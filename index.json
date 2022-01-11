@@ -1,6 +1,10 @@
-[
-  { 
-    name: 'cock hero',
-    location: 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/cock-hero.json'
-  }
-]
+{
+  author: 'xqueezeme',
+  categories:
+  [
+    { 
+      name: 'cock hero',
+      location: 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/cock-hero.json'
+    }
+  ]
+}
