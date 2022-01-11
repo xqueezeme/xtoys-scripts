@@ -7,3 +7,7 @@ All categories must have the same name in the index.json as in their own declara
 Every category should have it's own directory.
 
 All urls must point to the raw file on github (f.e. https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/anal/SpankBang.com_keisha%2Bgrey%2Bdoggy_720p.funscript)
+
+A good resource to add more videos is: https://scriptaxis.com/
+
+We currently only support pornhub & spankbang videos.
