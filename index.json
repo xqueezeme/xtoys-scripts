@@ -33,6 +33,10 @@
     {
       "name": "Vaginal",
       "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/vaginal/vaginal.json"
+    },
+    {
+      "name": "Trans",
+      "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/trans/trans.json"
     }
   ]
 }
