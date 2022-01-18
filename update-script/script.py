@@ -27,8 +27,6 @@ from pathlib import Path
 import uuid
 import json
 
-username = 'excusemi'
-password = 'ZATU5KDs8tifnF'
 ua = UserAgent()
 userAgent = str(ua.chrome)
 session = requests.Session()
