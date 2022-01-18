@@ -1,1 +1,14 @@
+requests
+beautifulsoup4
+html5lib
+requests_html
+tqdm
+mutagen
+pathlib
+pyyaml
+tldextract
 selenium
+fake_useragent
+hyper
+pycurl
+lxml
