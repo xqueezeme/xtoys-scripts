@@ -12,6 +12,7 @@ import yaml
 from yaml.loader import SafeLoader
 from fake_useragent import UserAgent
 import time
+import numpy as np
 import requests
 from hyper.contrib import HTTP20Adapter
 from selenium import webdriver
@@ -31,7 +32,7 @@ password = 'ZATU5KDs8tifnF'
 ua = UserAgent()
 userAgent = str(ua.chrome)
 session = requests.Session()
-f = open('credentials.json')
+f = open('./credentials.json')
 credentials = json.load(f)
 def getPage(url):
     response = session.get(url)
@@ -85,21 +86,25 @@ def download_file(filename, url):
     return local_filename
 
 def getSpankbangId(url):
+    print(url)
+
     regex = re.compile(r'pankbang.com\/(.*)\/video')
     return regex.search(url)[1]
 def getPornhubId(url):
+    print(url)
     regex = re.compile(r'viewkey=([a-z0-9]+)')
     return regex.search(url)[1]
 def parsePage(text, topic):
     soup = Soup(text, "lxml")
     dom = etree.HTML(str(soup))
+    firstPost = dom.xpath("//div[contains(@class, 'contents')]")[0]
     spankbang = None
     pornhub = None
     spankbangSel = dom.xpath('//a[contains(@href,"spankbang.com")]/@href')
-    if(len(spankbangSel) == 1):
+    if(len(spankbangSel) == 1 and not str(spankbangSel[0]).__contains__('/playlist/')):
         spankbang = spankbangSel[0]
     pornhubSel = dom.xpath('//a[contains(@href,"pornhub.com")]/@href')
-    if(len(pornhubSel) == 1):
+    if(len(pornhubSel) == 1 and not str(pornhubSel[0]).__contains__('pornhub.com/pornstar/')):
         pornhub = pornhubSel[0]
     funscripts = []
     regexpNS = 'http://exslt.org/regular-expressions'
@@ -144,11 +149,11 @@ def parseCategoryPage(text):
     return topics
 
 
-def readInfiniscroll():
+def readInfiniscroll(url, pages):
     newTopics = []
-    for i in range(0,10):
+    for i in range(0,pages):
         print('scroll index : ' + str(i))
-        scrollJson = getPage('https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false&page=' + str(i))
+        scrollJson = getPage(url + str(i))
         #print(scrollJson)
         data = json.loads(scrollJson)
         topics = data['topic_list']['topics']
@@ -161,7 +166,6 @@ def readInfiniscroll():
     return newTopics
 
 
-topics = readInfiniscroll()
 
 def looptopics(indexFile, topics):
     f = open(indexFile)
@@ -171,7 +175,7 @@ def looptopics(indexFile, topics):
     print('topics: ' + str(len(topics)))
     filteredTopics = filter(lambda topic: next(filter(lambda video: video['name'] == topic['title'], videos), None) == None, topics)
     for topic in filteredTopics:
-        print(topic['url'])
+        print(json.dumps(topic))
         video = parsePage(formatHTML(getPage(topic['url'])), topic)
         if(video):
             existingVideo = next(filter(lambda existing: existing['id'] == video['id'] and existing['site'] == video['site'], videos), None)
@@ -179,10 +183,14 @@ def looptopics(indexFile, topics):
                 videos.append(video)
             else:
                 existingVideo['tags'] = video['tags']
+                jsonStr = json.dumps(data, indent=4)
+                print('Writing json')
+                with open(indexFile, "w") as outfile:
+                    outfile.write(jsonStr)
+#topTopics = readInfiniscroll('https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page',100)
+#lastestopics = readInfiniscroll('https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false&per_page=50&&page=',100)
+#topics = np.concatenate((lastestopics, topTopics))
+#looptopics('../index-test.json', topics)
 
-    jsonStr = json.dumps(data, indent=4)
-    print('Writing json')
-    with open(indexFile, "w") as outfile:
-        outfile.write(jsonStr)
-
-looptopics('../index-test.json', topics)
+video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/dicks/39219')),None)
+#video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/mythriljay-mega-pack-6-more-music-10-pmvs/27519')), None)
