@@ -222,7 +222,7 @@ def parsePost(post,topic):
             site = 'xhamster'
         if(id):
             filename = topic['slug'] + '.funscript'
-            download_file('../funscripts/' + filename, funscripts[0])
+            download_file('funscripts/' + filename, funscripts[0])
             video = {
                 "name": topic['title'],
                 "site": site,
@@ -334,7 +334,7 @@ def looptopics(indexFile, topics):
             with open(indexFile, "w") as outfile:
                 outfile.write(jsonStr)
 
-jsonFile = '../index-test.json'
+jsonFile = 'index-test.json'
 validateJson(jsonFile)
 
 seleniumLogin()
