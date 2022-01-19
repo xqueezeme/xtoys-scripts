@@ -68,15 +68,20 @@ def seleniumLogin():
 def download_file(filename, url):
     local_filename = url.split('/')[-1]
     # NOTE the stream=True parameter below
-    with session.get(url, stream=True) as r:
-        r.raise_for_status()
-        with open(filename, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=8192): 
-                # If you have chunk encoded response uncomment if
-                # and set chunk_size parameter to None.
-                #if chunk: 
-                f.write(chunk)
-    return local_filename
+    try:
+        with session.get(url, stream=True) as r:
+            r.raise_for_status()
+            with open(filename, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=8192): 
+                    # If you have chunk encoded response uncomment if
+                    # and set chunk_size parameter to None.
+                    #if chunk: 
+                    f.write(chunk)
+        return local_filename
+    except:
+        print('Error trying to download ' + url+'\nTrying again in 10 sec')
+        time.sleep(5)
+        return download_file(filename, url)
 
 
 def getSpankbangId(url):
