@@ -34,7 +34,10 @@ def getPage(url):
         return getPage(url)
 
 def seleniumLogin():
-    driver = webdriver.Chrome()
+    options = webdriver.ChromeOptions()
+    options.add_argument('headless')
+    driver = webdriver.Chrome(chrome_options=options)
+
     driver.get('https://discuss.eroscripts.com/login')
     driver.implicitly_wait(10)
     input = WebDriverWait(driver, 10).until(
@@ -349,7 +352,8 @@ pages = 100
 all = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page',pages)
 lastestopics = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false&per_page=50&&page=',pages)
 for topic in lastestopics:
-    all.append(topic)
+    if (next(filter(lambda othertopic: topic['url'] == othertopic['url'], all), None) == None):
+        all.append(topic)
 looptopics(jsonFile, all)
 
 #video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/dicks/39219')),None)
