@@ -5,7 +5,6 @@ import re
 import requests
 from fake_useragent import UserAgent
 import time
-import numpy as np
 import requests
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -342,9 +341,10 @@ seleniumLogin()
 #video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/risi-simms-blue-eyes-xvideos/8135')), None)
 
 pages = 100
-topTopics = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page',pages)
+all = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page',pages)
 lastestopics = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false&per_page=50&&page=',pages)
-topics = np.concatenate((lastestopics, topTopics))
-looptopics(jsonFile, topics)
+for topic in lastestopics:
+    all.append(topic)
+looptopics(jsonFile, all)
 
 #video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/dicks/39219')),None)
