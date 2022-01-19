@@ -1,20 +1,12 @@
 
-from http import cookies
-from multiprocessing import allow_connection_pickling
 from bs4 import BeautifulSoup as Soup
 
 import re
-from urllib.request import build_opener, HTTPCookieProcessor, Request
-import os
 import requests
-from pathlib import Path
-import yaml
-from yaml.loader import SafeLoader
 from fake_useragent import UserAgent
 import time
 import numpy as np
 import requests
-from hyper.contrib import HTTP20Adapter
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -22,13 +14,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import time
 import lxml.etree as etree
-import lxml.html as LH
-from pathlib import Path
-import uuid
 import json
+from tqdm import tqdm
 
-username = 'excusemi'
-password = 'ZATU5KDs8tifnF'
+xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschikbaar.')]"
+xpath_invalid_pornhub = "//*[contains(text(), 'Fout Pagina Niet Gevonden')]"
+
 ua = UserAgent()
 userAgent = str(ua.chrome)
 session = requests.Session()
@@ -36,7 +27,6 @@ f = open('./credentials.json')
 credentials = json.load(f)
 def getPage(url):
     response = session.get(url)
-    print(response)
     return response.text
 
 def seleniumLogin():
@@ -60,7 +50,7 @@ def seleniumLogin():
     )
     input.click()
     # Pause for 10 seconds so that you can see the results.
-    time.sleep(3)
+    time.sleep(10)
     cookies = {}
     selenium_cookies = driver.get_cookies()
     for cookie in selenium_cookies:
@@ -71,7 +61,6 @@ def seleniumLogin():
     driver.close()
 #login()
     
-seleniumLogin()
 def download_file(filename, url):
     local_filename = url.split('/')[-1]
     # NOTE the stream=True parameter below
@@ -85,58 +74,181 @@ def download_file(filename, url):
                 f.write(chunk)
     return local_filename
 
-def getSpankbangId(url):
-    print(url)
 
-    regex = re.compile(r'pankbang.com\/(.*)\/video')
+def getSpankbangId(url):
+    regex = re.compile(r'spankbang.com\/([a-z0-9]+)\/video')
     return regex.search(url)[1]
 def getPornhubId(url):
-    print(url)
     regex = re.compile(r'viewkey=([a-z0-9]+)')
     return regex.search(url)[1]
-def parsePage(text, topic):
-    soup = Soup(text, "lxml")
-    dom = etree.HTML(str(soup))
-    firstPost = dom.xpath("//div[contains(@class, 'contents')]")[0]
+def getXvideosId(url):
+    regex = re.compile(r'\/video(\d+)\/')
+    return regex.search(url)[1]
+def getXhamsterId(url):
+    regex = re.compile(r'xhamster\.com\/videos\/(.*)\/?.*')
+    group =  regex.search(url)[1]
+    split = group.split('-')
+    return split[len(split)-1]
+def testVideoPornhub(id):
+    response = session.get('https://nl.pornhub.com/view_video.php?viewkey=' + id)
+    ok = response.status_code != 404
+    title = ''
+    return { "ok": ok, "title": title}
+
+def testVideoSpankbang(id):
+    response = session.get('https://nl.spankbang.com/' + id + '/video/test')
+    ok = response.status_code != 404
+    title = ''
+    return { "ok": ok, "title": title}
+def testVideoXhamster(id):
+    response = session.get('https://nl.xhamster.com/videos/dicks-' + id)
+    ok = response.status_code != 404
+    title = ''
+    return { "ok": ok, "title": title}
+def testVideoXvideo(id):
+    response = session.get('https://www.xvideos.com/video' + id + '/dicks')
+    ok = response.status_code != 404
+    title = ''
+    return { "ok": ok, "title": title}
+def findPornhubIds(pornhubSel):
+    links = []
+    if(len(pornhubSel)>0):
+        for a in pornhubSel:
+            if(not str(a).__contains__('pornhub.com/pornstar/') and not str(a).__contains__('pornhub.com/model/') and not str(a).__contains__('pornhub.com/users/')):
+                try:
+                    id = getPornhubId(str(a))
+                    if(id):
+                        valid =testVideoPornhub(id)
+                        if(valid and valid['ok']):
+                            links.append(id)
+                except:
+                    print('failed on ' + str(a))
+    return list(set(links))
+def findSpankbangIds(spankbangSel):
+    links = []
+    if(len(spankbangSel)>0):
+        for a in spankbangSel:
+            if(not str(spankbangSel[0]).__contains__('/playlist/') and not str(spankbangSel[0]).__contains__('/profile/')):
+                try:
+                    id = getSpankbangId(str(a))
+                    if(id):
+                        valid =testVideoSpankbang(id)
+                        if(valid and valid['ok']):
+                            links.append(id)
+                except:
+                    print('failed on ' + str(a))
+    return list(set(links))
+def findXvideosIds(xvideosSel):
+    links = []
+    if(len(xvideosSel)>0):
+        for a in xvideosSel:
+            try:
+                id = getXvideosId(str(a))
+                if(id):
+                    valid =testVideoXvideo(id)
+                    if(valid and valid['ok']):
+                        links.append(id)
+                    else:
+                        print(str(a) + ' is invalid')
+                else:
+                    print('Could not create id for ' + str(a))
+            except:
+                print('failed on ' + str(a))
+    return list(set(links))
+def findXhamsterIds(xhamsterSel):
+    links = []
+    if(len(xhamsterSel)>0):
+        for a in xhamsterSel:
+            try:
+                id = getXhamsterId(str(a))
+                if(id):
+                    valid =testVideoXhamster(id)
+                    if(valid and valid['ok']):
+                        links.append(id)
+            except:
+                print('failed on ' + str(a))
+    return list(set(links))
+
+def parsePost(post,topic):
     spankbang = None
     pornhub = None
-    spankbangSel = dom.xpath('//a[contains(@href,"spankbang.com")]/@href')
-    if(len(spankbangSel) == 1 and not str(spankbangSel[0]).__contains__('/playlist/')):
-        spankbang = spankbangSel[0]
-    pornhubSel = dom.xpath('//a[contains(@href,"pornhub.com")]/@href')
-    if(len(pornhubSel) == 1 and not str(pornhubSel[0]).__contains__('pornhub.com/pornstar/')):
-        pornhub = pornhubSel[0]
+    xvideos = None
+    xhamster = None
+
+    spankbangSel = post.xpath('.//a[contains(@href,"spankbang.com")]/@href')
+
+    spankbangLinks = findSpankbangIds(spankbangSel)
+    if(len(spankbangLinks) ==  1):
+        spankbang = spankbangLinks[0]
+
+    pornhubSel = post.xpath('.//a[contains(@href,"pornhub.com")]/@href')
+    pornhubLinks = findPornhubIds(pornhubSel)
+    if(len(pornhubLinks) == 1): 
+        pornhub = pornhubLinks[0]
+
+    xvideosSel = post.xpath('.//a[contains(@href,"xvideos.com")]/@href')
+    xvideosLinks = findXvideosIds(xvideosSel)
+    if(len(xvideosLinks) == 1): 
+        xvideos = xvideosLinks[0]
+
+    xhamsterSel = post.xpath('.//a[contains(@href,"xhamster.com")]/@href')
+    xhamsterLinks = findXhamsterIds(xhamsterSel)
+    if(len(xhamsterLinks) == 1): 
+        xhamster = xhamsterLinks[0]
+
     funscripts = []
     regexpNS = 'http://exslt.org/regular-expressions'
-    links = dom.xpath("//a[re:test(@href, '(\.funscript$)')]", namespaces={'re':regexpNS})
+    links = post.xpath(".//a[re:test(@href, '(\.funscript$)')]", namespaces={'re':regexpNS})
 
     for link in links:
         funscripts.append('https://discuss.eroscripts.com' + link.get("href"))
-    if((spankbang or pornhub) and len(links) > 0):
+    if((spankbang or pornhub or xvideos or xhamster) and len(links) > 0):
         if(spankbang):
-            id = getSpankbangId(spankbang)
+            id = spankbang
             site = 'spankbang'
         elif(pornhub):
-            id = getPornhubId(pornhub)
+            id = pornhub
             site = 'pornhub'
+        elif(xvideos):
+            id =  xvideos
+            site = 'xvideos'
+        elif(xhamster):
+            id = xhamster
+            site = 'xhamster'
+        if(id):
+            filename = topic['slug'] + '.funscript'
+            download_file('../funscripts/' + filename, funscripts[0])
+            video = {
+                "name": topic['title'],
+                "site": site,
+                "id": id,
+                "script": 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/' + filename,
+                "tags": topic['tags'],
+                "created_at": topic['created_at'],
+                "url": topic['url'],
+                "valid": True
+            }
+            return video
+        else:
+            print('Video is invalid ' + site + ' id: ' + id)
+        return None
 
-        download_file('../funscripts/' + topic['slug'] +'.funscript',funscripts[0])
-        video = { 
-            "name": topic['title'],
-            "site": site,
-            "id": id,
-            "script": 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/' + topic['slug']+'.funscript',
-            "tags": topic['tags'],
-            "url": topic['url'],
-            "created_at": topic['created_at']
-        }
-        return video
-    return None
-    #print(etree.tostring(dom))
+def parsePage(text, topic):
+    soup = Soup(text, "lxml")
+    dom = etree.HTML(str(soup))
+    posts = dom.xpath('//div[contains(@itemprop,"articleBody")]')
+    videos = []
+    if(len(posts) > 0):
+        video = parsePost(posts[0], topic)
+        if(video):
+            videos.append(video)
+    return videos
+    
 def formatHTML(content):
     start = content.index('<body')
     end = content.index('</body>')
     return '<!DOCTYPE html><html lang="en">' + content[start: end-1] + '</body></html'
+
 def parseCategoryPage(text):
     soup = Soup(text, "lxml")
     dom = etree.HTML(str(soup))
@@ -149,48 +261,85 @@ def parseCategoryPage(text):
     return topics
 
 
-def readInfiniscroll(url, pages):
+def readInfiniscroll(by, url, pages):
     newTopics = []
-    for i in range(0,pages):
-        print('scroll index : ' + str(i))
+    for i in tqdm (range(pages), 
+               desc="Reading " + by + " topics", 
+               ascii=False, ncols=75):
         scrollJson = getPage(url + str(i))
         #print(scrollJson)
         data = json.loads(scrollJson)
         topics = data['topic_list']['topics']
-        for topic in topics:
-            newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/dicks/'+str(topic['id']),
-                               'title': topic['title'],
-                               'slug': topic['slug'],
-                               'created_at': topic['created_at'],
-                               'tags': topic['tags']})
+        if len(topics) >0:
+            for topic in topics:
+                newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/dicks/'+str(topic['id']),
+                                'title': topic['title'],
+                                'slug': topic['slug'],
+                                'created_at': topic['created_at'],
+                                'tags': topic['tags']})
+        else:
+            break
     return newTopics
 
+def validateJson(indexFile):
+    f = open(indexFile)
+    data = json.load(f)
+    videos = data['videos']
+    for idx in tqdm (range(len(videos)), 
+               desc="Validating existing videos", 
+               ascii=False, ncols=75):
+        video = videos[idx]
+        valid = False
+        if(video['site'] == 'pornhub'):
+            valid = testVideoPornhub(video['id'])
+        elif(video['site'] == 'spankbang'):
+            valid = testVideoSpankbang(video['id'])
+        elif(video['site'] == 'xhamster'):
+            valid = testVideoXhamster(video['id'])
+        elif(video['site'] == 'xvideos'):
+            valid = testVideoXvideo(video['id'])
+        video['valid'] = valid['ok']
 
+    data['videos'] = videos
+    jsonStr = json.dumps(data, indent=4)
+    with open(indexFile, "w") as outfile:
+        outfile.write(jsonStr)
 
 def looptopics(indexFile, topics):
     f = open(indexFile)
     data = json.load(f)
-
     videos = data['videos']
-    print('topics: ' + str(len(topics)))
-    filteredTopics = filter(lambda topic: next(filter(lambda video: video['name'] == topic['title'], videos), None) == None, topics)
-    for topic in filteredTopics:
-        print(json.dumps(topic))
-        video = parsePage(formatHTML(getPage(topic['url'])), topic)
-        if(video):
-            existingVideo = next(filter(lambda existing: existing['id'] == video['id'] and existing['site'] == video['site'], videos), None)
-            if(existingVideo == None):
-                videos.append(video)
-            else:
-                existingVideo['tags'] = video['tags']
-                jsonStr = json.dumps(data, indent=4)
-                print('Writing json')
-                with open(indexFile, "w") as outfile:
-                    outfile.write(jsonStr)
-#topTopics = readInfiniscroll('https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page',100)
-#lastestopics = readInfiniscroll('https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false&per_page=50&&page=',100)
-#topics = np.concatenate((lastestopics, topTopics))
-#looptopics('../index-test.json', topics)
 
-video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/dicks/39219')),None)
-#video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/mythriljay-mega-pack-6-more-music-10-pmvs/27519')), None)
+    filteredTopics = list(filter(lambda topic: next(filter(lambda video: video['name'] == topic['title'], videos), None) == None, topics))
+    for idx in tqdm (range (len(filteredTopics)), 
+               desc="Getting videos from topics", 
+               ascii=False, ncols=75):
+        topic = filteredTopics[idx]
+        newvideos = parsePage(formatHTML(getPage(topic['url'])), topic)
+        if (newvideos):
+            for video in newvideos:
+                if(video):
+                    existingVideo = next(filter(lambda existing: existing['id'] == video['id'] and existing['site'] == video['site'], videos), None)
+                    if(existingVideo == None):
+                        videos.append(video)
+                    else:
+                        existingVideo['tags'] = video['tags']
+            data['videos'] = videos
+            jsonStr = json.dumps(data, indent=4)
+            with open(indexFile, "w") as outfile:
+                outfile.write(jsonStr)
+
+jsonFile = '../index-test.json'
+validateJson(jsonFile)
+
+seleniumLogin()
+
+#video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/risi-simms-blue-eyes-xvideos/8135')), None)
+
+pages = 100
+topTopics = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page',pages)
+lastestopics = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false&per_page=50&&page=',pages)
+topics = np.concatenate((lastestopics, topTopics))
+looptopics(jsonFile, topics)
+
+#video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/dicks/39219')),None)
