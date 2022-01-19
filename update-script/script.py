@@ -26,8 +26,13 @@ session = requests.Session()
 f = open('./credentials.json')
 credentials = json.load(f)
 def getPage(url):
-    response = session.get(url)
-    return response.text
+    try:
+        response = session.get(url)
+        return response.text
+    except:
+        print('Error trying to access ' + url+'\nTrying again in 10 sec')
+        time.sleep(5)
+        return getPage(url)
 
 def seleniumLogin():
     driver = webdriver.Chrome()
