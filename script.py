@@ -66,7 +66,7 @@ def seleniumLogin():
 #login()
     
 def download_file(filename, url):
-    local_filename = url.split('/')[-1]
+    local_filename = url.split('/')[-1]        
     # NOTE the stream=True parameter below
     try:
         with session.get(url, stream=True) as r:
@@ -137,7 +137,7 @@ def findSpankbangIds(spankbangSel):
     links = []
     if(len(spankbangSel)>0):
         for a in spankbangSel:
-            if(not str(spankbangSel[0]).__contains__('/playlist/') and not str(spankbangSel[0]).__contains__('/profile/')):
+            if(not str(a).__contains__('/playlist/') and not str(a).__contains__('/profile/')):
                 try:
                     id = getSpankbangId(str(a))
                     if(id):
@@ -151,18 +151,19 @@ def findXvideosIds(xvideosSel):
     links = []
     if(len(xvideosSel)>0):
         for a in xvideosSel:
-            try:
-                id = getXvideosId(str(a))
-                if(id):
-                    valid =testVideoXvideo(id)
-                    if(valid and valid['ok']):
-                        links.append(id)
+            if(not str(a).__contains__('/profile/')):
+                try:
+                    id = getXvideosId(str(a))
+                    if(id):
+                        valid =testVideoXvideo(id)
+                        if(valid and valid['ok']):
+                            links.append(id)
+                        else:
+                            print(str(a) + ' is invalid')
                     else:
-                        print(str(a) + ' is invalid')
-                else:
-                    print('Could not create id for ' + str(a))
-            except:
-                print('failed on ' + str(a))
+                        print('Could not create id for ' + str(a))
+                except:
+                    print('failed on ' + str(a))
     return list(set(links))
 def findXhamsterIds(xhamsterSel):
     links = []
@@ -210,7 +211,10 @@ def parsePost(post,topic):
     links = post.xpath(".//a[re:test(@href, '(\.funscript$)')]", namespaces={'re':regexpNS})
 
     for link in links:
-        funscripts.append('https://discuss.eroscripts.com' + link.get("href"))
+        if(link.get("href").startswith('http')):
+            funscripts.append(link.get("href"))
+        else:
+            funscripts.append('https://discuss.eroscripts.com' + link.get("href"))
     if((spankbang or pornhub or xvideos or xhamster) and len(links) > 0):
         if(spankbang):
             id = spankbang
