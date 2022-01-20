@@ -322,8 +322,10 @@ def looptopics(indexFile, topics):
     f = open(indexFile)
     data = json.load(f)
     videos = data['videos']
-
+    print("Topics unfiltered: " + str(len(topics)))
     filteredTopics = list(filter(lambda topic: next(filter(lambda video: video['name'] == topic['title'], videos), None) == None, topics))
+    print("Topics filtered: " + str(len(filteredTopics)))
+
     for idx in tqdm (range (len(filteredTopics)), 
                desc="Getting videos from topics", 
                ascii=False, ncols=75):
