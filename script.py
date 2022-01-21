@@ -349,7 +349,7 @@ def looptopics(indexFile, topics):
             with open(indexFile, "w") as outfile:
                 outfile.write(jsonStr)
 
-jsonFile = 'index-test.json'
+jsonFile = 'index.json'
 validateJson(jsonFile)
 
 seleniumLogin()
