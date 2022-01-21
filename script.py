@@ -306,16 +306,25 @@ def validateJson(indexFile):
                desc="Validating existing videos", 
                ascii=False, ncols=75):
         video = videos[idx]
-        valid = False
-        if(video['site'] == 'pornhub'):
-            valid = testVideoPornhub(video['id'])
-        elif(video['site'] == 'spankbang'):
-            valid = testVideoSpankbang(video['id'])
-        elif(video['site'] == 'xhamster'):
-            valid = testVideoXhamster(video['id'])
-        elif(video['site'] == 'xvideos'):
-            valid = testVideoXvideo(video['id'])
-        video['valid'] = valid['ok']
+        valid = None
+        tries = 0
+        while tries < 5 and not valid == None:
+            try:
+                if(video['site'] == 'pornhub'):
+                    valid = testVideoPornhub(video['id'])
+                elif(video['site'] == 'spankbang'):
+                    valid = testVideoSpankbang(video['id'])
+                elif(video['site'] == 'xhamster'):
+                    valid = testVideoXhamster(video['id'])
+                elif(video['site'] == 'xvideos'):
+                    valid = testVideoXvideo(video['id'])
+            except:
+                tries+=1
+                time.sleep(5)
+        if(valid != None):
+            video['valid'] = valid['ok']
+        else:
+            video['valid'] = False
         time.sleep(10)
 
     data['videos'] = videos
