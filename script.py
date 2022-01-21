@@ -321,7 +321,7 @@ def validateJson(indexFile):
             except:
                 tries+=1
                 time.sleep(5)
-        if(valid != None):
+        if(not valid == None):
             video['valid'] = valid['ok']
         else:
             video['valid'] = False
@@ -359,6 +359,8 @@ def looptopics(indexFile, topics):
                 outfile.write(jsonStr)
 
 jsonFile = 'index.json'
+
+
 validateJson(jsonFile)
 
 seleniumLogin()
