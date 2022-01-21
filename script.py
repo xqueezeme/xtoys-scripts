@@ -308,7 +308,7 @@ def validateJson(indexFile):
         video = videos[idx]
         valid = None
         tries = 0
-        while tries < 5 and not valid == None:
+        while tries < 5 and valid == None:
             try:
                 if(video['site'] == 'pornhub'):
                     valid = testVideoPornhub(video['id'])
@@ -321,8 +321,9 @@ def validateJson(indexFile):
             except:
                 tries+=1
                 time.sleep(5)
-        if(not valid == None):
-            video['valid'] = valid['ok']
+        
+        if(not valid == None and valid['ok'] == True):
+            video['valid'] = True
         else:
             video['valid'] = False
         time.sleep(10)
