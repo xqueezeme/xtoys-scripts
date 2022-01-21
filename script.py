@@ -24,6 +24,7 @@ userAgent = str(ua.chrome)
 session = requests.Session()
 f = open('./credentials.json')
 credentials = json.load(f)
+
 def getPage(url):
     try:
         response = session.get(url)
@@ -35,8 +36,12 @@ def getPage(url):
 
 def seleniumLogin():
     driver = webdriver.Chrome()
+
+    driver.get('https://pornhub.com')
+    driver.implicitly_wait(5)
+
     driver.get('https://discuss.eroscripts.com/login')
-    driver.implicitly_wait(10)
+    driver.implicitly_wait(5)
     input = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.ID, "login-account-name"))
     )
@@ -63,8 +68,7 @@ def seleniumLogin():
 
     # Close.
     driver.close()
-#login()
-    
+
 def download_file(filename, url):
     local_filename = url.split('/')[-1]        
     # NOTE the stream=True parameter below
@@ -100,7 +104,7 @@ def getXhamsterId(url):
     return split[len(split)-1]
 def testVideoPornhub(id):
     response = session.get('https://nl.pornhub.com/view_video.php?viewkey=' + id)
-    ok = response.status_code != 404
+    ok = response.status_code != 404 and not response.text.__contains__('Page Not Found')
     title = ''
     return { "ok": ok, "title": title}
 
@@ -312,6 +316,7 @@ def validateJson(indexFile):
         elif(video['site'] == 'xvideos'):
             valid = testVideoXvideo(video['id'])
         video['valid'] = valid['ok']
+        time.sleep(10)
 
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
