@@ -306,26 +306,27 @@ def validateJson(indexFile):
                desc="Validating existing videos", 
                ascii=False, ncols=75):
         video = videos[idx]
-        valid = None
-        tries = 0
-        while tries < 5 and valid == None:
-            try:
-                if(video['site'] == 'pornhub'):
-                    valid = testVideoPornhub(video['id'])
-                elif(video['site'] == 'spankbang'):
-                    valid = testVideoSpankbang(video['id'])
-                elif(video['site'] == 'xhamster'):
-                    valid = testVideoXhamster(video['id'])
-                elif(video['site'] == 'xvideos'):
-                    valid = testVideoXvideo(video['id'])
-            except:
-                tries+=1
-                time.sleep(5)
-        
-        if(not valid == None and valid['ok'] == True):
-            video['valid'] = True
-        else:
-            video['valid'] = False
+        if(video['valid'] == True):
+            valid = None
+            tries = 0
+            while tries < 5 and valid == None:
+                try:
+                    if(video['site'] == 'pornhub'):
+                        valid = testVideoPornhub(video['id'])
+                    elif(video['site'] == 'spankbang'):
+                        valid = testVideoSpankbang(video['id'])
+                    elif(video['site'] == 'xhamster'):
+                        valid = testVideoXhamster(video['id'])
+                    elif(video['site'] == 'xvideos'):
+                        valid = testVideoXvideo(video['id'])
+                except:
+                    tries+=1
+                    time.sleep(5)
+            
+            if(not valid == None and valid['ok'] == True):
+                video['valid'] = True
+            else:
+                video['valid'] = False
         time.sleep(10)
 
     data['videos'] = videos
@@ -362,9 +363,9 @@ def looptopics(indexFile, topics):
 jsonFile = 'index.json'
 
 
-validateJson(jsonFile)
 
 seleniumLogin()
+validateJson(jsonFile)
 
 #video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/risi-simms-blue-eyes-xvideos/8135')), None)
 
@@ -374,5 +375,8 @@ lastestopics = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scri
 for topic in lastestopics:
     all.append(topic)
 looptopics(jsonFile, all)
+
+print('Waiting 5 min to continue')
+time.sleep(5 * 60)
 
 #video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/dicks/39219')),None)
