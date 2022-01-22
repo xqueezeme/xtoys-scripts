@@ -287,25 +287,28 @@ def readInfiniscroll(by, url, pages):
         scrollJson = getPage(url + str(i))
         #print(scrollJson)
         data = json.loads(scrollJson)
-        topicsUsers = data['users']
-        topics = data['topic_list']['topics']
-        if len(topics) >0:
-            for topic in topics:
-                username =''
+        if(data):
+            topicsUsers = data['users']
+            topics = data['topic_list']['topics']
+            if len(topics) >0:
+                for topic in topics:
+                    username =''
+                    if(topicsUsers):
+                        originalPoster = next(filter(lambda poster: poster['description'] == 'Original Poster', topic['posters']),None)
+                        if(originalPoster):
+                            user = next(filter(lambda user: user['id'] == originalPoster['user_id'], topicsUsers), None)
+                            if(user):
+                                username = user['username']
 
-                originalPoster = next(filter(lambda poster: poster['description'] == 'Original Poster', topic['posters']),None)
-                if(originalPoster):
-                    user = next(filter(lambda user: user['id'] == originalPoster['user_id'], topicsUsers), None)
-                    if(user):
-                        username = user['username']
-
-                newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/dicks/'+str(topic['id']),
-                                'title': topic['title'],
-                                'slug': topic['slug'],
-                                'created_at': topic['created_at'],
-                                'tags': topic['tags'],
-                                'username': username
-                                })
+                    newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/dicks/'+str(topic['id']),
+                                    'title': topic['title'],
+                                    'slug': topic['slug'],
+                                    'created_at': topic['created_at'],
+                                    'tags': topic['tags'],
+                                    'username': username
+                                    })
+            else:
+                break
         else:
             break
     return newTopics
