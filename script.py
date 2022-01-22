@@ -243,7 +243,8 @@ def parsePost(post,topic):
                 "tags": topic['tags'],
                 "created_at": topic['created_at'],
                 "url": topic['url'],
-                "valid": True
+                "valid": True,
+                "creator": topic['username']
             }
             return video
         else:
@@ -286,14 +287,25 @@ def readInfiniscroll(by, url, pages):
         scrollJson = getPage(url + str(i))
         #print(scrollJson)
         data = json.loads(scrollJson)
+        topicsUsers = data['users']
         topics = data['topic_list']['topics']
         if len(topics) >0:
             for topic in topics:
+                username =''
+
+                originalPoster = next(filter(lambda poster: poster['description'] == 'Original Poster', topic['posters']),None)
+                if(originalPoster):
+                    user = next(filter(lambda user: user['id'] == originalPoster['user_id'], topicsUsers), None)
+                    if(user):
+                        username = user['username']
+
                 newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/dicks/'+str(topic['id']),
                                 'title': topic['title'],
                                 'slug': topic['slug'],
                                 'created_at': topic['created_at'],
-                                'tags': topic['tags']})
+                                'tags': topic['tags'],
+                                'username': username
+                                })
         else:
             break
     return newTopics
@@ -338,9 +350,7 @@ def looptopics(indexFile, topics):
     f = open(indexFile)
     data = json.load(f)
     videos = data['videos']
-    print("Topics unfiltered: " + str(len(topics)))
     filteredTopics = list(filter(lambda topic: next(filter(lambda video: video['name'] == topic['title'], videos), None) == None, topics))
-    print("Topics filtered: " + str(len(filteredTopics)))
 
     for idx in tqdm (range (len(filteredTopics)), 
                desc="Getting videos from topics", 
@@ -355,6 +365,7 @@ def looptopics(indexFile, topics):
                         videos.append(video)
                     else:
                         existingVideo['tags'] = video['tags']
+                        existingVideo['creator'] = video['creator']
             data['videos'] = videos
             jsonStr = json.dumps(data, indent=4)
             with open(indexFile, "w") as outfile:
@@ -365,12 +376,12 @@ jsonFile = 'index.json'
 
 
 seleniumLogin()
-validateJson(jsonFile)
+#validateJson(jsonFile)
 
 #video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/risi-simms-blue-eyes-xvideos/8135')), None)
 
 pages = 100
-all = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page',pages)
+all = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page=',pages)
 lastestopics = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false&per_page=50&&page=',pages)
 for topic in lastestopics:
     all.append(topic)
