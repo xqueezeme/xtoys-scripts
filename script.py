@@ -114,12 +114,12 @@ def testVideoSpankbang(id):
     title = ''
     return { "ok": ok, "title": title}
 def testVideoXhamster(id):
-    response = session.get('https://nl.xhamster.com/videos/dicks-' + id)
+    response = session.get('https://nl.xhamster.com/videos/xxx-' + id)
     ok = response.status_code != 404
     title = ''
     return { "ok": ok, "title": title}
 def testVideoXvideo(id):
-    response = session.get('https://www.xvideos.com/video' + id + '/dicks')
+    response = session.get('https://www.xvideos.com/video' + id + '/xxx')
     ok = response.status_code != 404
     title = ''
     return { "ok": ok, "title": title}
@@ -127,7 +127,7 @@ def findPornhubIds(pornhubSel):
     links = []
     if(len(pornhubSel)>0):
         for a in pornhubSel:
-            if(not str(a).__contains__('pornhub.com/pornstar/') and not str(a).__contains__('pornhub.com/model/') and not str(a).__contains__('pornhub.com/users/')):
+            if(not str(a).__contains__('pornhub.com/pornstar/') and not str(a).__contains__('pornhub.com/model/') and not str(a).__contains__('pornhub.com/users/') and not str(a).__contains__('pornhub.com/playlist/') and not str(a).__contains__('pornhub.com/channels/')):
                 try:
                     id = getPornhubId(str(a))
                     if(id):
@@ -288,23 +288,25 @@ def readInfiniscroll(by, url, pages):
         #print(scrollJson)
         data = json.loads(scrollJson)
         if(data):
-            topicsUsers = data['users']
-            topics = data['topic_list']['topics']
+            topicsUsers = data.get('users')
+            topicList = data.get('topic_list')
+            topics = topicList.get('topics')
+            ['topics']
             if len(topics) >0:
                 for topic in topics:
                     username =''
                     if(topicsUsers):
-                        originalPoster = next(filter(lambda poster: poster['description'] == 'Original Poster', topic['posters']),None)
+                        originalPoster = next(filter(lambda poster: poster.get('description') == 'Original Poster', topic.get('posters')),None)
                         if(originalPoster):
-                            user = next(filter(lambda user: user['id'] == originalPoster['user_id'], topicsUsers), None)
+                            user = next(filter(lambda user: user.get('id') == originalPoster.get('user_id'), topicsUsers), None)
                             if(user):
-                                username = user['username']
+                                username = user.get('username')
 
-                    newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/dicks/'+str(topic['id']),
-                                    'title': topic['title'],
-                                    'slug': topic['slug'],
-                                    'created_at': topic['created_at'],
-                                    'tags': topic['tags'],
+                    newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/xxx/'+str(topic.get('id')),
+                                    'title': topic.get('title'),
+                                    'slug': topic.get('slug'),
+                                    'created_at': topic.get('created_at'),
+                                    'tags': topic.get('tags'),
                                     'username': username
                                     })
             else:
@@ -384,7 +386,7 @@ seleniumLogin()
 #video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/risi-simms-blue-eyes-xvideos/8135')), None)
 
 pages = 100
-all = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page=',pages)
+all = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page=',60)
 lastestopics = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false&per_page=50&&page=',pages)
 for topic in lastestopics:
     all.append(topic)
