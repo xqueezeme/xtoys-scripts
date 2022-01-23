@@ -28,8 +28,7 @@ options = webdriver.FirefoxOptions()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
 
-#options.add_argument("--headless")
-
+options.add_argument("--headless")
 driver = webdriver.Firefox(options=options)
 
 def getPage(url):
@@ -394,8 +393,7 @@ def validateSelenium(indexFile):
             valid = False
             print(url + ' is invalid')
         video['valid'] = valid
-        time.sleep(1)
-    
+    driver.close()
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
     with open(indexFile, "w") as outfile:
@@ -435,7 +433,7 @@ def looptopics(indexFile, topics):
 
 jsonFile = 'index.json'
 
-validateSelenium(jsonFile)
+
 
 
 seleniumLogin()
@@ -446,8 +444,4 @@ lastestopics = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scri
 for topic in lastestopics:
     all.append(topic)
 looptopics(jsonFile, all)
-
-print('Waiting 5 min to continue')
-time.sleep(5 * 60)
-
-#video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/dicks/39219')),None)
+validateSelenium(jsonFile)
