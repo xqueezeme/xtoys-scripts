@@ -24,8 +24,13 @@ userAgent = str(ua.chrome)
 session = requests.Session()
 f = open('./credentials.json')
 credentials = json.load(f)
-options = webdriver.ChromeOptions()
-driver = webdriver.Chrome(chrome_options=options)
+options = webdriver.FirefoxOptions()
+options.add_argument("--mute-audio")
+options.add_argument('--disable-browser-side-navigation')
+
+#options.add_argument("--headless")
+
+driver = webdriver.Firefox(options=options)
 
 def getPage(url):
     try:
@@ -377,21 +382,20 @@ def validateSelenium(indexFile):
         if (site == 'pornhub'):
             xpath = "//div[@id='player']//video"
         driver.get(url)
+        driver.execute_script('videos = document.querySelectorAll("video"); for(video of videos) {video.pause()}')
         try:
-            input = WebDriverWait(driver, 5).until(
+            input = WebDriverWait(driver, 2).until(
                 EC.presence_of_element_located((By.XPATH, xpath))
             )
             valid = True
+            print(url + ' is valid')
+
         except: 
             valid = False
-    
-        if(valid == True):
-            print(url + ' is valid')
-            video['valid'] = True
-        else:
             print(url + ' is invalid')
-            #video['valid'] = False
-
+        video['valid'] = valid
+        time.sleep(1)
+    
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
     with open(indexFile, "w") as outfile:
