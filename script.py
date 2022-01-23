@@ -370,29 +370,27 @@ def validateSelenium(indexFile):
                desc="Validating existing videos", 
                ascii=False, ncols=75):
         video = videos[idx]
-        if(video['valid'] == True):
-            valid = None
-            tries = 0
-            site = video['site']
-            url = getUrl(site, video['id'])
-            xpath = "//video"
-            if (site == 'pornhub'):
-                xpath = "//div[@id='player']//video"
-            driver.get(url)
+        valid = None
+        site = video['site']
+        url = getUrl(site, video['id'])
+        xpath = "//video"
+        if (site == 'pornhub'):
+            xpath = "//div[@id='player']//video"
+        driver.get(url)
+        try:
             input = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located((By.XPATH, xpath))
             )
-            if(input):
-                valid = True
-            else:
-                valid = False
-        
-            if(valid == True):
-                print(url + ' is valid')
-                video['valid'] = True
-            else:
-                print(url + ' is invalid')
-                #video['valid'] = False
+            valid = True
+        except: 
+            valid = False
+    
+        if(valid == True):
+            print(url + ' is valid')
+            video['valid'] = True
+        else:
+            print(url + ' is invalid')
+            #video['valid'] = False
 
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
