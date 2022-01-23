@@ -355,26 +355,33 @@ def looptopics(indexFile, topics):
     f = open(indexFile)
     data = json.load(f)
     videos = data['videos']
-    filteredTopics = list(filter(lambda topic: next(filter(lambda video: video['name'] == topic['title'], videos), None) == None, topics))
 
-    for idx in tqdm (range (len(filteredTopics)), 
+    for idx in tqdm (range (len(topics)), 
                desc="Getting videos from topics", 
                ascii=False, ncols=75):
-        topic = filteredTopics[idx]
-        newvideos = parsePage(formatHTML(getPage(topic['url'])), topic)
-        if (newvideos):
-            for video in newvideos:
-                if(video):
-                    existingVideo = next(filter(lambda existing: existing['id'] == video['id'] and existing['site'] == video['site'], videos), None)
-                    if(existingVideo == None):
-                        videos.append(video)
-                    else:
-                        existingVideo['tags'] = video['tags']
-                        existingVideo['creator'] = video['creator']
-            data['videos'] = videos
-            jsonStr = json.dumps(data, indent=4)
-            with open(indexFile, "w") as outfile:
-                outfile.write(jsonStr)
+        topic = topics[idx]
+        matchingVideo = next(filter(lambda existing: existing['title'] == topic['name'], videos), None)
+        if(matchingVideo):
+            matchingVideo['tags'] = topic['tags']
+            matchingVideo['creator'] = topic['creator']
+            matchingVideo['created_at'] = topic['username']
+
+        else:
+            newvideos = parsePage(formatHTML(getPage(topic['url'])), topic)
+            if (newvideos):
+                for video in newvideos:
+                    if(video):
+                        existingVideo = next(filter(lambda existing: existing['id'] == video['id'] and existing['site'] == video['site'], videos), None)
+                        if(existingVideo == None):
+                            videos.append(video)
+                        else:
+                            existingVideo['tags'] = video['tags']
+                            existingVideo['creator'] = video['creator']
+                            existingVideo['created_at'] = video['created_at']
+                data['videos'] = videos
+                jsonStr = json.dumps(data, indent=4)
+                with open(indexFile, "w") as outfile:
+                    outfile.write(jsonStr)
 
 jsonFile = 'index.json'
 
