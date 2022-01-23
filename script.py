@@ -360,7 +360,7 @@ def looptopics(indexFile, topics):
                desc="Getting videos from topics", 
                ascii=False, ncols=75):
         topic = topics[idx]
-        matchingVideo = next(filter(lambda existing: existing['title'] == topic['name'], videos), None)
+        matchingVideo = next(filter(lambda existing: existing['name'] == topic['title'], videos), None)
         if(matchingVideo):
             matchingVideo['tags'] = topic['tags']
             matchingVideo['creator'] = topic['creator']
