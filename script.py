@@ -24,6 +24,8 @@ userAgent = str(ua.chrome)
 session = requests.Session()
 f = open('./credentials.json')
 credentials = json.load(f)
+options = webdriver.ChromeOptions()
+driver = webdriver.Chrome(chrome_options=options)
 
 def getPage(url):
     try:
@@ -35,8 +37,6 @@ def getPage(url):
         return getPage(url)
 
 def seleniumLogin():
-    driver = webdriver.Chrome()
-
     driver.get('https://pornhub.com')
     driver.implicitly_wait(5)
 
@@ -102,6 +102,17 @@ def getXhamsterId(url):
     group =  regex.search(url)[1]
     split = group.split('-')
     return split[len(split)-1]
+def getUrl(site, id):
+    if(site == 'pornhub'):
+        return 'https://nl.pornhub.com/view_video.php?viewkey=' + id
+    elif(site == 'spankbang'):
+        return 'https://nl.spankbang.com/' + id + '/video/test'
+    elif(site == 'xvideos'):
+        return 'https://www.xvideos.com/video' + id + '/xxx'
+    elif(site == 'xhamster'):
+        return 'https://nl.xhamster.com/videos/xxx-' + id
+    return None
+
 def testVideoPornhub(id):
     response = session.get('https://nl.pornhub.com/view_video.php?viewkey=' + id)
     ok = response.status_code != 404 and not response.text.__contains__('Page Not Found')
@@ -351,6 +362,43 @@ def validateJson(indexFile):
     with open(indexFile, "w") as outfile:
         outfile.write(jsonStr)
 
+def validateSelenium(indexFile):
+    f = open(indexFile)
+    data = json.load(f)
+    videos = data['videos']
+    for idx in tqdm (range(len(videos)), 
+               desc="Validating existing videos", 
+               ascii=False, ncols=75):
+        video = videos[idx]
+        if(video['valid'] == True):
+            valid = None
+            tries = 0
+            site = video['site']
+            url = getUrl(site, video['id'])
+            xpath = "//video"
+            if (site == 'pornhub'):
+                xpath = "//div[@id='player']//video"
+            driver.get(url)
+            input = WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((By.XPATH, xpath))
+            )
+            if(input):
+                valid = True
+            else:
+                valid = False
+        
+            if(valid == True):
+                print(url + ' is valid')
+                video['valid'] = True
+            else:
+                print(url + ' is invalid')
+                #video['valid'] = False
+
+    data['videos'] = videos
+    jsonStr = json.dumps(data, indent=4)
+    with open(indexFile, "w") as outfile:
+        outfile.write(jsonStr)
+
 def looptopics(indexFile, topics):
     f = open(indexFile)
     data = json.load(f)
@@ -363,8 +411,8 @@ def looptopics(indexFile, topics):
         matchingVideo = next(filter(lambda existing: existing['name'] == topic['title'], videos), None)
         if(matchingVideo):
             matchingVideo['tags'] = topic['tags']
-            matchingVideo['creator'] = topic['creator']
-            matchingVideo['created_at'] = topic['username']
+            matchingVideo['creator'] = topic['username']
+            matchingVideo['created_at'] = topic['created_at']
 
         else:
             newvideos = parsePage(formatHTML(getPage(topic['url'])), topic)
@@ -378,19 +426,17 @@ def looptopics(indexFile, topics):
                             existingVideo['tags'] = video['tags']
                             existingVideo['creator'] = video['creator']
                             existingVideo['created_at'] = video['created_at']
-                data['videos'] = videos
-                jsonStr = json.dumps(data, indent=4)
-                with open(indexFile, "w") as outfile:
-                    outfile.write(jsonStr)
+        data['videos'] = videos
+        jsonStr = json.dumps(data, indent=4)
+        with open(indexFile, "w") as outfile:
+            outfile.write(jsonStr)
 
 jsonFile = 'index.json'
 
+validateSelenium(jsonFile)
 
 
 seleniumLogin()
-#validateJson(jsonFile)
-
-#video = parsePage(formatHTML(getPage('https://discuss.eroscripts.com/t/risi-simms-blue-eyes-xvideos/8135')), None)
 
 pages = 100
 all = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page=',60)
