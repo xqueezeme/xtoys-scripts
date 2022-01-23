@@ -15,6 +15,7 @@ import time
 import lxml.etree as etree
 import json
 from tqdm import tqdm
+import traceback
 
 xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschikbaar.')]"
 xpath_invalid_pornhub = "//*[contains(text(), 'Fout Pagina Niet Gevonden')]"
@@ -380,19 +381,24 @@ def validateSelenium(indexFile):
         xpath = "//video"
         if (site == 'pornhub'):
             xpath = "//div[@id='player']//video"
-        driver.get(url)
-        driver.execute_script('videos = document.querySelectorAll("video"); for(video of videos) {video.pause()}')
         try:
-            input = WebDriverWait(driver, 2).until(
-                EC.presence_of_element_located((By.XPATH, xpath))
-            )
-            valid = True
-            print(url + ' is valid')
+            driver.get(url)
+            driver.execute_script('videos = document.querySelectorAll("video"); for(video of videos) {video.pause()}')
+            try:
+                input = WebDriverWait(driver, 2).until(
+                    EC.presence_of_element_located((By.XPATH, xpath))
+                )
+                valid = True
+                print(url + ' is valid')
 
-        except: 
-            valid = False
-            print(url + ' is invalid')
-        video['valid'] = valid
+            except: 
+                valid = False
+                print(url + ' is invalid')
+            video['valid'] = valid
+        except:
+            traceback.print_exc()
+
+
     driver.close()
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
