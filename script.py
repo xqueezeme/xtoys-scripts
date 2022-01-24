@@ -71,8 +71,7 @@ def seleniumLogin():
         cookies[cookie['name']] = cookie['value']
     session.cookies.update(cookies)
 
-    # Close.
-    driver.close()
+
 
 def download_file(filename, url):
     local_filename = url.split('/')[-1]        
@@ -399,7 +398,6 @@ def validateSelenium(indexFile):
             traceback.print_exc()
 
 
-    driver.close()
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
     with open(indexFile, "w") as outfile:
@@ -451,3 +449,5 @@ for topic in lastestopics:
     all.append(topic)
 looptopics(jsonFile, all)
 validateSelenium(jsonFile)
+# Close.
+driver.close()
