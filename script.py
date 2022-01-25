@@ -311,7 +311,7 @@ def readInfiniscroll(by, url, pages):
                 for topic in topics:
                     username =''
                     if(topicsUsers):
-                        originalPoster = next(filter(lambda poster: poster.get('description') == 'Original Poster', topic.get('posters')),None)
+                        originalPoster = next(filter(lambda poster: poster.get('description').__contains__('Original Poster'), topic.get('posters')),None)
                         if(originalPoster):
                             user = next(filter(lambda user: user.get('id') == originalPoster.get('user_id'), topicsUsers), None)
                             if(user):
