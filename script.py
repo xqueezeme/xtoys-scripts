@@ -224,7 +224,7 @@ def parsePost(post,topic):
     xhamsterLinks = findXhamsterIds(xhamsterSel)
     if(len(xhamsterLinks) == 1): 
         xhamster = xhamsterLinks[0]
-    videosCount = len(pornhubLinks) + len(xvideosLinks) + len(spankbangLinks) + len(xhamsterLinks;)
+    videosCount = len(pornhubLinks) + len(xvideosLinks) + len(spankbangLinks) + len(xhamsterLinks)
     funscripts = []
     regexpNS = 'http://exslt.org/regular-expressions'
     links = post.xpath(".//a[re:test(@href, '(\.funscript$)')]", namespaces={'re':regexpNS})
