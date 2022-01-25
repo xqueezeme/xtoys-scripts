@@ -224,7 +224,7 @@ def parsePost(post,topic):
     xhamsterLinks = findXhamsterIds(xhamsterSel)
     if(len(xhamsterLinks) == 1): 
         xhamster = xhamsterLinks[0]
-
+    videosCount = len(pornhubLinks) + len(xvideosLinks) + len(spankbangLinks) + len(xhamsterLinks;)
     funscripts = []
     regexpNS = 'http://exslt.org/regular-expressions'
     links = post.xpath(".//a[re:test(@href, '(\.funscript$)')]", namespaces={'re':regexpNS})
@@ -234,7 +234,7 @@ def parsePost(post,topic):
             funscripts.append(link.get("href"))
         else:
             funscripts.append('https://discuss.eroscripts.com' + link.get("href"))
-    if((spankbang or pornhub or xvideos or xhamster) and len(links) > 0):
+    if(videosCount ==1 and len(links) > 0):
         if(spankbang):
             id = spankbang
             site = 'spankbang'
@@ -442,8 +442,8 @@ jsonFile = 'index.json'
 
 seleniumLogin()
 
-pages = 100
-all = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page=',60)
+pages = 10
+all = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page=',pages)
 lastestopics = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false&per_page=50&&page=',pages)
 for topic in lastestopics:
     all.append(topic)
