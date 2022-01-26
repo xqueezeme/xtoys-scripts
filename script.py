@@ -438,7 +438,7 @@ def readTopicList():
         outfile.write(jsonStr)
 seleniumLogin()
 
-jsonFile = 'index-test.json'
+jsonFile = 'index.json'
 
 upgradeScript(jsonFile)
 
