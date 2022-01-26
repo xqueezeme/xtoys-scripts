@@ -1,3 +1,4 @@
 credentials.json
 .DS_Store
 geckodriver.log
+topics.json

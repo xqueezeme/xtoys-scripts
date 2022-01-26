@@ -185,7 +185,7 @@ def findXvideosIds(xvideosSel):
                     print('failed on ' + str(a))
     return list(set(links))
 def findXhamsterIds(xhamsterSel):
-    links = []
+    links = [] 
     if(len(xhamsterSel)>0):
         for a in xhamsterSel:
             try:
@@ -197,44 +197,45 @@ def findXhamsterIds(xhamsterSel):
             except:
                 print('failed on ' + str(a))
     return list(set(links))
-
+funscriptsFolder = 'funscripts2'
 def parsePost(post,topic):
     spankbang = None
     pornhub = None
     xvideos = None
     xhamster = None
 
-    spankbangSel = post.xpath('.//a[contains(@href,"spankbang.com")]/@href')
+    spankbangSel = post.xpath('.//*[not(blockquote)]//a[contains(@href,"spankbang.com")]/@href')
 
     spankbangLinks = findSpankbangIds(spankbangSel)
     if(len(spankbangLinks) ==  1):
         spankbang = spankbangLinks[0]
 
-    pornhubSel = post.xpath('.//a[contains(@href,"pornhub.com")]/@href')
+    pornhubSel = post.xpath('.//*[not(blockquote)]//a[contains(@href,"pornhub.com")]/@href')
     pornhubLinks = findPornhubIds(pornhubSel)
     if(len(pornhubLinks) == 1): 
         pornhub = pornhubLinks[0]
 
-    xvideosSel = post.xpath('.//a[contains(@href,"xvideos.com")]/@href')
+    xvideosSel = post.xpath('.//*[not(blockquote)]//a[contains(@href,"xvideos.com")]/@href')
     xvideosLinks = findXvideosIds(xvideosSel)
     if(len(xvideosLinks) == 1): 
         xvideos = xvideosLinks[0]
 
-    xhamsterSel = post.xpath('.//a[contains(@href,"xhamster.com")]/@href')
+    xhamsterSel = post.xpath('.//*[not(blockquote)]//a[contains(@href,"xhamster.com")]/@href')
     xhamsterLinks = findXhamsterIds(xhamsterSel)
     if(len(xhamsterLinks) == 1): 
         xhamster = xhamsterLinks[0]
     videosCount = len(pornhubLinks) + len(xvideosLinks) + len(spankbangLinks) + len(xhamsterLinks)
     funscripts = []
     regexpNS = 'http://exslt.org/regular-expressions'
-    links = post.xpath(".//a[re:test(@href, '(\.funscript$)')]", namespaces={'re':regexpNS})
+    links = post.xpath(".//*[not(blockquote)]//a[re:test(@href, '(\.funscript$)')]", namespaces={'re':regexpNS})
 
     for link in links:
         if(link.get("href").startswith('http')):
-            funscripts.append(link.get("href"))
+            funscripts.append({'location' : link.get("href"), 'name': ''.join(link.itertext())})
         else:
-            funscripts.append('https://discuss.eroscripts.com' + link.get("href"))
-    if(videosCount ==1 and len(links) > 0):
+            funscripts.append({'location' : 'https://discuss.eroscripts.com' + link.get("href"), 'name': ''.join(link.itertext())})
+
+    if(videosCount ==1 and len(funscripts) > 0 and len(funscripts) <= 3):
         if(spankbang):
             id = spankbang
             site = 'spankbang'
@@ -248,18 +249,24 @@ def parsePost(post,topic):
             id = xhamster
             site = 'xhamster'
         if(id):
-            filename = topic['slug'] + '.funscript'
-            download_file('funscripts/' + filename, funscripts[0])
+            funscriptIndex = 1
+            scripts = []
+            for funscript in funscripts:
+                filename = topic['slug'] + '-' + str(funscriptIndex) + '.funscript'
+                download_file(funscriptsFolder + '/' + filename, funscript['location'])
+                scripts.append({'name': funscript['name'], 'location': 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + funscriptsFolder + '/' + filename})
+                funscriptIndex += 1
             video = {
                 "name": topic['title'],
                 "site": site,
                 "id": id,
-                "script": 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/' + filename,
+                "scripts": scripts,
                 "tags": topic['tags'],
                 "created_at": topic['created_at'],
                 "url": topic['url'],
                 "valid": True,
-                "creator": topic['username']
+                "creator": topic['username'],
+                "ignore" : False
             }
             return video
         else:
@@ -293,7 +300,7 @@ def parseCategoryPage(text):
                                 'title':''.join(topicLink.itertext())})
     return topics
 
-
+titleEscapeWords = [ 'mega', 'compilation', 'pack']
 def readInfiniscroll(by, url, pages):
     newTopics = []
     for i in tqdm (range(pages), 
@@ -306,7 +313,6 @@ def readInfiniscroll(by, url, pages):
             topicsUsers = data.get('users')
             topicList = data.get('topic_list')
             topics = topicList.get('topics')
-            ['topics']
             if len(topics) >0:
                 for topic in topics:
                     username =''
@@ -316,19 +322,41 @@ def readInfiniscroll(by, url, pages):
                             user = next(filter(lambda user: user.get('id') == originalPoster.get('user_id'), topicsUsers), None)
                             if(user):
                                 username = user.get('username')
-
-                    newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/xxx/'+str(topic.get('id')),
-                                    'title': topic.get('title'),
-                                    'slug': topic.get('slug'),
-                                    'created_at': topic.get('created_at'),
-                                    'tags': topic.get('tags'),
-                                    'username': username
-                                    })
+                    title = topic.get('title', None)
+                    if title:
+                        if(next(filter(lambda keyword: title.lower().__contains__(keyword), titleEscapeWords), None) != None):
+                            newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/xxx/'+str(topic.get('id')),
+                                            'title': title,
+                                            'slug': topic.get('slug'),
+                                            'created_at': topic.get('created_at'),
+                                            'tags': topic.get('tags'),
+                                            'username': username
+                                            })
             else:
                 break
         else:
             break
     return newTopics
+
+def upgradeScript(indexFile):
+    f = open(indexFile)
+    data = json.load(f)
+    videos = data['videos']
+    for idx in tqdm (range(len(videos)), 
+               desc="Upgrading script videos", 
+               ascii=False, ncols=75):
+        video = videos[idx]
+        if(video.get('ignore', False) == False):
+            scripts = []
+            if(video.get('script', None) != None):
+                scripts.append({"name" : '', "location": video['script']})
+                video['scripts'] = scripts
+                video.pop('script', None)
+    data['videos'] = videos
+    jsonStr = json.dumps(data, indent=4)
+    with open(indexFile, "w") as outfile:
+        outfile.write(jsonStr)
+
 
 def validateJson(indexFile):
     f = open(indexFile)
@@ -338,7 +366,7 @@ def validateJson(indexFile):
                desc="Validating existing videos", 
                ascii=False, ncols=75):
         video = videos[idx]
-        if(video['valid'] == True):
+        if(video['valid'] == True and video.get('ignore', False) == False):
             valid = None
             tries = 0
             while tries < 5 and valid == None:
@@ -434,19 +462,35 @@ def looptopics(indexFile, topics):
         jsonStr = json.dumps(data, indent=4)
         with open(indexFile, "w") as outfile:
             outfile.write(jsonStr)
+def savePage(page, url):
+    pageContent = getPage(url)
+    with open(page, "w") as outfile:
+        outfile.write(pageContent)
 
-jsonFile = 'index.json'
+def readTopicList():
+    all = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page=',pages)
+    lastestopics = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false&per_page=50&&page=',pages)
+    for topic in lastestopics:
+        all.append(topic)
 
-
-
-
+    jsonStr = json.dumps(all, indent=4)
+    with open('topics.json', "w") as outfile:
+        outfile.write(jsonStr)
 seleniumLogin()
 
-pages = 10
-all = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page=',pages)
-lastestopics = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false&per_page=50&&page=',pages)
-for topic in lastestopics:
-    all.append(topic)
+#savePage('page.html', 'https://discuss.eroscripts.com/t/general-butch-mega-compilation-updated/42117')
+#savePage('page2.html','https://discuss.eroscripts.com/t/xxx/15099')
+
+jsonFile = 'index-test.json'
+
+upgradeScript(jsonFile)
+
+pages = 100
+
+#readTopicList()
+f = open('topics.json')
+all = json.load(f)
+
 looptopics(jsonFile, all)
 validateSelenium(jsonFile)
 # Close.
