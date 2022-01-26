@@ -167,8 +167,7 @@ def findXhamsterIds(xhamsterSel):
             except:
                 print('failed on ' + str(a))
     return list(set(links))
-funscriptsFolder = 'funscripts2'
-def parsePost(post,topic):
+def parsePost(post,topic,funscriptsFolder):
     spankbang = None
     pornhub = None
     xvideos = None
@@ -243,13 +242,13 @@ def parsePost(post,topic):
             print('Video is invalid ' + site + ' id: ' + id)
         return None
 
-def parsePage(text, topic):
+def parsePage(text, topic, funscriptsFolder):
     soup = Soup(text, "lxml")
     dom = etree.HTML(str(soup))
     posts = dom.xpath('//div[contains(@itemprop,"articleBody")]')
     videos = []
     if(len(posts) > 0):
-        video = parsePost(posts[0], topic)
+        video = parsePost(posts[0], topic, funscriptsFolder)
         if(video):
             videos.append(video)
     return videos
@@ -317,43 +316,6 @@ def upgradeScript(indexFile):
     with open(indexFile, "w") as outfile:
         outfile.write(jsonStr)
 
-
-def validateJson(indexFile):
-    f = open(indexFile)
-    data = json.load(f)
-    videos = data['videos']
-    for idx in tqdm (range(len(videos)), 
-               desc="Validating existing videos", 
-               ascii=False, ncols=75):
-        video = videos[idx]
-        if(video['valid'] == True and video.get('ignore', False) == False):
-            valid = None
-            tries = 0
-            while tries < 5 and valid == None:
-                try:
-                    if(video['site'] == 'pornhub'):
-                        valid = testVideoPornhub(video['id'])
-                    elif(video['site'] == 'spankbang'):
-                        valid = testVideoSpankbang(video['id'])
-                    elif(video['site'] == 'xhamster'):
-                        valid = testVideoXhamster(video['id'])
-                    elif(video['site'] == 'xvideos'):
-                        valid = testVideoXvideo(video['id'])
-                except:
-                    tries+=1
-                    time.sleep(5)
-            
-            if(not valid == None and valid['ok'] == True):
-                video['valid'] = True
-            else:
-                video['valid'] = False
-        time.sleep(10)
-
-    data['videos'] = videos
-    jsonStr = json.dumps(data, indent=4)
-    with open(indexFile, "w") as outfile:
-        outfile.write(jsonStr)
-
 def validateSelenium(indexFile):
     f = open(indexFile)
     data = json.load(f)
@@ -391,7 +353,7 @@ def validateSelenium(indexFile):
     with open(indexFile, "w") as outfile:
         outfile.write(jsonStr)
 
-def looptopics(indexFile, topics):
+def looptopics(indexFile, topics, funscriptsFolder):
     f = open(indexFile)
     data = json.load(f)
     videos = data['videos']
@@ -407,7 +369,7 @@ def looptopics(indexFile, topics):
             matchingVideo['created_at'] = topic['created_at']
 
         else:
-            newvideos = parsePage(formatHTML(getPage(topic['url'])), topic)
+            newvideos = parsePage(formatHTML(getPage(topic['url'])), topic, funscriptsFolder)
             if (newvideos):
                 for video in newvideos:
                     if(video):
@@ -447,8 +409,8 @@ pages = 100
 readTopicList()
 f = open('topics.json')
 all = json.load(f)
-
-looptopics(jsonFile, all)
+funscriptsFolder = 'funscripts'
+looptopics(jsonFile, all, funscriptsFolder)
 validateSelenium(jsonFile)
 # Close.
 driver.close()
