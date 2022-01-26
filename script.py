@@ -297,9 +297,10 @@ def readInfiniscroll(by, url, pages):
             break
     return newTopics
 
-def upgradeScript(indexFile):
+def upgradeScript(indexFile, modelVersion):
     f = open(indexFile)
     data = json.load(f)
+    data['version'] = modelVersion
     videos = data['videos']
     for idx in tqdm (range(len(videos)), 
                desc="Upgrading script videos", 
@@ -401,8 +402,8 @@ def readTopicList():
 seleniumLogin()
 
 jsonFile = 'index.json'
-
-upgradeScript(jsonFile)
+modelVersion = 1
+upgradeScript(jsonFile, modelVersion)
 
 pages = 100
 
