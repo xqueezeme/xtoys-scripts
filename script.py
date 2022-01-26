@@ -117,27 +117,6 @@ def getUrl(site, id):
         return 'https://nl.xhamster.com/videos/xxx-' + id
     return None
 
-def testVideoPornhub(id):
-    response = session.get('https://nl.pornhub.com/view_video.php?viewkey=' + id)
-    ok = response.status_code != 404 and not response.text.__contains__('Page Not Found')
-    title = ''
-    return { "ok": ok, "title": title}
-
-def testVideoSpankbang(id):
-    response = session.get('https://nl.spankbang.com/' + id + '/video/test')
-    ok = response.status_code != 404
-    title = ''
-    return { "ok": ok, "title": title}
-def testVideoXhamster(id):
-    response = session.get('https://nl.xhamster.com/videos/xxx-' + id)
-    ok = response.status_code != 404
-    title = ''
-    return { "ok": ok, "title": title}
-def testVideoXvideo(id):
-    response = session.get('https://www.xvideos.com/video' + id + '/xxx')
-    ok = response.status_code != 404
-    title = ''
-    return { "ok": ok, "title": title}
 def findPornhubIds(pornhubSel):
     links = []
     if(len(pornhubSel)>0):
@@ -146,9 +125,7 @@ def findPornhubIds(pornhubSel):
                 try:
                     id = getPornhubId(str(a))
                     if(id):
-                        valid =testVideoPornhub(id)
-                        if(valid and valid['ok']):
-                            links.append(id)
+                        links.append(id)
                 except:
                     print('failed on ' + str(a))
     return list(set(links))
@@ -160,9 +137,8 @@ def findSpankbangIds(spankbangSel):
                 try:
                     id = getSpankbangId(str(a))
                     if(id):
-                        valid =testVideoSpankbang(id)
-                        if(valid and valid['ok']):
-                            links.append(id)
+                        links.append(id)
+
                 except:
                     print('failed on ' + str(a))
     return list(set(links))
@@ -174,11 +150,7 @@ def findXvideosIds(xvideosSel):
                 try:
                     id = getXvideosId(str(a))
                     if(id):
-                        valid =testVideoXvideo(id)
-                        if(valid and valid['ok']):
-                            links.append(id)
-                        else:
-                            print(str(a) + ' is invalid')
+                        links.append(id)
                     else:
                         print('Could not create id for ' + str(a))
                 except:
@@ -191,9 +163,7 @@ def findXhamsterIds(xhamsterSel):
             try:
                 id = getXhamsterId(str(a))
                 if(id):
-                    valid =testVideoXhamster(id)
-                    if(valid and valid['ok']):
-                        links.append(id)
+                    links.append(id)
             except:
                 print('failed on ' + str(a))
     return list(set(links))
@@ -289,16 +259,6 @@ def formatHTML(content):
     end = content.index('</body>')
     return '<!DOCTYPE html><html lang="en">' + content[start: end-1] + '</body></html'
 
-def parseCategoryPage(text):
-    soup = Soup(text, "lxml")
-    dom = etree.HTML(str(soup))
-    topicLinks= dom.xpath('//a[contains(@href,"/t/")]')
-    topics = []
-    if(len(topicLinks) > 0):
-        for topicLink in topicLinks:
-            topics.append({ 'url': topicLink.get("href"),
-                                'title':''.join(topicLink.itertext())})
-    return topics
 
 titleEscapeWords = [ 'mega', 'compilation', 'pack']
 def readInfiniscroll(by, url, pages):
@@ -478,16 +438,13 @@ def readTopicList():
         outfile.write(jsonStr)
 seleniumLogin()
 
-#savePage('page.html', 'https://discuss.eroscripts.com/t/general-butch-mega-compilation-updated/42117')
-#savePage('page2.html','https://discuss.eroscripts.com/t/xxx/15099')
-
 jsonFile = 'index-test.json'
 
 upgradeScript(jsonFile)
 
 pages = 100
 
-#readTopicList()
+readTopicList()
 f = open('topics.json')
 all = json.load(f)
 
