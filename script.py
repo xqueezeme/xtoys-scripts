@@ -358,7 +358,7 @@ def looptopics(indexFile, topics, funscriptsFolder):
     f = open(indexFile)
     data = json.load(f)
     videos = data['videos']
-
+    videosAdded = 0
     for idx in tqdm (range (len(topics)), 
                desc="Getting videos from topics", 
                ascii=False, ncols=75):
@@ -377,6 +377,7 @@ def looptopics(indexFile, topics, funscriptsFolder):
                         existingVideo = next(filter(lambda existing: existing['id'] == video['id'] and existing['site'] == video['site'], videos), None)
                         if(existingVideo == None):
                             videos.append(video)
+                            videosAdded += 1
                         else:
                             existingVideo['tags'] = video['tags']
                             existingVideo['creator'] = video['creator']
@@ -385,6 +386,8 @@ def looptopics(indexFile, topics, funscriptsFolder):
         jsonStr = json.dumps(data, indent=4)
         with open(indexFile, "w") as outfile:
             outfile.write(jsonStr)
+
+        return videosAdded
 def savePage(page, url):
     pageContent = getPage(url)
     with open(page, "w") as outfile:
@@ -405,13 +408,14 @@ jsonFile = 'index.json'
 modelVersion = 1
 upgradeScript(jsonFile, modelVersion)
 
-pages = 100
+pages = 10
 
 readTopicList()
 f = open('topics.json')
 all = json.load(f)
 funscriptsFolder = 'funscripts'
-looptopics(jsonFile, all, funscriptsFolder)
+videosAdded = looptopics(jsonFile, all, funscriptsFolder)
+print('Added ' + videosAdded + ' videos.')
 validateSelenium(jsonFile)
 # Close.
 driver.close()

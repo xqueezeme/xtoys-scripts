@@ -7,3 +7,4 @@ python3 script.py
 git add .
 git commit -am "Automatic update"
 git push
+killall firefox
