@@ -408,14 +408,14 @@ jsonFile = 'index.json'
 modelVersion = 1
 upgradeScript(jsonFile, modelVersion)
 
-pages = 10
+pages = 50
 
 readTopicList()
 f = open('topics.json')
 all = json.load(f)
 funscriptsFolder = 'funscripts'
 videosAdded = looptopics(jsonFile, all, funscriptsFolder)
-print('Added ' + videosAdded + ' videos.')
+print('Added ' + str(videosAdded) + ' videos.')
 validateSelenium(jsonFile)
 # Close.
 driver.close()
