@@ -271,26 +271,29 @@ def readInfiniscroll(by, url, pages):
         if(data):
             topicsUsers = data.get('users')
             topicList = data.get('topic_list')
-            topics = topicList.get('topics')
-            if len(topics) >0:
-                for topic in topics:
-                    username =''
-                    if(topicsUsers):
-                        originalPoster = next(filter(lambda poster: poster.get('description').__contains__('Original Poster'), topic.get('posters')),None)
-                        if(originalPoster):
-                            user = next(filter(lambda user: user.get('id') == originalPoster.get('user_id'), topicsUsers), None)
-                            if(user):
-                                username = user.get('username')
-                    title = topic.get('title', None)
-                    if title:
-                        if(next(filter(lambda keyword: title.lower().__contains__(keyword), titleEscapeWords), None) != None):
-                            newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/xxx/'+str(topic.get('id')),
-                                            'title': title,
-                                            'slug': topic.get('slug'),
-                                            'created_at': topic.get('created_at'),
-                                            'tags': topic.get('tags'),
-                                            'username': username
-                                            })
+            if topicList:
+                topics = topicList.get('topics')
+                if len(topics) >0:
+                    for topic in topics:
+                        username =''
+                        if(topicsUsers):
+                            originalPoster = next(filter(lambda poster: poster.get('description').__contains__('Original Poster'), topic.get('posters')),None)
+                            if(originalPoster):
+                                user = next(filter(lambda user: user.get('id') == originalPoster.get('user_id'), topicsUsers), None)
+                                if(user):
+                                    username = user.get('username')
+                        title = topic.get('title', None)
+                        if title:
+                            if(next(filter(lambda keyword: title.lower().__contains__(keyword), titleEscapeWords), None) != None):
+                                newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/xxx/'+str(topic.get('id')),
+                                                'title': title,
+                                                'slug': topic.get('slug'),
+                                                'created_at': topic.get('created_at'),
+                                                'tags': topic.get('tags'),
+                                                'username': username
+                                                })
+                else:
+                    break
             else:
                 break
         else:
