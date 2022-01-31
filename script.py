@@ -390,7 +390,7 @@ def looptopics(indexFile, topics, funscriptsFolder):
         with open(indexFile, "w") as outfile:
             outfile.write(jsonStr)
 
-        return videosAdded
+    return videosAdded
 def savePage(page, url):
     pageContent = getPage(url)
     with open(page, "w") as outfile:
@@ -412,7 +412,6 @@ modelVersion = 1
 upgradeScript(jsonFile, modelVersion)
 
 pages = 50
-
 readTopicList()
 f = open('topics.json')
 all = json.load(f)
