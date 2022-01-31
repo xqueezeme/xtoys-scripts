@@ -16,7 +16,7 @@ import lxml.etree as etree
 import json
 from tqdm import tqdm
 import traceback
-
+import os
 xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschikbaar.')]"
 xpath_invalid_pornhub = "//*[contains(text(), 'Fout Pagina Niet Gevonden')]"
 
@@ -222,7 +222,8 @@ def parsePost(post,topic,funscriptsFolder):
             scripts = []
             for funscript in funscripts:
                 filename = topic['slug'] + '-' + str(funscriptIndex) + '.funscript'
-                download_file(funscriptsFolder + '/' + filename, funscript['location'])
+                if(not os.path.exists(funscriptsFolder + '/' + filename)):
+                    download_file(funscriptsFolder + '/' + filename, funscript['location'])
                 scripts.append({'name': funscript['name'], 'location': 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + funscriptsFolder + '/' + filename})
                 funscriptIndex += 1
             video = {
