@@ -146,7 +146,7 @@ def findXvideosIds(xvideosSel):
     links = []
     if(len(xvideosSel)>0):
         for a in xvideosSel:
-            if(not str(a).__contains__('/profile/')):
+            if(not str(a).__contains__('/profiles/')):
                 try:
                     id = getXvideosId(str(a))
                     if(id):
@@ -302,8 +302,13 @@ def readInfiniscroll(by, url, pages):
     return newTopics
 
 def upgradeScript(indexFile, modelVersion):
-    f = open(indexFile)
-    data = json.load(f)
+    if os.path.exists(indexFile):
+        f = open(indexFile)
+        data = json.load(f)
+    else:
+        data = {}
+        data['author'] = 'xqueezeme'
+        data['videos'] = []
     data['version'] = modelVersion
     videos = data['videos']
     for idx in tqdm (range(len(videos)), 
