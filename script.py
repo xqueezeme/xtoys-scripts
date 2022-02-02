@@ -93,7 +93,7 @@ def download_file(filename, url):
 
 
 def getSpankbangId(url):
-    regex = re.compile(r'spankbang.com\/([a-z0-9]+)\/video')
+    regex = re.compile(r'spankbang.com\/([a-zA-Z0-9]+)\/video')
     return regex.search(url)[1]
 def getPornhubId(url):
     regex = re.compile(r'viewkey=([a-z0-9]+)')
@@ -106,6 +106,12 @@ def getXhamsterId(url):
     group =  regex.search(url)[1]
     split = group.split('-')
     return split[len(split)-1]
+def getEpornerId(url):
+    regex = re.compile(r'eporner\.com\/video\-([a-zA-Z0-9]+)\/?.*')
+    group =  regex.search(url)[1]
+    split = group.split('-')
+    return split[len(split)-1]
+
 def getUrl(site, id):
     if(site == 'pornhub'):
         return 'https://nl.pornhub.com/view_video.php?viewkey=' + id
@@ -115,6 +121,9 @@ def getUrl(site, id):
         return 'https://www.xvideos.com/video' + id + '/xxx'
     elif(site == 'xhamster'):
         return 'https://nl.xhamster.com/videos/xxx-' + id
+    elif(site == 'eporner'):
+        return 'https://www.eporner.com/video-' + id + '/'
+
     return None
 
 def findPornhubIds(pornhubSel):
@@ -167,6 +176,17 @@ def findXhamsterIds(xhamsterSel):
             except:
                 print('failed on ' + str(a))
     return list(set(links))
+def findEpornerIds(epornerSel):
+    links = [] 
+    if(len(epornerSel)>0):
+        for a in epornerSel:
+            try:
+                id = getEpornerId(str(a))
+                if(id):
+                    links.append(id)
+            except:
+                print('failed on ' + str(a))
+    return list(set(links))
 def parsePost(post,topic,funscriptsFolder):
     spankbang = None
     pornhub = None
@@ -193,7 +213,11 @@ def parsePost(post,topic,funscriptsFolder):
     xhamsterLinks = findXhamsterIds(xhamsterSel)
     if(len(xhamsterLinks) == 1): 
         xhamster = xhamsterLinks[0]
-    videosCount = len(pornhubLinks) + len(xvideosLinks) + len(spankbangLinks) + len(xhamsterLinks)
+    epornerSel = post.xpath('.//*[not(blockquote)]//a[contains(@href,"eporner.com")]/@href')
+    epornerLinks = findEpornerIds(epornerSel)
+    if(len(epornerLinks) == 1):
+        eporner = epornerLinks[0]
+    videosCount = len(pornhubLinks) + len(xvideosLinks) + len(spankbangLinks) + len(xhamsterLinks) + len(epornerLinks)
     funscripts = []
     regexpNS = 'http://exslt.org/regular-expressions'
     links = post.xpath(".//*[not(blockquote)]//a[re:test(@href, '(\.funscript$)')]", namespaces={'re':regexpNS})
@@ -217,6 +241,9 @@ def parsePost(post,topic,funscriptsFolder):
         elif(xhamster):
             id = xhamster
             site = 'xhamster'
+        elif(eporner):
+            id = eporner
+            site = 'eporner'
         if(id):
             funscriptIndex = 1
             scripts = []
@@ -260,14 +287,16 @@ def formatHTML(content):
     return '<!DOCTYPE html><html lang="en">' + content[start: end-1] + '</body></html'
 
 
-titleEscapeWords = [ 'mega', 'compilation', 'pack']
+titleEscapeWords = [ 'mega', 'pack']
 def readInfiniscroll(by, url, pages):
     newTopics = []
     for i in tqdm (range(pages), 
                desc="Reading " + by + " topics", 
                ascii=False, ncols=75):
-        scrollJson = getPage(url + str(i))
-        #print(scrollJson)
+        if(i == 0):
+            scrollJson = getPage(url)
+        else:
+            scrollJson = getPage(url + '&page=' + str(i))
         data = json.loads(scrollJson)
         if(data):
             topicsUsers = data.get('users')
@@ -285,7 +314,7 @@ def readInfiniscroll(by, url, pages):
                                     username = user.get('username')
                         title = topic.get('title', None)
                         if title:
-                            if(next(filter(lambda keyword: title.lower().__contains__(keyword), titleEscapeWords), None) != None):
+                            if(next(filter(lambda keyword: title.lower().__contains__(keyword), titleEscapeWords), None) == None):
                                 newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/xxx/'+str(topic.get('id')),
                                                 'title': title,
                                                 'slug': topic.get('slug'),
@@ -364,6 +393,14 @@ def validateSelenium(indexFile):
         outfile.write(jsonStr)
 
 def looptopics(indexFile, topics, funscriptsFolder):
+    ignoreUrls = []
+    if os.path.exists('ignore-urls.json'):
+        f = open('ignore-urls.json')
+        ignoreIndex = json.load(f)
+        ignoreUrls = ignoreIndex.get('urls')
+    else:
+        ignoreIndex = {}
+    
     f = open(indexFile)
     data = json.load(f)
     videos = data['videos']
@@ -372,28 +409,39 @@ def looptopics(indexFile, topics, funscriptsFolder):
                desc="Getting videos from topics", 
                ascii=False, ncols=75):
         topic = topics[idx]
-        matchingVideo = next(filter(lambda existing: existing['name'] == topic['title'], videos), None)
-        if(matchingVideo):
-            matchingVideo['tags'] = topic['tags']
-            matchingVideo['creator'] = topic['username']
-            matchingVideo['created_at'] = topic['created_at']
+        if not topic['url'] in ignoreIndex:
+            matchingVideo = next(filter(lambda existing: existing['name'] == topic['title'], videos), None)
+            if(matchingVideo):
+                matchingVideo['tags'] = topic['tags']
+                matchingVideo['creator'] = topic['username']
+                matchingVideo['created_at'] = topic['created_at']
+            else:
+                newvideos = parsePage(formatHTML(getPage(topic['url'])), topic, funscriptsFolder)
+                if (newvideos and len(newvideos) > 0):
+                    for video in newvideos:
+                        if(video):
+                            existingVideo = next(filter(lambda existing: existing['id'] == video['id'] and existing['site'] == video['site'], videos), None)
+                            if(existingVideo == None):
+                                videos.append(video)
+                                videosAdded += 1
+                            else:
+                                existingVideo['tags'] = video['tags']
+                                existingVideo['creator'] = video['creator']
+                                existingVideo['created_at'] = video['created_at']
 
-        else:
-            newvideos = parsePage(formatHTML(getPage(topic['url'])), topic, funscriptsFolder)
-            if (newvideos):
-                for video in newvideos:
-                    if(video):
-                        existingVideo = next(filter(lambda existing: existing['id'] == video['id'] and existing['site'] == video['site'], videos), None)
-                        if(existingVideo == None):
-                            videos.append(video)
-                            videosAdded += 1
                         else:
-                            existingVideo['tags'] = video['tags']
-                            existingVideo['creator'] = video['creator']
-                            existingVideo['created_at'] = video['created_at']
+                            ignoreUrls.append(topic['url'])
+                else:
+                    ignoreUrls.append(topic['url'])
+
         data['videos'] = videos
         jsonStr = json.dumps(data, indent=4)
         with open(indexFile, "w") as outfile:
+            outfile.write(jsonStr)
+
+        ignoreIndex['urls'] = ignoreUrls
+        jsonStr = json.dumps(ignoreIndex, indent=4)
+        with open('ignore-urls.json', "w") as outfile:
             outfile.write(jsonStr)
 
     return videosAdded
@@ -403,9 +451,10 @@ def savePage(page, url):
         outfile.write(pageContent)
 
 def readTopicList():
-    all = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all&page=',pages)
-    lastestopics = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false&per_page=50&&page=',pages)
-    for topic in lastestopics:
+    all = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false',pages)
+    topTopics = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all',pages)
+
+    for topic in topTopics:
         all.append(topic)
 
     jsonStr = json.dumps(all, indent=4)
@@ -417,8 +466,8 @@ jsonFile = 'index.json'
 modelVersion = 1
 upgradeScript(jsonFile, modelVersion)
 
-pages = 50
-readTopicList()
+pages = 100
+#readTopicList()
 f = open('topics.json')
 all = json.load(f)
 funscriptsFolder = 'funscripts'
