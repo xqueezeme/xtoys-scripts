@@ -465,17 +465,17 @@ def readTopicList():
 
 jsonFile = 'index.json'
 modelVersion = 1
-#seleniumLogin()
+seleniumLogin()
 
 upgradeScript(jsonFile, modelVersion)
 
 pages = 100
-#readTopicList()
+readTopicList()
 f = open('topics.json')
 all = json.load(f)
 funscriptsFolder = 'funscripts'
-#videosAdded = looptopics(jsonFile, all, funscriptsFolder)
-#print('Added ' + str(videosAdded) + ' videos.')
+videosAdded = looptopics(jsonFile, all, funscriptsFolder)
+print('Added ' + str(videosAdded) + ' videos.')
 
 def ignoreEporner(indexFile):
     f = open(indexFile)
