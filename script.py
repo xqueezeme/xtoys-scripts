@@ -469,19 +469,19 @@ modelVersion = 1
 upgradeScript(jsonFile, modelVersion)
 
 pages = 100
-readTopicList()
+#readTopicList()
 f = open('topics.json')
 all = json.load(f)
 funscriptsFolder = 'funscripts'
-videosAdded = looptopics(jsonFile, all, funscriptsFolder)
-print('Added ' + str(videosAdded) + ' videos.')
+#videosAdded = looptopics(jsonFile, all, funscriptsFolder)
+#print('Added ' + str(videosAdded) + ' videos.')
 
 def ignoreEporner(indexFile):
     f = open(indexFile)
     data = json.load(f)
     videos = data['videos']
     for idx in tqdm (range(len(videos)), 
-               desc="Validating existing videos", 
+               desc="Ignoring Eporner videos", 
                ascii=False, ncols=75):
         video = videos[idx]
         site = video['site']
