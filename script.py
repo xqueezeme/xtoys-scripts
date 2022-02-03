@@ -107,10 +107,12 @@ def getXhamsterId(url):
     split = group.split('-')
     return split[len(split)-1]
 def getEpornerId(url):
-    regex = re.compile(r'eporner\.com\/video\-([a-zA-Z0-9]+)\/?.*')
-    group =  regex.search(url)[1]
-    split = group.split('-')
-    return split[len(split)-1]
+    regex = re.compile(r'Eporner\.com\/video\-([a-zA-Z0-9]+)\/?.*')
+    group =  regex.search(url)
+    if(group):
+        return group[1]
+    regex = re.compile(r'Eporner\.com\/.*\/([a-zA-Z0-9]+)\/.*')
+    return regex.search(url)[1]
 
 def getUrl(site, id):
     if(site == 'pornhub'):
@@ -121,8 +123,8 @@ def getUrl(site, id):
         return 'https://www.xvideos.com/video' + id + '/xxx'
     elif(site == 'xhamster'):
         return 'https://nl.xhamster.com/videos/xxx-' + id
-    elif(site == 'eporner'):
-        return 'https://www.eporner.com/video-' + id + '/'
+    elif(site == 'Eporner'):
+        return 'https://www.Eporner.com/video-' + id + '/'
 
     return None
 
@@ -176,10 +178,10 @@ def findXhamsterIds(xhamsterSel):
             except:
                 print('failed on ' + str(a))
     return list(set(links))
-def findEpornerIds(epornerSel):
+def findEpornerIds(EpornerSel):
     links = [] 
-    if(len(epornerSel)>0):
-        for a in epornerSel:
+    if(len(EpornerSel)>0):
+        for a in EpornerSel:
             try:
                 id = getEpornerId(str(a))
                 if(id):
@@ -213,11 +215,11 @@ def parsePost(post,topic,funscriptsFolder):
     xhamsterLinks = findXhamsterIds(xhamsterSel)
     if(len(xhamsterLinks) == 1): 
         xhamster = xhamsterLinks[0]
-    epornerSel = post.xpath('.//*[not(blockquote)]//a[contains(@href,"eporner.com")]/@href')
-    epornerLinks = findEpornerIds(epornerSel)
-    if(len(epornerLinks) == 1):
-        eporner = epornerLinks[0]
-    videosCount = len(pornhubLinks) + len(xvideosLinks) + len(spankbangLinks) + len(xhamsterLinks) + len(epornerLinks)
+    EpornerSel = post.xpath('.//*[not(blockquote)]//a[contains(@href,"Eporner.com")]/@href')
+    EpornerLinks = findEpornerIds(EpornerSel)
+    if(len(EpornerLinks) == 1):
+        Eporner = EpornerLinks[0]
+    videosCount = len(pornhubLinks) + len(xvideosLinks) + len(spankbangLinks) + len(xhamsterLinks) + len(EpornerLinks)
     funscripts = []
     regexpNS = 'http://exslt.org/regular-expressions'
     links = post.xpath(".//*[not(blockquote)]//a[re:test(@href, '(\.funscript$)')]", namespaces={'re':regexpNS})
@@ -241,9 +243,9 @@ def parsePost(post,topic,funscriptsFolder):
         elif(xhamster):
             id = xhamster
             site = 'xhamster'
-        elif(eporner):
-            id = eporner
-            site = 'eporner'
+        elif(Eporner):
+            id = Eporner
+            site = 'Eporner'
         if(id):
             funscriptIndex = 1
             scripts = []
@@ -467,12 +469,32 @@ modelVersion = 1
 upgradeScript(jsonFile, modelVersion)
 
 pages = 100
-#readTopicList()
+readTopicList()
 f = open('topics.json')
 all = json.load(f)
 funscriptsFolder = 'funscripts'
 videosAdded = looptopics(jsonFile, all, funscriptsFolder)
 print('Added ' + str(videosAdded) + ' videos.')
+
+def ignoreEporner(indexFile):
+    f = open(indexFile)
+    data = json.load(f)
+    videos = data['videos']
+    for idx in tqdm (range(len(videos)), 
+               desc="Validating existing videos", 
+               ascii=False, ncols=75):
+        video = videos[idx]
+        site = video['site']
+        if(site == 'eporner'):
+            video['ignore'] = True
+
+    data['videos'] = videos
+    jsonStr = json.dumps(data, indent=4)
+    with open(indexFile, "w") as outfile:
+        outfile.write(jsonStr)
+ignoreEporner(jsonFile)
 validateSelenium(jsonFile)
 # Close.
 driver.close()
+
+
