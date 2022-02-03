@@ -462,10 +462,11 @@ def readTopicList():
     jsonStr = json.dumps(all, indent=4)
     with open('topics.json', "w") as outfile:
         outfile.write(jsonStr)
-seleniumLogin()
 
 jsonFile = 'index.json'
 modelVersion = 1
+#seleniumLogin()
+
 upgradeScript(jsonFile, modelVersion)
 
 pages = 100
