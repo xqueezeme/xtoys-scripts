@@ -399,7 +399,7 @@ def looptopics(indexFile, topics, funscriptsFolder):
     if os.path.exists('ignore-urls.json'):
         f = open('ignore-urls.json')
         ignoreIndex = json.load(f)
-        ignoreUrls = ignoreIndex.get('urls')
+        ignoreUrls = list(set(ignoreIndex.get('urls')))
     else:
         ignoreIndex = {}
     
@@ -411,7 +411,7 @@ def looptopics(indexFile, topics, funscriptsFolder):
                desc="Getting videos from topics", 
                ascii=False, ncols=75):
         topic = topics[idx]
-        if not topic['url'] in ignoreIndex:
+        if not topic['url'] in ignoreUrls:
             matchingVideo = next(filter(lambda existing: existing['name'] == topic['title'], videos), None)
             if(matchingVideo):
                 matchingVideo['tags'] = topic['tags']
@@ -435,6 +435,7 @@ def looptopics(indexFile, topics, funscriptsFolder):
                             ignoreUrls.append(topic['url'])
                 else:
                     ignoreUrls.append(topic['url'])
+
 
         data['videos'] = videos
         jsonStr = json.dumps(data, indent=4)
@@ -465,6 +466,7 @@ def readTopicList():
 
 jsonFile = 'index.json'
 modelVersion = 1
+
 seleniumLogin()
 
 upgradeScript(jsonFile, modelVersion)
