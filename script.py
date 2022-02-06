@@ -267,6 +267,7 @@ def parsePost(post,topic,funscriptsFolder):
                 "creator": topic['username'],
                 "ignore" : False
             }
+            validateVideo(video)
             return video
         else:
             print('Video is invalid ' + site + ' id: ' + id)
@@ -365,35 +366,35 @@ def validateSelenium(indexFile):
                desc="Validating existing videos", 
                ascii=False, ncols=75):
         video = videos[idx]
-        valid = None
-        site = video['site']
-        url = getUrl(site, video['id'])
-        xpath = "//video"
-        if (site == 'pornhub'):
-            xpath = "//div[@id='player']//video"
-        try:
-            driver.get(url)
-            driver.execute_script('videos = document.querySelectorAll("video"); for(video of videos) {video.pause()}')
-            try:
-                input = WebDriverWait(driver, 2).until(
-                    EC.presence_of_element_located((By.XPATH, xpath))
-                )
-                valid = True
-                #print(url + ' is valid')
-
-            except: 
-                valid = False
-                #print(url + ' is invalid')
-            video['valid'] = valid
-        except:
-            traceback.print_exc()
-
-
+        validateVideo(video)
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
     with open(indexFile, "w") as outfile:
         outfile.write(jsonStr)
 
+def validateVideo(video):
+    valid = None
+    site = video['site']
+    url = getUrl(site, video['id'])
+    xpath = "//video"
+    if (site == 'pornhub'):
+        xpath = "//div[@id='player']//video"
+    try:
+        driver.get(url)
+        driver.execute_script('videos = document.querySelectorAll("video"); for(video of videos) {video.pause()}')
+        try:
+            input = WebDriverWait(driver, 2).until(
+                EC.presence_of_element_located((By.XPATH, xpath))
+            )
+            valid = True
+            #print(url + ' is valid')
+
+        except: 
+            valid = False
+            #print(url + ' is invalid')
+        video['valid'] = valid
+    except:
+        traceback.print_exc()
 def looptopics(indexFile, topics, funscriptsFolder):
     ignoreUrls = []
     if os.path.exists('ignore-urls.json'):
