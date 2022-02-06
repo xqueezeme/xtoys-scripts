@@ -345,7 +345,7 @@
             "tags": [],
             "created_at": "2020-11-21T01:43:39.460Z",
             "url": "https://discuss.eroscripts.com/t/xxx/9361",
-            "valid": true,
+            "valid": false,
             "creator": "Hydra",
             "ignore": false
         },
@@ -1229,7 +1229,7 @@
             ],
             "created_at": "2020-12-19T06:41:12.120Z",
             "url": "https://discuss.eroscripts.com/t/xxx/11535",
-            "valid": true,
+            "valid": false,
             "creator": "Mudbug012",
             "ignore": false
         },
@@ -2625,7 +2625,7 @@
             ],
             "created_at": "2020-12-08T05:50:40.089Z",
             "url": "https://discuss.eroscripts.com/t/xxx/10706",
-            "valid": true,
+            "valid": false,
             "creator": "Hydra",
             "ignore": false
         },
