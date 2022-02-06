@@ -471,7 +471,7 @@ seleniumLogin()
 
 upgradeScript(jsonFile, modelVersion)
 
-pages = 100
+pages = 5
 readTopicList()
 f = open('topics.json')
 all = json.load(f)
@@ -496,7 +496,7 @@ def ignoreEporner(indexFile):
     with open(indexFile, "w") as outfile:
         outfile.write(jsonStr)
 ignoreEporner(jsonFile)
-validateSelenium(jsonFile)
+#validateSelenium(jsonFile)
 # Close.
 driver.close()
 
