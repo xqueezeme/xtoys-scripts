@@ -2,6 +2,7 @@
 from bs4 import BeautifulSoup as Soup
 
 import re
+from jinja2 import Undefined
 import requests
 from fake_useragent import UserAgent
 import time
@@ -73,9 +74,10 @@ def seleniumLogin():
 
 
 
-def download_file(filename, url):
+def download_file(filename, url, retries=0):
     local_filename = url.split('/')[-1]        
     # NOTE the stream=True parameter below
+    retries+=1
     try:
         with session.get(url, stream=True) as r:
             r.raise_for_status()
@@ -87,9 +89,12 @@ def download_file(filename, url):
                     f.write(chunk)
         return local_filename
     except:
-        print('Error trying to download ' + url+'\nTrying again in 10 sec')
-        time.sleep(5)
-        return download_file(filename, url)
+        if(retries < 5):
+            print('Error trying to download ' + url+'\nTrying again in 10 sec')
+            time.sleep(5)
+            return download_file(filename, url, retries=retries)
+        else:
+            return None
 
 
 def getSpankbangId(url):
@@ -139,7 +144,8 @@ def findPornhubIds(pornhubSel):
                         links.append(id)
                 except:
                     print('failed on ' + str(a))
-    return list(set(links))
+    return list(map(lambda link: { 'id' : link, 'site': 'pornhub'}, set(links)))
+
 def findSpankbangIds(spankbangSel):
     links = []
     if(len(spankbangSel)>0):
@@ -152,7 +158,7 @@ def findSpankbangIds(spankbangSel):
 
                 except:
                     print('failed on ' + str(a))
-    return list(set(links))
+    return list(map(lambda link: { 'id' : link, 'site': 'spankbang'}, set(links)))
 def findXvideosIds(xvideosSel):
     links = []
     if(len(xvideosSel)>0):
@@ -166,7 +172,7 @@ def findXvideosIds(xvideosSel):
                         print('Could not create id for ' + str(a))
                 except:
                     print('failed on ' + str(a))
-    return list(set(links))
+    return list(map(lambda link: { 'id' : link, 'site': 'xvideos'}, set(links)))
 def findXhamsterIds(xhamsterSel):
     links = [] 
     if(len(xhamsterSel)>0):
@@ -174,10 +180,10 @@ def findXhamsterIds(xhamsterSel):
             try:
                 id = getXhamsterId(str(a))
                 if(id):
-                    links.append(id)
+                        links.append(id)
             except:
                 print('failed on ' + str(a))
-    return list(set(links))
+    return list(map(lambda link: { 'id' : link, 'site': 'xhamster'}, set(links)))
 def findEpornerIds(EpornerSel):
     links = [] 
     if(len(EpornerSel)>0):
@@ -185,41 +191,35 @@ def findEpornerIds(EpornerSel):
             try:
                 id = getEpornerId(str(a))
                 if(id):
-                    links.append(id)
+                        links.append(id)
             except:
                 print('failed on ' + str(a))
-    return list(set(links))
+    return list(map(lambda link: { 'id' : link, 'site': 'eporner'}, set(links)))
+
+epornerAXPath = './/a[contains(@href,"Eporner.com")]/@href'
+spankbangAXPath = './/a[contains(@href,"spankbang.com")]/@href'
+pornhubAXPath = './/a[contains(@href,"pornhub.com")]/@href'
+xvideosAXPath = './/a[contains(@href,"xvideos.com")]/@href'
+xhamsterAXPath = './/a[contains(@href,"xhamster.com")]/@href'
+
+def findVideoLinks(element):
+    newVideoLinks = []
+    spankbangSel = element.xpath(spankbangAXPath)
+    newVideoLinks = newVideoLinks + findSpankbangIds(spankbangSel)
+
+    pornhubSel = element.xpath(pornhubAXPath)
+    newVideoLinks = newVideoLinks + findPornhubIds(pornhubSel)
+
+    xvideosSel = element.xpath(xvideosAXPath)
+    newVideoLinks = newVideoLinks + findXvideosIds(xvideosSel)
+    xhamsterSel = element.xpath(xhamsterAXPath)
+    newVideoLinks = newVideoLinks +  findXhamsterIds(xhamsterSel)
+    EpornerSel = element.xpath(epornerAXPath)
+    newVideoLinks = newVideoLinks +  findEpornerIds(EpornerSel)
+    return newVideoLinks
+
 def parsePost(post,topic,funscriptsFolder):
-    spankbang = None
-    pornhub = None
-    xvideos = None
-    xhamster = None
-
-    spankbangSel = post.xpath('.//*[not(blockquote)]//a[contains(@href,"spankbang.com")]/@href')
-
-    spankbangLinks = findSpankbangIds(spankbangSel)
-    if(len(spankbangLinks) ==  1):
-        spankbang = spankbangLinks[0]
-
-    pornhubSel = post.xpath('.//*[not(blockquote)]//a[contains(@href,"pornhub.com")]/@href')
-    pornhubLinks = findPornhubIds(pornhubSel)
-    if(len(pornhubLinks) == 1): 
-        pornhub = pornhubLinks[0]
-
-    xvideosSel = post.xpath('.//*[not(blockquote)]//a[contains(@href,"xvideos.com")]/@href')
-    xvideosLinks = findXvideosIds(xvideosSel)
-    if(len(xvideosLinks) == 1): 
-        xvideos = xvideosLinks[0]
-
-    xhamsterSel = post.xpath('.//*[not(blockquote)]//a[contains(@href,"xhamster.com")]/@href')
-    xhamsterLinks = findXhamsterIds(xhamsterSel)
-    if(len(xhamsterLinks) == 1): 
-        xhamster = xhamsterLinks[0]
-    EpornerSel = post.xpath('.//*[not(blockquote)]//a[contains(@href,"Eporner.com")]/@href')
-    EpornerLinks = findEpornerIds(EpornerSel)
-    if(len(EpornerLinks) == 1):
-        Eporner = EpornerLinks[0]
-    videosCount = len(pornhubLinks) + len(xvideosLinks) + len(spankbangLinks) + len(xhamsterLinks) + len(EpornerLinks)
+    newVideoLinks = findVideoLinks(post)
     funscripts = []
     regexpNS = 'http://exslt.org/regular-expressions'
     links = post.xpath(".//*[not(blockquote)]//a[re:test(@href, '(\.funscript$)')]", namespaces={'re':regexpNS})
@@ -230,48 +230,86 @@ def parsePost(post,topic,funscriptsFolder):
         else:
             funscripts.append({'location' : 'https://discuss.eroscripts.com' + link.get("href"), 'name': ''.join(link.itertext())})
 
-    if(videosCount ==1 and len(funscripts) > 0 and len(funscripts) <= 3):
-        if(spankbang):
-            id = spankbang
-            site = 'spankbang'
-        elif(pornhub):
-            id = pornhub
-            site = 'pornhub'
-        elif(xvideos):
-            id =  xvideos
-            site = 'xvideos'
-        elif(xhamster):
-            id = xhamster
-            site = 'xhamster'
-        elif(Eporner):
-            id = Eporner
-            site = 'Eporner'
+    if(len(newVideoLinks) == 1 and len(funscripts) > 0 and len(funscripts) <= 3):
+        id = newVideoLinks[0]
         if(id):
             funscriptIndex = 1
             scripts = []
+            allscriptsfound = True
             for funscript in funscripts:
                 filename = topic['slug'] + '-' + str(funscriptIndex) + '.funscript'
                 if(not os.path.exists(funscriptsFolder + '/' + filename)):
-                    download_file(funscriptsFolder + '/' + filename, funscript['location'])
+                    file = download_file(funscriptsFolder + '/' + filename, funscript['location'])
+                    if(file == None):
+                        allscriptsfound = False
                 scripts.append({'name': funscript['name'], 'location': 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + funscriptsFolder + '/' + filename})
                 funscriptIndex += 1
-            video = {
-                "name": topic['title'],
-                "site": site,
-                "id": id,
-                "scripts": scripts,
-                "tags": topic['tags'],
-                "created_at": topic['created_at'],
-                "url": topic['url'],
-                "valid": True,
-                "creator": topic['username'],
-                "ignore" : False
-            }
-            validateVideo(video)
-            return video
+            if(allscriptsfound):
+                video = {
+                    "name": topic['title'],
+                    "site": id['site'],
+                    "id": id['id'],
+                    "scripts": scripts,
+                    "tags": topic['tags'],
+                    "created_at": topic['created_at'],
+                    "url": topic['url'],
+                    "valid": True,
+                    "creator": topic['username'],
+                    "ignore" : False
+                }
+                validateVideo(video)
+                return video
+            else:
+                return None
         else:
-            print('Video is invalid ' + site + ' id: ' + id)
+            print('Video is invalid ' + id['site'] + ' id: ' + id)
         return None
+
+def parsePack(post):
+    current = ''
+    title = None
+    link = None
+    funscripts = None
+    videos = []
+    for el in post:
+        text = ''.join(el.itertext()).strip().lower()
+        if(text):
+            if(current == 'title'):
+                title = text.split('\n')[0]
+                current = None
+            elif(current == 'link'):
+                videoLinks = findVideoLinks(el)
+                current = None
+
+            elif(current == 'script'):
+                regexpNS = 'http://exslt.org/regular-expressions'
+                funscripts = []
+                links = el.xpath(".//a[re:test(@href, '(\.funscript$)')]", namespaces={'re':regexpNS})
+                if(len(links)>0):
+                    for link in links:
+                        if(link.get("href").startswith('http')):
+                            funscripts.append({'location' : link.get("href"), 'name': ''.join(link.itertext())})
+                        else:
+                            funscripts.append({'location' : 'https://discuss.eroscripts.com' + link.get("href"), 'name': ''.join(link.itertext())})
+                current = None
+
+            elif(text == 'details'):
+                current = 'title'
+            elif(text == 'video link') or el.get('alt') == ':movie_camera:':
+                current = 'link'
+            elif(text == 'script'):
+                current = 'script'
+        if el.tag == 'hr':
+            if(title and funscripts != None and len(funscripts) > 0 and videoLinks != None and len(videoLinks) == 1):
+                video = videoLinks[0]
+                videos.append({'title': title, 'site': video['site'], 'id': video['id'], 'funscripts': funscripts})
+            title = None
+            link = None
+            funscripts = None
+            videoLinks = None
+    return videos
+
+
 
 def parsePage(text, topic, funscriptsFolder):
     soup = Soup(text, "lxml")
@@ -279,9 +317,42 @@ def parsePage(text, topic, funscriptsFolder):
     posts = dom.xpath('//div[contains(@itemprop,"articleBody")]')
     videos = []
     if(len(posts) > 0):
-        video = parsePost(posts[0], topic, funscriptsFolder)
-        if(video):
-            videos.append(video)
+        if(len(posts[0].xpath('.//hr'))>0):
+            packVideos = parsePack(posts[0])
+            for video in packVideos:
+                funscriptIndex = 1
+                scripts = []
+                allscriptsfound = True
+                for funscript in video['funscripts']:
+                    filename = topic['slug'] + '-' + video['id'] + '-' + str(funscriptIndex) + '.funscript'
+                    if(not os.path.exists(funscriptsFolder + '/' + filename)):
+                        file = download_file(funscriptsFolder + '/' + filename, funscript['location'])
+                        if(file == None):
+                            allscriptsfound = False
+                    scripts.append({'name': funscript['name'], 'location': 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + funscriptsFolder + '/' + filename})
+                    funscriptIndex += 1
+                if allscriptsfound:
+                    video = {
+                        "name": video['title'],
+                        "site": video['site'],
+                        "id": video['id'],
+                        "scripts": scripts,
+                        "tags": topic['tags'],
+                        "created_at": topic['created_at'],
+                        "url": topic['url'],
+                        "valid": True,
+                        "creator": topic['username'],
+                        "ignore" : False,
+                        "pack": True
+                    }
+                    validateVideo(video)
+                    videos.append(video)
+                else:
+                    return None
+        else:
+            video = parsePost(posts[0], topic, funscriptsFolder)
+            if(video):
+                videos.append(video)
     return videos
     
 def formatHTML(content):
@@ -290,7 +361,7 @@ def formatHTML(content):
     return '<!DOCTYPE html><html lang="en">' + content[start: end-1] + '</body></html'
 
 
-titleEscapeWords = [ 'mega', 'pack']
+titleEscapeWords = [ 'pack']
 def readInfiniscroll(by, url, pages):
     newTopics = []
     for i in tqdm (range(pages), 
@@ -317,14 +388,14 @@ def readInfiniscroll(by, url, pages):
                                     username = user.get('username')
                         title = topic.get('title', None)
                         if title:
-                            if(next(filter(lambda keyword: title.lower().__contains__(keyword), titleEscapeWords), None) == None):
-                                newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/xxx/'+str(topic.get('id')),
-                                                'title': title,
-                                                'slug': topic.get('slug'),
-                                                'created_at': topic.get('created_at'),
-                                                'tags': topic.get('tags'),
-                                                'username': username
-                                                })
+                            newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/xxx/'+str(topic.get('id')),
+                                            'title': title,
+                                            'slug': topic.get('slug'),
+                                            'created_at': topic.get('created_at'),
+                                            'tags': topic.get('tags'),
+                                            'username': username,
+                                            'pack': next(filter(lambda keyword: title.lower().__contains__(keyword), titleEscapeWords), None) == None
+                                            })
                 else:
                     break
             else:
@@ -333,9 +404,9 @@ def readInfiniscroll(by, url, pages):
             break
     return newTopics
 
-def upgradeScript(indexFile, modelVersion):
-    if os.path.exists(indexFile):
-        f = open(indexFile)
+def upgradeScript(sourceIndexFile, modelVersion):
+    if os.path.exists(sourceIndexFile):
+        f = open(sourceIndexFile)
         data = json.load(f)
     else:
         data = {}
@@ -343,6 +414,7 @@ def upgradeScript(indexFile, modelVersion):
         data['videos'] = []
     data['version'] = modelVersion
     videos = data['videos']
+    newVideos = []
     for idx in tqdm (range(len(videos)), 
                desc="Upgrading script videos", 
                ascii=False, ncols=75):
@@ -353,13 +425,37 @@ def upgradeScript(indexFile, modelVersion):
                 scripts.append({"name" : '', "location": video['script']})
                 video['scripts'] = scripts
                 video.pop('script', None)
-    data['videos'] = videos
+        if(video.get('pack', False) == False):
+            newVideos.append(video)
+    data['videos'] = newVideos
     jsonStr = json.dumps(data, indent=4)
-    with open(indexFile, "w") as outfile:
+    with open(sourceIndexFile, "w") as outfile:
         outfile.write(jsonStr)
 
-def validateSelenium(indexFile):
-    f = open(indexFile)
+def saveIndex(sourceIndexFile, indexFileName):
+    if os.path.exists(sourceIndexFile):
+        f = open(sourceIndexFile)
+        data = json.load(f)
+    else:
+        data = {}
+        data['author'] = 'xqueezeme'
+        data['videos'] = []
+    data['version'] = modelVersion
+    videos = data['videos']
+    newVideos = []
+    for idx in tqdm (range(len(videos)), 
+               desc="Upgrading script videos", 
+               ascii=False, ncols=75):
+        video = videos[idx]
+        if(video.get('ignore', False) == False and video.get('valid', True)):
+            newVideos.append(video)
+    data['videos'] = newVideos
+    jsonStr = json.dumps(data, indent=4)
+    with open(indexFileName, "w") as outfile:
+        outfile.write(jsonStr)
+
+def validateSelenium(sourceIndexFile):
+    f = open(sourceIndexFile)
     data = json.load(f)
     videos = data['videos']
     for idx in tqdm (range(len(videos)), 
@@ -369,7 +465,7 @@ def validateSelenium(indexFile):
         validateVideo(video)
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
-    with open(indexFile, "w") as outfile:
+    with open(sourceIndexFile, "w") as outfile:
         outfile.write(jsonStr)
 
 def validateVideo(video):
@@ -395,7 +491,7 @@ def validateVideo(video):
         video['valid'] = valid
     except:
         traceback.print_exc()
-def looptopics(indexFile, topics, funscriptsFolder):
+def looptopics(sourceIndexFile, topics, funscriptsFolder):
     ignoreUrls = []
     if os.path.exists('ignore-urls.json'):
         f = open('ignore-urls.json')
@@ -404,7 +500,7 @@ def looptopics(indexFile, topics, funscriptsFolder):
     else:
         ignoreIndex = {}
     
-    f = open(indexFile)
+    f = open(sourceIndexFile)
     data = json.load(f)
     videos = data['videos']
     videosAdded = 0
@@ -440,7 +536,7 @@ def looptopics(indexFile, topics, funscriptsFolder):
 
         data['videos'] = videos
         jsonStr = json.dumps(data, indent=4)
-        with open(indexFile, "w") as outfile:
+        with open(sourceIndexFile, "w") as outfile:
             outfile.write(jsonStr)
 
         ignoreIndex['urls'] = ignoreUrls
@@ -465,23 +561,24 @@ def readTopicList():
     with open('topics.json', "w") as outfile:
         outfile.write(jsonStr)
 
-jsonFile = 'index.json'
+sourceIndexFile = 'index-source.json'
+indexFile = 'index.json'
 modelVersion = 1
 
 seleniumLogin()
 
-upgradeScript(jsonFile, modelVersion)
+upgradeScript(sourceIndexFile, modelVersion)
 
-pages = 5
+pages = 100
 readTopicList()
 f = open('topics.json')
 all = json.load(f)
 funscriptsFolder = 'funscripts'
-videosAdded = looptopics(jsonFile, all, funscriptsFolder)
+videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
 print('Added ' + str(videosAdded) + ' videos.')
 
-def ignoreEporner(indexFile):
-    f = open(indexFile)
+def ignoreEporner(sourceIndexFile):
+    f = open(sourceIndexFile)
     data = json.load(f)
     videos = data['videos']
     for idx in tqdm (range(len(videos)), 
@@ -494,11 +591,12 @@ def ignoreEporner(indexFile):
 
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
-    with open(indexFile, "w") as outfile:
+    with open(sourceIndexFile, "w") as outfile:
         outfile.write(jsonStr)
-ignoreEporner(jsonFile)
+
+ignoreEporner(sourceIndexFile)
 #validateSelenium(jsonFile)
+saveIndex(sourceIndexFile, indexFile)
+
 # Close.
 driver.close()
-
-
