@@ -302,6 +302,8 @@ def parsePack(post):
         if el.tag == 'hr':
             if(title and funscripts != None and len(funscripts) > 0 and videoLinks != None and len(videoLinks) == 1):
                 video = videoLinks[0]
+                if(title.lower() == 'length'):
+                    title = funscripts[0]['name'].replace('.funscript', '')
                 videos.append({'title': title, 'site': video['site'], 'id': video['id'], 'funscripts': funscripts})
             title = None
             link = None
@@ -425,8 +427,8 @@ def upgradeScript(sourceIndexFile, modelVersion):
                 scripts.append({"name" : '', "location": video['script']})
                 video['scripts'] = scripts
                 video.pop('script', None)
-        if(video.get('pack', False) == False):
-            newVideos.append(video)
+        #if(video.get('pack', False) == False):
+        newVideos.append(video)
     data['videos'] = newVideos
     jsonStr = json.dumps(data, indent=4)
     with open(sourceIndexFile, "w") as outfile:
