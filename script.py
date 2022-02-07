@@ -291,7 +291,17 @@ def parsePack(post):
                             funscripts.append({'location' : link.get("href"), 'name': ''.join(link.itertext())})
                         else:
                             funscripts.append({'location' : 'https://discuss.eroscripts.com' + link.get("href"), 'name': ''.join(link.itertext())})
-                current = None
+                    current = None
+                if(title and funscripts != None and len(funscripts) > 0 and videoLinks != None and len(videoLinks) == 1):
+                    video = videoLinks[0]
+                    if(title.lower() == 'length'):
+                        title = funscripts[0]['name'].replace('.funscript', '')
+                    videos.append({'title': title, 'site': video['site'], 'id': video['id'], 'funscripts': funscripts})
+                title = None
+                link = None
+                funscripts = None
+                videoLinks = None
+
 
             elif(text == 'details'):
                 current = 'title'
@@ -319,7 +329,7 @@ def parsePage(text, topic, funscriptsFolder):
     posts = dom.xpath('//div[contains(@itemprop,"articleBody")]')
     videos = []
     if(len(posts) > 0):
-        if(len(posts[0].xpath('.//hr'))>0):
+        if(len(posts[0].xpath('.//hr'))>0 or len(posts[0].xpath(".//h3[text() =' Details']"))> 0):
             packVideos = parsePack(posts[0])
             for video in packVideos:
                 funscriptIndex = 1
@@ -554,10 +564,10 @@ def savePage(page, url):
 
 def readTopicList():
     all = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false',pages)
-    topTopics = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all',pages)
+    #topTopics = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all',pages)
 
-    for topic in topTopics:
-        all.append(topic)
+    #for topic in topTopics:
+    #    all.append(topic)
 
     jsonStr = json.dumps(all, indent=4)
     with open('topics.json', "w") as outfile:
@@ -571,7 +581,7 @@ seleniumLogin()
 
 upgradeScript(sourceIndexFile, modelVersion)
 
-pages = 100
+pages = 10
 readTopicList()
 f = open('topics.json')
 all = json.load(f)
