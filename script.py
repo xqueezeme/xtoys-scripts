@@ -329,8 +329,10 @@ def parsePage(text, topic, funscriptsFolder):
     posts = dom.xpath('//div[contains(@itemprop,"articleBody")]')
     videos = []
     if(len(posts) > 0):
-        if(len(posts[0].xpath('.//hr'))>0 or len(posts[0].xpath(".//h3[text() =' Details']"))> 0):
-            packVideos = parsePack(posts[0])
+        post = posts[0]
+        postId = post.xpath('.//*')
+        if(len(post.xpath('.//hr'))>0 or len(post.xpath(".//h3[text() =' Details']"))> 0):
+            packVideos = parsePack(posts)
             for video in packVideos:
                 funscriptIndex = 1
                 scripts = []
@@ -362,7 +364,7 @@ def parsePage(text, topic, funscriptsFolder):
                 else:
                     return None
         else:
-            video = parsePost(posts[0], topic, funscriptsFolder)
+            video = parsePost(post, topic, funscriptsFolder)
             if(video):
                 videos.append(video)
     return videos
@@ -578,6 +580,7 @@ indexFile = 'index.json'
 modelVersion = 1
 
 seleniumLogin()
+#savePage("page.html", 'https://discuss.eroscripts.com/t/cock-hero-dreamscape-5-blissful-immersion/49864')
 
 upgradeScript(sourceIndexFile, modelVersion)
 
