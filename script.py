@@ -585,12 +585,12 @@ seleniumLogin()
 upgradeScript(sourceIndexFile, modelVersion)
 
 pages = 10
-readTopicList()
+#readTopicList()
 f = open('topics.json')
 all = json.load(f)
 funscriptsFolder = 'funscripts'
-videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
-print('Added ' + str(videosAdded) + ' videos.')
+#videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
+#print('Added ' + str(videosAdded) + ' videos.')
 
 def ignoreEporner(sourceIndexFile):
     f = open(sourceIndexFile)
@@ -602,7 +602,7 @@ def ignoreEporner(sourceIndexFile):
         video = videos[idx]
         site = video['site']
         if(site == 'eporner'):
-            video['ignore'] = True
+            video['ignore'] = False
 
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
@@ -610,7 +610,7 @@ def ignoreEporner(sourceIndexFile):
         outfile.write(jsonStr)
 
 ignoreEporner(sourceIndexFile)
-#validateSelenium(jsonFile)
+#validateSelenium(sourceIndexFile)
 saveIndex(sourceIndexFile, indexFile)
 
 # Close.
