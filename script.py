@@ -476,35 +476,44 @@ def validateSelenium(sourceIndexFile):
                desc="Validating existing videos", 
                ascii=False, ncols=75):
         video = videos[idx]
-        validateVideo(video)
+        if(video.get('ignore', False) == False):
+            validateVideo(video)
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
     with open(sourceIndexFile, "w") as outfile:
         outfile.write(jsonStr)
 
 def validateVideo(video):
-    valid = None
     site = video['site']
     url = getUrl(site, video['id'])
     xpath = "//video"
     if (site == 'pornhub'):
         xpath = "//div[@id='player']//video"
-    try:
-        driver.get(url)
-        driver.execute_script('videos = document.querySelectorAll("video"); for(video of videos) {video.pause()}')
+    tries = 0
+    previousValid =  video.get('valid', True)
+    valid = None
+    
+    while tries < 3 and valid == None:
         try:
-            input = WebDriverWait(driver, 2).until(
-                EC.presence_of_element_located((By.XPATH, xpath))
-            )
-            valid = True
-            #print(url + ' is valid')
+            driver.get(url)
+            driver.execute_script('videos = document.querySelectorAll("video"); for(video of videos) {video.pause()}')
+            try:
+                input = WebDriverWait(driver, 5).until(
+                    EC.presence_of_element_located((By.XPATH, xpath))
+                )
+                valid = True
+                #print(url + ' is valid')
 
-        except: 
-            valid = False
-            #print(url + ' is invalid')
+            except: 
+                valid = False
+                #print(url + ' is invalid')
+        except:
+            tries += 1
+            traceback.print_exc()
+    if(valid != None):
         video['valid'] = valid
-    except:
-        traceback.print_exc()
+        if(previousValid == False and valid == False):
+            video['ignore'] = True
 def looptopics(sourceIndexFile, topics, funscriptsFolder):
     ignoreUrls = []
     if os.path.exists('ignore-urls.json'):
