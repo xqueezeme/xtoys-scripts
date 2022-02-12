@@ -2,7 +2,6 @@
 from bs4 import BeautifulSoup as Soup
 
 import re
-from jinja2 import Undefined
 import requests
 from fake_useragent import UserAgent
 import time
@@ -18,6 +17,7 @@ import json
 from tqdm import tqdm
 import traceback
 import os
+import sys
 xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschikbaar.')]"
 xpath_invalid_pornhub = "//*[contains(text(), 'Fout Pagina Niet Gevonden')]"
 
@@ -507,6 +507,8 @@ def validateVideo(video):
             except: 
                 valid = False
                 #print(url + ' is invalid')
+        except KeyboardInterrupt:
+            sys.exit()
         except:
             tries += 1
             traceback.print_exc()
@@ -601,7 +603,7 @@ funscriptsFolder = 'funscripts'
 videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
 print('Added ' + str(videosAdded) + ' videos.')
 
-
+saveIndex(sourceIndexFile, indexFile)
 
 validateSelenium(sourceIndexFile)
 saveIndex(sourceIndexFile, indexFile)
