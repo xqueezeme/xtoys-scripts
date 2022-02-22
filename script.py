@@ -35,10 +35,8 @@ options = webdriver.ChromeOptions()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
 options.add_argument("--headless")
-capabilities = webdriver.DesiredCapabilities().CHROME
-capabilities["marionette"] = False
 
-driver = webdriver.Chrome(options=options,capabilities=capabilities)
+driver = webdriver.Chrome(options=options)
 
 def getPage(url):
     try:
