@@ -14,4 +14,3 @@ hyper
 pycurl
 lxml
 pyvirtualdisplay
-xvfb
