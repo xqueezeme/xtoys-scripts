@@ -18,6 +18,8 @@ from tqdm import tqdm
 import traceback
 import os
 import sys
+from pyvirtualdisplay import Display
+
 xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschikbaar.')]"
 xpath_invalid_pornhub = "//*[contains(text(), 'Fout Pagina Niet Gevonden')]"
 
@@ -29,9 +31,11 @@ credentials = json.load(f)
 options = webdriver.FirefoxOptions()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
-
 options.add_argument("--headless")
-driver = webdriver.Firefox(options=options)
+capabilities = webdriver.DesiredCapabilities().FIREFOX
+capabilities["marionette"] = False
+
+driver = webdriver.Firefox(options=options,capabilities=capabilities)
 
 def getPage(url):
     try:
@@ -610,3 +614,4 @@ saveIndex(sourceIndexFile, indexFile)
 
 # Close.
 driver.close()
+display.stop()

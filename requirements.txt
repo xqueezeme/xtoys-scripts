@@ -13,3 +13,4 @@ fake_useragent
 hyper
 pycurl
 lxml
+pyvirtualdisplay
