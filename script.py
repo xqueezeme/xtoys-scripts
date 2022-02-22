@@ -19,6 +19,8 @@ import traceback
 import os
 import sys
 from pyvirtualdisplay import Display
+display = Display(visible=0, size=(800, 600))
+display.start()
 
 xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschikbaar.')]"
 xpath_invalid_pornhub = "//*[contains(text(), 'Fout Pagina Niet Gevonden')]"
@@ -28,14 +30,14 @@ userAgent = str(ua.chrome)
 session = requests.Session()
 f = open('./credentials.json')
 credentials = json.load(f)
-options = webdriver.FirefoxOptions()
+options = webdriver.ChromeOptions()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
 options.add_argument("--headless")
-capabilities = webdriver.DesiredCapabilities().FIREFOX
+capabilities = webdriver.DesiredCapabilities().CHROME
 capabilities["marionette"] = False
 
-driver = webdriver.Firefox(options=options,capabilities=capabilities)
+driver = webdriver.Chrome(options=options,capabilities=capabilities)
 
 def getPage(url):
     try:
