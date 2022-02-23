@@ -1,0 +1,4 @@
+Defaulting to user installation because normal site-packages is not writeable
+Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
+Requirement already satisfied: pip in ./.local/lib/python3.9/site-packages (22.0.3)
+Defaulting to user installation because normal site-packages is not writeable

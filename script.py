@@ -18,6 +18,11 @@ from tqdm import tqdm
 import traceback
 import os
 import sys
+from pyvirtualdisplay import Display
+
+display = Display(visible=0, size=(800, 600))
+display.start()
+
 xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschikbaar.')]"
 xpath_invalid_pornhub = "//*[contains(text(), 'Fout Pagina Niet Gevonden')]"
 
@@ -26,12 +31,12 @@ userAgent = str(ua.chrome)
 session = requests.Session()
 f = open('./credentials.json')
 credentials = json.load(f)
-options = webdriver.FirefoxOptions()
+options = webdriver.ChromeOptions()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
-
 options.add_argument("--headless")
-driver = webdriver.Firefox(options=options)
+
+driver = webdriver.Chrome(options=options)
 
 def getPage(url):
     try:
@@ -595,7 +600,7 @@ seleniumLogin()
 
 upgradeScript(sourceIndexFile, modelVersion)
 
-pages = 50
+pages = 10
 readTopicList()
 f = open('topics.json')
 all = json.load(f)
@@ -604,9 +609,9 @@ videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
 print('Added ' + str(videosAdded) + ' videos.')
 
 saveIndex(sourceIndexFile, indexFile)
-
 validateSelenium(sourceIndexFile)
 saveIndex(sourceIndexFile, indexFile)
 
 # Close.
 driver.close()
+display.stop()
