@@ -133,8 +133,8 @@ def getUrl(site, id):
         return 'https://www.xvideos.com/video' + id + '/xxx'
     elif(site == 'xhamster'):
         return 'https://nl.xhamster.com/videos/xxx-' + id
-    elif(site == 'Eporner'):
-        return 'https://www.Eporner.com/video-' + id + '/'
+    elif(site == 'eporner'):
+        return 'https://www.eporner.com/video-' + id + '/'
 
     return None
 
@@ -492,18 +492,20 @@ def validateVideo(video):
     site = video['site']
     url = getUrl(site, video['id'])
     xpath = "//video"
+    driver.get('https://google.com')
+
     if (site == 'pornhub'):
         xpath = "//div[@id='player']//video"
     tries = 0
     previousValid =  video.get('valid', True)
     valid = None
-    
+    time.sleep(1)
     while tries < 3 and valid == None:
         try:
             driver.get(url)
             driver.execute_script('videos = document.querySelectorAll("video"); for(video of videos) {video.pause()}')
             try:
-                input = WebDriverWait(driver, 5).until(
+                input = WebDriverWait(driver, 20).until(
                     EC.presence_of_element_located((By.XPATH, xpath))
                 )
                 valid = True
