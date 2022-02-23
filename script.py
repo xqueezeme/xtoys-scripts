@@ -402,7 +402,7 @@ def readInfiniscroll(by, url, pages):
                                     username = user.get('username')
                         title = topic.get('title', None)
                         if title:
-                            newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/xxx/'+str(topic.get('id')),
+                            newTopics.append({ 'url': 'https://discuss.eroscripts.com/t/' + topic.get('slug') + '/'+str(topic.get('id')),
                                             'title': title,
                                             'slug': topic.get('slug'),
                                             'created_at': topic.get('created_at'),
