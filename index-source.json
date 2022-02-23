@@ -20711,7 +20711,7 @@
             "url": "https://discuss.eroscripts.com/t/xxx/18834",
             "valid": false,
             "creator": "JP42069",
-            "ignore": false
+            "ignore": true
         },
         {
             "name": "Kemono Furry Animation [Furry]",
@@ -20768,7 +20768,7 @@
             "tags": [],
             "created_at": "2020-10-13T01:13:10.767Z",
             "url": "https://discuss.eroscripts.com/t/xxx/6377",
-            "valid": true,
+            "valid": false,
             "creator": "Dig125",
             "ignore": false
         },
@@ -23844,7 +23844,7 @@
             ],
             "created_at": "2022-02-07T03:06:12.034Z",
             "url": "https://discuss.eroscripts.com/t/xxx/49754",
-            "valid": false,
+            "valid": true,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -23865,7 +23865,7 @@
             ],
             "created_at": "2022-02-07T03:06:12.034Z",
             "url": "https://discuss.eroscripts.com/t/xxx/49754",
-            "valid": false,
+            "valid": true,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -23886,7 +23886,7 @@
             ],
             "created_at": "2022-02-07T03:06:12.034Z",
             "url": "https://discuss.eroscripts.com/t/xxx/49754",
-            "valid": false,
+            "valid": true,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24061,7 +24061,7 @@
             ],
             "created_at": "2021-09-29T13:51:33.538Z",
             "url": "https://discuss.eroscripts.com/t/xxx/36409",
-            "valid": false,
+            "valid": true,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24086,7 +24086,7 @@
             ],
             "created_at": "2021-09-29T13:51:33.538Z",
             "url": "https://discuss.eroscripts.com/t/xxx/36409",
-            "valid": false,
+            "valid": true,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24419,7 +24419,7 @@
             ],
             "created_at": "2021-09-18T01:29:39.516Z",
             "url": "https://discuss.eroscripts.com/t/xxx/35412",
-            "valid": false,
+            "valid": true,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24441,7 +24441,7 @@
             ],
             "created_at": "2021-09-18T01:29:39.516Z",
             "url": "https://discuss.eroscripts.com/t/xxx/35412",
-            "valid": false,
+            "valid": true,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24697,7 +24697,7 @@
             ],
             "created_at": "2021-12-22T22:16:36.724Z",
             "url": "https://discuss.eroscripts.com/t/xxx/44652",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24718,7 +24718,7 @@
             ],
             "created_at": "2021-12-22T22:16:36.724Z",
             "url": "https://discuss.eroscripts.com/t/xxx/44652",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24739,7 +24739,7 @@
             ],
             "created_at": "2021-12-22T22:16:36.724Z",
             "url": "https://discuss.eroscripts.com/t/xxx/44652",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24779,7 +24779,7 @@
             ],
             "created_at": "2021-06-13T02:35:51.835Z",
             "url": "https://discuss.eroscripts.com/t/xxx/27519",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24799,7 +24799,7 @@
             ],
             "created_at": "2021-06-13T02:35:51.835Z",
             "url": "https://discuss.eroscripts.com/t/xxx/27519",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24819,7 +24819,7 @@
             ],
             "created_at": "2021-06-13T02:35:51.835Z",
             "url": "https://discuss.eroscripts.com/t/xxx/27519",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24839,7 +24839,7 @@
             ],
             "created_at": "2021-06-13T02:35:51.835Z",
             "url": "https://discuss.eroscripts.com/t/xxx/27519",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24859,7 +24859,7 @@
             ],
             "created_at": "2021-06-13T02:35:51.835Z",
             "url": "https://discuss.eroscripts.com/t/xxx/27519",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24879,7 +24879,7 @@
             ],
             "created_at": "2021-06-13T02:35:51.835Z",
             "url": "https://discuss.eroscripts.com/t/xxx/27519",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -24899,7 +24899,7 @@
             ],
             "created_at": "2021-06-13T02:35:51.835Z",
             "url": "https://discuss.eroscripts.com/t/xxx/27519",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -25168,7 +25168,7 @@
             ],
             "created_at": "2021-07-11T02:01:02.207Z",
             "url": "https://discuss.eroscripts.com/t/xxx/29579",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -26110,7 +26110,7 @@
             ],
             "created_at": "2021-06-11T03:13:36.690Z",
             "url": "https://discuss.eroscripts.com/t/xxx/27334",
-            "valid": false,
+            "valid": true,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -26130,7 +26130,7 @@
             ],
             "created_at": "2021-06-11T03:13:36.690Z",
             "url": "https://discuss.eroscripts.com/t/xxx/27334",
-            "valid": false,
+            "valid": true,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -26152,7 +26152,7 @@
             ],
             "created_at": "2021-08-31T12:38:27.601Z",
             "url": "https://discuss.eroscripts.com/t/xxx/33783",
-            "valid": false,
+            "valid": true,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -26174,7 +26174,7 @@
             ],
             "created_at": "2021-08-31T12:38:27.601Z",
             "url": "https://discuss.eroscripts.com/t/xxx/33783",
-            "valid": false,
+            "valid": true,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -26196,7 +26196,7 @@
             ],
             "created_at": "2021-08-31T12:38:27.601Z",
             "url": "https://discuss.eroscripts.com/t/xxx/33783",
-            "valid": false,
+            "valid": true,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -26218,7 +26218,7 @@
             ],
             "created_at": "2021-08-31T12:38:27.601Z",
             "url": "https://discuss.eroscripts.com/t/xxx/33783",
-            "valid": false,
+            "valid": true,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -26723,7 +26723,7 @@
             ],
             "created_at": "2021-07-29T04:02:29.624Z",
             "url": "https://discuss.eroscripts.com/t/xxx/31016",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -26914,7 +26914,7 @@
             ],
             "created_at": "2021-07-19T01:20:03.492Z",
             "url": "https://discuss.eroscripts.com/t/xxx/30224",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -26938,7 +26938,7 @@
             ],
             "created_at": "2021-07-19T01:20:03.492Z",
             "url": "https://discuss.eroscripts.com/t/xxx/30224",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -26986,7 +26986,7 @@
             ],
             "created_at": "2021-07-19T01:20:03.492Z",
             "url": "https://discuss.eroscripts.com/t/xxx/30224",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -27006,7 +27006,7 @@
             ],
             "created_at": "2021-04-14T04:37:21.278Z",
             "url": "https://discuss.eroscripts.com/t/xxx/21824",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -27026,7 +27026,7 @@
             ],
             "created_at": "2021-04-14T04:37:21.278Z",
             "url": "https://discuss.eroscripts.com/t/xxx/21824",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -27046,7 +27046,7 @@
             ],
             "created_at": "2021-04-14T04:37:21.278Z",
             "url": "https://discuss.eroscripts.com/t/xxx/21824",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -27066,7 +27066,7 @@
             ],
             "created_at": "2021-04-14T04:37:21.278Z",
             "url": "https://discuss.eroscripts.com/t/xxx/21824",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -27086,7 +27086,7 @@
             ],
             "created_at": "2021-04-14T04:37:21.278Z",
             "url": "https://discuss.eroscripts.com/t/xxx/21824",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -27106,7 +27106,7 @@
             ],
             "created_at": "2021-04-14T04:37:21.278Z",
             "url": "https://discuss.eroscripts.com/t/xxx/21824",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true
@@ -27126,7 +27126,7 @@
             ],
             "created_at": "2021-04-14T04:37:21.278Z",
             "url": "https://discuss.eroscripts.com/t/xxx/21824",
-            "valid": true,
+            "valid": false,
             "creator": "MythrilJay",
             "ignore": false,
             "pack": true

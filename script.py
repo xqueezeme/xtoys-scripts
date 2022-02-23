@@ -609,7 +609,7 @@ videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
 print('Added ' + str(videosAdded) + ' videos.')
 
 saveIndex(sourceIndexFile, indexFile)
-#validateSelenium(sourceIndexFile)
+validateSelenium(sourceIndexFile)
 saveIndex(sourceIndexFile, indexFile)
 
 # Close.
