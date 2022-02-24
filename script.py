@@ -610,7 +610,8 @@ funscriptsFolder = 'funscripts'
 videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
 print('Added ' + str(videosAdded) + ' videos.')
 
-wxxvalidateSelenium(sourceIndexFile)
+saveIndex(sourceIndexFile, indexFile)
+validateSelenium(sourceIndexFile)
 saveIndex(sourceIndexFile, indexFile)
 
 # Close.
