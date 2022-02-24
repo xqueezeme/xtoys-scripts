@@ -20,8 +20,8 @@ import os
 import sys
 from pyvirtualdisplay import Display
 
-display = Display(visible=0, size=(800, 600))
-display.start()
+#display = Display(visible=0, size=(800, 600))
+#display.start()
 
 xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschikbaar.')]"
 xpath_invalid_pornhub = "//*[contains(text(), 'Fout Pagina Niet Gevonden')]"
@@ -336,7 +336,7 @@ def parsePage(text, topic, funscriptsFolder):
     if(len(posts) > 0):
         post = posts[0]
         postId = post.xpath('.//*')
-        if(len(post.xpath('.//hr'))>0 or len(post.xpath(".//h3[text() =' Details']"))> 0):
+        if(len(post.xpath('.//hr'))>0 or len(post.xpath(".//h3[text() =' Details']"))> 1):
             packVideos = parsePack(posts)
             for video in packVideos:
                 funscriptIndex = 1
@@ -602,7 +602,7 @@ seleniumLogin()
 
 upgradeScript(sourceIndexFile, modelVersion)
 
-pages = 10
+pages = 20
 readTopicList()
 f = open('topics.json')
 all = json.load(f)
@@ -610,10 +610,9 @@ funscriptsFolder = 'funscripts'
 videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
 print('Added ' + str(videosAdded) + ' videos.')
 
-saveIndex(sourceIndexFile, indexFile)
-validateSelenium(sourceIndexFile)
+wxxvalidateSelenium(sourceIndexFile)
 saveIndex(sourceIndexFile, indexFile)
 
 # Close.
 driver.close()
-display.stop()
+#display.stop()
