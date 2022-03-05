@@ -23784,7 +23784,7 @@
             "url": "https://discuss.eroscripts.com/t/xxx/49754",
             "valid": false,
             "creator": "MythrilJay",
-            "ignore": false,
+            "ignore": true,
             "pack": true
         },
         {
@@ -27619,7 +27619,7 @@
             "url": "https://discuss.eroscripts.com/t/paag-twerk-abg-pmv/50833",
             "valid": false,
             "creator": "ckhero",
-            "ignore": false
+            "ignore": true
         },
         {
             "name": "Enter Sandman PMV",
