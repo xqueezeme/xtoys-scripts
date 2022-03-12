@@ -1,4 +1,5 @@
 
+import operator
 from bs4 import BeautifulSoup as Soup
 
 import re
@@ -450,6 +451,13 @@ def upgradeScript(sourceIndexFile, modelVersion):
     jsonStr = json.dumps(data, indent=4)
     with open(sourceIndexFile, "w") as outfile:
         outfile.write(jsonStr)
+def createDisplayName(name):
+    keywords = ['request filled', 'request fulfillment', 'completed request', 'script requested', 'script request', 'first script','pornhub','request'];
+    for keyword in keywords:
+        name = re.sub('[\(]\s*' + keyword + '\s*\[\)]\s*', '',name, flags=re.IGNORECASE)
+        name = re.sub('[\[]\s*' + keyword + '\s*\]\s*', '', name,flags=re.IGNORECASE)
+        name = re.sub('\s*' + keyword + '\s*[\:]?[\-]?\s*',  '', name,flags=re.IGNORECASE)
+    return name.strip()
 
 def saveIndex(sourceIndexFile, indexFileName):
     if os.path.exists(sourceIndexFile):
@@ -459,16 +467,27 @@ def saveIndex(sourceIndexFile, indexFileName):
         data = {}
         data['author'] = 'xqueezeme'
         data['videos'] = []
+        data['tags'] = []
     data['version'] = modelVersion
     videos = data['videos']
     newVideos = []
+    tags = {}
     for idx in tqdm (range(len(videos)), 
                desc="Upgrading script videos", 
                ascii=False, ncols=75):
         video = videos[idx]
         if(video.get('ignore', False) == False and video.get('valid', True)):
+            video['displayName'] = createDisplayName(video.get('name'))
+            for tag in video['tags']:
+                newTags = tags.get(tag)
+                if(newTags == None):
+                    newTags = []
+                newTags.append(video['name'])
+                tags[tag] = newTags
             newVideos.append(video)
     data['videos'] = newVideos
+    data['tags'] = dict(sorted(tags.items(), key=operator.itemgetter(0)))
+ 
     jsonStr = json.dumps(data, indent=4)
     with open(indexFileName, "w") as outfile:
         outfile.write(jsonStr)
