@@ -2189,7 +2189,7 @@
             ],
             "created_at": "2021-02-13T08:35:32.652Z",
             "url": "https://discuss.eroscripts.com/t/xxx/16258",
-            "valid": true,
+            "valid": false,
             "creator": "Liquid",
             "ignore": false
         },
@@ -4937,7 +4937,7 @@
             "url": "https://discuss.eroscripts.com/t/xxx/29297",
             "valid": false,
             "creator": "VRProdigy",
-            "ignore": false
+            "ignore": true
         },
         {
             "name": "Dani Daniels - Edging JOI",
@@ -10083,7 +10083,7 @@
             ],
             "created_at": "2021-09-23T11:05:16.496Z",
             "url": "https://discuss.eroscripts.com/t/xxx/35891",
-            "valid": true,
+            "valid": false,
             "creator": "noodledude",
             "ignore": false
         },
@@ -29890,6 +29890,51 @@
             ],
             "created_at": "2022-04-04T09:40:37.454Z",
             "url": "https://discuss.eroscripts.com/t/deselmine-milking-farm-my-first-script/55668",
+            "valid": true,
+            "creator": "99DM",
+            "ignore": false
+        },
+        {
+            "name": "Gianna Michaels-Fuck You Like A Hurricane (rework)",
+            "site": "xhamster",
+            "id": "1177444280.1628477768",
+            "scripts": [
+                {
+                    "name": "GIANNA-Fuck You Like A Hurricane PMV.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/gianna-michaels-fuck-you-like-a-hurricane-rework-1.funscript"
+                }
+            ],
+            "tags": [
+                "blowjob",
+                "vaginal",
+                "riding",
+                "pmv"
+            ],
+            "created_at": "2022-04-06T23:26:38.810Z",
+            "url": "https://discuss.eroscripts.com/t/gianna-michaels-fuck-you-like-a-hurricane-rework/55983",
+            "valid": false,
+            "creator": "evilpapa666",
+            "ignore": true
+        },
+        {
+            "name": "Zell23 - fobs (forest of the blue skin version 1.09 gallery)",
+            "site": "xvideos",
+            "id": "24705537",
+            "scripts": [
+                {
+                    "name": "fobs.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/zell23-fobs-forest-of-the-blue-skin-version-1-09-gallery-1.funscript"
+                }
+            ],
+            "tags": [
+                "blowjob",
+                "handjob",
+                "hentai",
+                "animation",
+                "titfuck"
+            ],
+            "created_at": "2022-04-06T09:43:56.707Z",
+            "url": "https://discuss.eroscripts.com/t/zell23-fobs-forest-of-the-blue-skin-version-1-09-gallery/55914",
             "valid": true,
             "creator": "99DM",
             "ignore": false
