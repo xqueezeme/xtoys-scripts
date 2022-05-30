@@ -13220,7 +13220,7 @@
             ],
             "created_at": "2021-06-14T03:45:10.184Z",
             "url": "https://discuss.eroscripts.com/t/xxx/27592",
-            "valid": true,
+            "valid": false,
             "creator": "Lynara",
             "ignore": false
         },
@@ -14639,7 +14639,7 @@
             "url": "https://discuss.eroscripts.com/t/xxx/36068",
             "valid": false,
             "creator": "quartz",
-            "ignore": false
+            "ignore": true
         },
         {
             "name": "VR PMV - Don't Start Now by sbstuff - cock hero style beats",
@@ -33305,6 +33305,50 @@
             "url": "https://discuss.eroscripts.com/t/aisha-bunny-asian-eyes/61362",
             "valid": true,
             "creator": "VRProdigy",
+            "ignore": false
+        },
+        {
+            "name": "JJULEZ - Anthem No.3 Draenei HMV",
+            "site": "spankbang",
+            "id": "4zvuc",
+            "scripts": [
+                {
+                    "name": "Anthem No.3 Draenei PMV.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/jjulez-anthem-no-3-draenei-hmv-1.funscript"
+                }
+            ],
+            "tags": [
+                "cgi",
+                "hmv",
+                "audio-based",
+                "action"
+            ],
+            "created_at": "2022-05-30T00:40:23.323Z",
+            "url": "https://discuss.eroscripts.com/t/jjulez-anthem-no-3-draenei-hmv/62639",
+            "valid": true,
+            "creator": "bruhpodspro",
+            "ignore": false
+        },
+        {
+            "name": "Stellar Loving - Riding dildo",
+            "site": "spankbang",
+            "id": "5zds8",
+            "scripts": [
+                {
+                    "name": "SpankBang.com_xxxvvvyyy_1080p.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/stellar-loving-riding-dildo-1.funscript"
+                }
+            ],
+            "tags": [
+                "handjob",
+                "riding",
+                "solo-female",
+                "dildo"
+            ],
+            "created_at": "2022-05-29T18:43:17.960Z",
+            "url": "https://discuss.eroscripts.com/t/stellar-loving-riding-dildo/62604",
+            "valid": true,
+            "creator": "arator",
             "ignore": false
         }
     ],
