@@ -32582,7 +32582,7 @@
             "url": "https://discuss.eroscripts.com/t/madam-violet-genie-part-1/60802",
             "valid": false,
             "creator": "Lynara",
-            "ignore": false
+            "ignore": true
         },
         {
             "name": "MandiMOAR - Naked Sex on the Beach",
@@ -36139,7 +36139,7 @@
             "url": "https://discuss.eroscripts.com/t/madam-violet-genie-part-3/69049",
             "valid": false,
             "creator": "Lynara",
-            "ignore": false
+            "ignore": true
         },
         {
             "name": "Every Man's Morning Should Start Like This! - LuxuryGirl",
@@ -36274,6 +36274,53 @@
             "url": "https://discuss.eroscripts.com/t/melanie-rios-bangarang-pmv/69460",
             "valid": true,
             "creator": "ZANDORF",
+            "ignore": false
+        },
+        {
+            "name": "SalieriXXX - Lucy Li - Blowjob Competition",
+            "site": "spankbang",
+            "id": "cwgv",
+            "scripts": [
+                {
+                    "name": "SalieriXXX - Lucy Li - Blowjob Competition [zalunda].funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/salierixxx-lucy-li-blowjob-competition-1.funscript"
+                },
+                {
+                    "name": "SalieriXXX - Lucy Li - Blowjob Competition (spankbang.com) [zalunda].funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/salierixxx-lucy-li-blowjob-competition-2.funscript"
+                }
+            ],
+            "tags": [
+                "blowjob"
+            ],
+            "created_at": "2022-07-26T21:42:11.335Z",
+            "url": "https://discuss.eroscripts.com/t/salierixxx-lucy-li-blowjob-competition/69730",
+            "valid": true,
+            "creator": "Zalunda",
+            "ignore": false
+        },
+        {
+            "name": "[StudioFOW] Subverse - Dr. Lily Has Sex With Captain",
+            "site": "pornhub",
+            "id": "ph61ef099782036",
+            "scripts": [
+                {
+                    "name": "Subverse - Dr. Lily Has Sex With Captain.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/studiofow-subverse-dr-lily-has-sex-with-captain-1.funscript"
+                }
+            ],
+            "tags": [
+                "blowjob",
+                "vaginal",
+                "animation",
+                "cgi",
+                "titfuck",
+                "animated"
+            ],
+            "created_at": "2022-07-26T20:36:27.081Z",
+            "url": "https://discuss.eroscripts.com/t/studiofow-subverse-dr-lily-has-sex-with-captain/69725",
+            "valid": true,
+            "creator": "GarbageMan",
             "ignore": false
         }
     ],
