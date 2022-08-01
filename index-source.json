@@ -36453,10 +36453,6 @@
             "id": "4wmh7",
             "scripts": [
                 {
-                    "name": "CowboyPMV - All Sinners Day.funscript",
-                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/all-sinners-day-cowboypmv-1.funscript"
-                },
-                {
                     "name": "ALL SINNERS DAY-COMBOYPMV.funscript",
                     "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/all-sinners-day-cowboypmv-2.funscript"
                 }
