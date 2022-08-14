@@ -12783,13 +12783,16 @@
                 }
             ],
             "tags": [
-                "hentai",
-                "hmv"
+                "pmv",
+                "cgi",
+                "hmv",
+                "music",
+                "overwatch"
             ],
-            "created_at": "2020-10-24T08:52:05.035Z",
+            "created_at": "2022-08-13T16:37:35.086Z",
             "url": "https://discuss.eroscripts.com/t/xxx/7282",
             "valid": false,
-            "creator": "Liquid",
+            "creator": "Baxtyr",
             "ignore": true
         },
         {
@@ -37122,6 +37125,50 @@
             "url": "https://discuss.eroscripts.com/t/bill-wake-up-i-m-not-mom/71929",
             "valid": true,
             "creator": "Endlessdream",
+            "ignore": false
+        },
+        {
+            "name": "PMV - Girls on Film (ASPmvs)",
+            "site": "spankbang",
+            "id": "74mvo",
+            "scripts": [
+                {
+                    "name": "acht_stellige-girls_on_film.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/pmv-girls-on-film-aspmvs-1.funscript"
+                }
+            ],
+            "tags": [
+                "blowjob",
+                "vaginal",
+                "pmv",
+                "audio-based",
+                "solo-female"
+            ],
+            "created_at": "2022-08-14T00:25:40.905Z",
+            "url": "https://discuss.eroscripts.com/t/pmv-girls-on-film-aspmvs/72080",
+            "valid": true,
+            "creator": "achtstellige",
+            "ignore": false
+        },
+        {
+            "name": "Umemaro 3D - Vol.11 - Pizza Takeout Obscenity",
+            "site": "spankbang",
+            "id": "2d9s4",
+            "scripts": [
+                {
+                    "name": "Umemaro 3D - Vol.11 - Pizza Takeout Obscenity.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/umemaro-3d-vol-11-pizza-takeout-obscenity-1.funscript"
+                }
+            ],
+            "tags": [
+                "hentai",
+                "animation",
+                "cgi"
+            ],
+            "created_at": "2022-08-13T14:23:20.955Z",
+            "url": "https://discuss.eroscripts.com/t/umemaro-3d-vol-11-pizza-takeout-obscenity/72017",
+            "valid": true,
+            "creator": "th3d3v1l.7",
             "ignore": false
         }
     ],
