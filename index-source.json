@@ -986,7 +986,7 @@
             "tags": [],
             "created_at": "2021-04-18T18:51:02.490Z",
             "url": "https://discuss.eroscripts.com/t/xxx/22260",
-            "valid": true,
+            "valid": false,
             "creator": "Nodude",
             "ignore": false
         },
@@ -37606,6 +37606,25 @@
             "url": "https://discuss.eroscripts.com/t/request-for-anal-drilling/73035",
             "valid": true,
             "creator": "Endlessdream",
+            "ignore": false
+        },
+        {
+            "name": "PMV - Need You Tonight | Ellie Idol Tribute",
+            "site": "spankbang",
+            "id": "75kbt",
+            "scripts": [
+                {
+                    "name": "AchtStellige-Ellie_Idol_Tribute.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/pmv-need-you-tonight-ellie-idol-tribute-1.funscript"
+                }
+            ],
+            "tags": [
+                "pmv"
+            ],
+            "created_at": "2022-08-23T00:17:56.520Z",
+            "url": "https://discuss.eroscripts.com/t/pmv-need-you-tonight-ellie-idol-tribute/73249",
+            "valid": true,
+            "creator": "achtstellige",
             "ignore": false
         }
     ],
