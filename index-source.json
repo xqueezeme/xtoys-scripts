@@ -14147,7 +14147,7 @@
             ],
             "created_at": "2021-02-17T22:05:36.848Z",
             "url": "https://discuss.eroscripts.com/t/xxx/16649",
-            "valid": true,
+            "valid": false,
             "creator": "Teasey",
             "ignore": false
         },
@@ -31001,8 +31001,8 @@
                 }
             ],
             "tags": [
-                "futanari",
                 "furry",
+                "futanari",
                 "bdsm",
                 "hypno"
             ],
@@ -38298,6 +38298,31 @@
             "url": "https://discuss.eroscripts.com/t/alexa-pearl-2/74627",
             "valid": true,
             "creator": "Spacetrain22",
+            "ignore": false
+        },
+        {
+            "name": "Eroico Game CG Collection! (about 34min, 2 version script!)",
+            "site": "xvideos",
+            "id": "58431759",
+            "scripts": [
+                {
+                    "name": "Eroico All Sex Scenes.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/eroico-game-cg-collection-about-34min-2-version-script-1.funscript"
+                },
+                {
+                    "name": "Eroico All Sex Scenes (simple).funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/eroico-game-cg-collection-about-34min-2-version-script-2.funscript"
+                }
+            ],
+            "tags": [
+                "hentai",
+                "animation",
+                "animated"
+            ],
+            "created_at": "2022-09-04T19:17:11.283Z",
+            "url": "https://discuss.eroscripts.com/t/eroico-game-cg-collection-about-34min-2-version-script/74801",
+            "valid": true,
+            "creator": "99DM",
             "ignore": false
         }
     ],
