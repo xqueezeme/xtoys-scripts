@@ -30688,7 +30688,7 @@
             ],
             "created_at": "2022-04-16T13:37:19.966Z",
             "url": "https://discuss.eroscripts.com/t/deselmine-mira-and-the-strange-alchemy-hardcore/57190",
-            "valid": true,
+            "valid": false,
             "creator": "99DM",
             "ignore": false
         },
@@ -39929,7 +39929,7 @@
             "url": "https://discuss.eroscripts.com/t/fap-hero-spiral-abyss-by-ivory2-genshin-impact/77678",
             "valid": false,
             "creator": "Blade600",
-            "ignore": false
+            "ignore": true
         },
         {
             "name": "High-Class Sluts PMV",
@@ -40704,6 +40704,26 @@
             "valid": true,
             "creator": "Red_Lane",
             "ignore": false
+        },
+        {
+            "name": "VR PMV - Push the Button",
+            "site": "spankbang",
+            "id": "78q9a",
+            "scripts": [
+                {
+                    "name": "PMV - Push the Button VR.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/vr-pmv-push-the-button-1.funscript"
+                }
+            ],
+            "tags": [
+                "vr",
+                "pmv"
+            ],
+            "created_at": "2022-10-17T23:07:37.614Z",
+            "url": "https://discuss.eroscripts.com/t/vr-pmv-push-the-button/79963",
+            "valid": false,
+            "creator": "teufelx3",
+            "ignore": true
         }
     ],
     "version": 1
