@@ -6949,13 +6949,12 @@
             "tags": [
                 "audio-based",
                 "handy",
-                "cockhero",
-                "launch"
+                "cockhero"
             ],
-            "created_at": "2020-11-30T10:25:10.748Z",
+            "created_at": "2020-12-01T17:30:50.089Z",
             "url": "https://discuss.eroscripts.com/t/xxx/10211",
             "valid": false,
-            "creator": "defucilis",
+            "creator": "dude69",
             "ignore": true
         },
         {
@@ -30690,7 +30689,7 @@
             "url": "https://discuss.eroscripts.com/t/deselmine-mira-and-the-strange-alchemy-hardcore/57190",
             "valid": false,
             "creator": "99DM",
-            "ignore": false
+            "ignore": true
         },
         {
             "name": "Back Seat Fucks 2 Scene 7 - Hot Ebony Rayne Falls",
@@ -40724,6 +40723,28 @@
             "valid": false,
             "creator": "teufelx3",
             "ignore": true
+        },
+        {
+            "name": "Halloween special - fap hero (Requested!)",
+            "site": "spankbang",
+            "id": "6d8ir",
+            "scripts": [
+                {
+                    "name": "halloween special - fap hero.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/halloween-special-fap-hero-requested-1.funscript"
+                }
+            ],
+            "tags": [
+                "animation",
+                "hentai",
+                "hmv",
+                "fap-hero"
+            ],
+            "created_at": "2022-10-18T17:32:55.548Z",
+            "url": "https://discuss.eroscripts.com/t/halloween-special-fap-hero-requested/80055",
+            "valid": true,
+            "creator": "99DM",
+            "ignore": false
         }
     ],
     "version": 1
