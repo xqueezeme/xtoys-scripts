@@ -597,7 +597,7 @@
             ],
             "created_at": "2021-06-26T05:11:29.980Z",
             "url": "https://discuss.eroscripts.com/t/xxx/28528",
-            "valid": false,
+            "valid": true,
             "creator": "Liquid",
             "ignore": false
         },
@@ -1257,7 +1257,7 @@
             ],
             "created_at": "2021-03-21T17:21:16.346Z",
             "url": "https://discuss.eroscripts.com/t/xxx/19342",
-            "valid": false,
+            "valid": true,
             "creator": "iPickle",
             "ignore": false
         },
@@ -1437,7 +1437,7 @@
             ],
             "created_at": "2021-12-17T00:55:54.618Z",
             "url": "https://discuss.eroscripts.com/t/xxx/44088",
-            "valid": false,
+            "valid": true,
             "creator": "evilpapa666",
             "ignore": false
         },
@@ -1618,7 +1618,7 @@
             ],
             "created_at": "2021-04-30T16:10:21.579Z",
             "url": "https://discuss.eroscripts.com/t/xxx/23514",
-            "valid": false,
+            "valid": true,
             "creator": "mchip04",
             "ignore": false
         },
@@ -1701,7 +1701,7 @@
             ],
             "created_at": "2021-08-11T16:29:11.746Z",
             "url": "https://discuss.eroscripts.com/t/xxx/32087",
-            "valid": false,
+            "valid": true,
             "creator": "Tolkienwhiteguy",
             "ignore": false
         },
@@ -1722,7 +1722,7 @@
             ],
             "created_at": "2021-10-29T23:46:21.496Z",
             "url": "https://discuss.eroscripts.com/t/xxx/39095",
-            "valid": false,
+            "valid": true,
             "creator": "rogueleader_92",
             "ignore": false
         },
@@ -1765,7 +1765,7 @@
             ],
             "created_at": "2021-09-21T14:41:42.363Z",
             "url": "https://discuss.eroscripts.com/t/xxx/35730",
-            "valid": false,
+            "valid": true,
             "creator": "noodledude",
             "ignore": false
         },
@@ -1919,7 +1919,7 @@
             ],
             "created_at": "2021-05-06T18:15:01.612Z",
             "url": "https://discuss.eroscripts.com/t/xxx/24168",
-            "valid": false,
+            "valid": true,
             "creator": "evilpapa666",
             "ignore": false
         },
@@ -1961,7 +1961,7 @@
             ],
             "created_at": "2020-11-22T08:55:55.044Z",
             "url": "https://discuss.eroscripts.com/t/xxx/9462",
-            "valid": false,
+            "valid": true,
             "creator": "Liquid",
             "ignore": false
         },
@@ -2023,7 +2023,7 @@
             ],
             "created_at": "2021-05-20T05:42:35.530Z",
             "url": "https://discuss.eroscripts.com/t/xxx/25603",
-            "valid": false,
+            "valid": true,
             "creator": "rogueleader_92",
             "ignore": false
         },
@@ -2426,7 +2426,7 @@
             ],
             "created_at": "2021-06-21T22:15:41.706Z",
             "url": "https://discuss.eroscripts.com/t/xxx/28208",
-            "valid": false,
+            "valid": true,
             "creator": "evilpapa666",
             "ignore": false
         },
@@ -2608,7 +2608,7 @@
             ],
             "created_at": "2021-12-11T11:30:20.472Z",
             "url": "https://discuss.eroscripts.com/t/xxx/43533",
-            "valid": false,
+            "valid": true,
             "creator": "Husky",
             "ignore": false
         },
@@ -2973,7 +2973,7 @@
             ],
             "created_at": "2021-04-12T02:05:52.632Z",
             "url": "https://discuss.eroscripts.com/t/xxx/21651",
-            "valid": false,
+            "valid": true,
             "creator": "evilpapa666",
             "ignore": false
         },
@@ -3119,7 +3119,7 @@
             ],
             "created_at": "2021-10-26T20:02:47.194Z",
             "url": "https://discuss.eroscripts.com/t/xxx/38814",
-            "valid": false,
+            "valid": true,
             "creator": "ckhero",
             "ignore": false
         },
@@ -3207,7 +3207,7 @@
             "url": "https://discuss.eroscripts.com/t/xxx/24411",
             "valid": false,
             "creator": "NelsonJFrank",
-            "ignore": false
+            "ignore": true
         },
         {
             "name": "PMV - Ariana Grande, Jessie J & Nicki Minaj - (Gang) Bang Bang",
@@ -3224,7 +3224,7 @@
             ],
             "created_at": "2021-04-18T00:21:19.104Z",
             "url": "https://discuss.eroscripts.com/t/xxx/22180",
-            "valid": false,
+            "valid": true,
             "creator": "evilpapa666",
             "ignore": false
         },
@@ -3377,7 +3377,7 @@
             ],
             "created_at": "2021-06-15T11:27:11.749Z",
             "url": "https://discuss.eroscripts.com/t/xxx/27695",
-            "valid": false,
+            "valid": true,
             "creator": "mchip04",
             "ignore": false
         },
@@ -3428,7 +3428,7 @@
             ],
             "created_at": "2021-11-21T17:44:57.020Z",
             "url": "https://discuss.eroscripts.com/t/xxx/41272",
-            "valid": false,
+            "valid": true,
             "creator": "rogueleader_92",
             "ignore": false
         },
@@ -3543,7 +3543,7 @@
             ],
             "created_at": "2021-03-01T19:17:46.774Z",
             "url": "https://discuss.eroscripts.com/t/xxx/17632",
-            "valid": false,
+            "valid": true,
             "creator": "klarmacy",
             "ignore": false
         },
@@ -3583,7 +3583,7 @@
             ],
             "created_at": "2021-04-10T06:12:56.766Z",
             "url": "https://discuss.eroscripts.com/t/xxx/21419",
-            "valid": false,
+            "valid": true,
             "creator": "Liquid",
             "ignore": false
         },
@@ -3647,7 +3647,7 @@
             ],
             "created_at": "2021-11-14T03:01:30.670Z",
             "url": "https://discuss.eroscripts.com/t/xxx/40574",
-            "valid": false,
+            "valid": true,
             "creator": "evilpapa666",
             "ignore": false
         },
@@ -3787,7 +3787,7 @@
             ],
             "created_at": "2022-01-11T01:11:39.748Z",
             "url": "https://discuss.eroscripts.com/t/xxx/46883",
-            "valid": false,
+            "valid": true,
             "creator": "Juirrl",
             "ignore": false
         },
@@ -3871,7 +3871,7 @@
             ],
             "created_at": "2021-05-05T04:26:04.481Z",
             "url": "https://discuss.eroscripts.com/t/xxx/24016",
-            "valid": false,
+            "valid": true,
             "creator": "rogueleader_92",
             "ignore": false
         },
@@ -4258,7 +4258,7 @@
             ],
             "created_at": "2021-05-16T12:52:21.181Z",
             "url": "https://discuss.eroscripts.com/t/xxx/25191",
-            "valid": false,
+            "valid": true,
             "creator": "Shawn",
             "ignore": false
         },
@@ -7682,7 +7682,7 @@
             ],
             "created_at": "2021-09-22T05:06:33.381Z",
             "url": "https://discuss.eroscripts.com/t/xxx/35793",
-            "valid": false,
+            "valid": true,
             "creator": "ezrealreformed",
             "ignore": false
         },
@@ -29685,7 +29685,7 @@
             ],
             "created_at": "2022-03-29T23:56:54.227Z",
             "url": "https://discuss.eroscripts.com/t/wrecked-pmv/55088",
-            "valid": false,
+            "valid": true,
             "creator": "evilpapa666",
             "ignore": false
         },
@@ -29795,7 +29795,7 @@
             ],
             "created_at": "2022-04-02T06:57:28.528Z",
             "url": "https://discuss.eroscripts.com/t/fap-hero-hidden-pleasures/55445",
-            "valid": false,
+            "valid": true,
             "creator": "Liquid",
             "ignore": false
         },
@@ -29819,7 +29819,7 @@
             ],
             "created_at": "2022-04-02T05:17:24.602Z",
             "url": "https://discuss.eroscripts.com/t/furry-fap-hero-round-3-brolaren/55439",
-            "valid": false,
+            "valid": true,
             "creator": "AgentRush",
             "ignore": false
         },
@@ -38308,7 +38308,7 @@
             "tags": [],
             "created_at": "2022-09-03T05:03:50.815Z",
             "url": "https://discuss.eroscripts.com/t/alexa-pearl-2/74627",
-            "valid": true,
+            "valid": false,
             "creator": "Spacetrain22",
             "ignore": false
         },
@@ -41343,6 +41343,95 @@
             "url": "https://discuss.eroscripts.com/t/bobbi-star-throated-bobbi-star/81320",
             "valid": true,
             "creator": "Kinks",
+            "ignore": false
+        },
+        {
+            "name": "Skinny big boobs teen fucked hard I found her at",
+            "site": "spankbang",
+            "id": "75j88",
+            "scripts": [
+                {
+                    "name": "SpankBang.com_skinny+big+tits+teen+fucked+hard+i+found+her+at+meetxx+com_1080p.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/skinny-big-boobs-teen-fucked-hard-i-found-her-at-1.funscript"
+                }
+            ],
+            "tags": [
+                "blowjob",
+                "vaginal",
+                "riding",
+                "doggy",
+                "missionary"
+            ],
+            "created_at": "2022-10-30T21:17:28.506Z",
+            "url": "https://discuss.eroscripts.com/t/skinny-big-boobs-teen-fucked-hard-i-found-her-at/81517",
+            "valid": true,
+            "creator": "Lolo007",
+            "ignore": false
+        },
+        {
+            "name": "Celine centino ride",
+            "site": "spankbang",
+            "id": "5qsf5",
+            "scripts": [
+                {
+                    "name": "SpankBang.com_ride_720p celine.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/celine-centino-ride-1.funscript"
+                }
+            ],
+            "tags": [
+                "vaginal",
+                "riding",
+                "dildo"
+            ],
+            "created_at": "2022-10-30T21:23:47.288Z",
+            "url": "https://discuss.eroscripts.com/t/celine-centino-ride/81519",
+            "valid": true,
+            "creator": "Lolo007",
+            "ignore": false
+        },
+        {
+            "name": "Spankbang / perfect body",
+            "site": "spankbang",
+            "id": "73xqk",
+            "scripts": [
+                {
+                    "name": "SpankBang.com_perfect+body+check+description_1080p.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/spankbang-perfect-body-1.funscript"
+                }
+            ],
+            "tags": [
+                "blowjob",
+                "vaginal",
+                "doggy",
+                "deepthroat"
+            ],
+            "created_at": "2022-10-30T21:13:06.607Z",
+            "url": "https://discuss.eroscripts.com/t/spankbang-perfect-body/81516",
+            "valid": true,
+            "creator": "Lolo007",
+            "ignore": false
+        },
+        {
+            "name": "Sasha Foxxx and Britney Amber - Double Blowjob",
+            "site": "pornhub",
+            "id": "ph584c3ec8369e8",
+            "scripts": [
+                {
+                    "name": "Sasha Foxxx and Britney Amber - Double Blowjob.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/sasha-foxxx-and-britney-amber-double-blowjob-1.funscript"
+                }
+            ],
+            "tags": [
+                "blowjob",
+                "pov",
+                "handjob",
+                "threesome",
+                "shefinishesthejob"
+            ],
+            "created_at": "2022-10-30T20:49:48.382Z",
+            "url": "https://discuss.eroscripts.com/t/sasha-foxxx-and-britney-amber-double-blowjob/81512",
+            "valid": true,
+            "creator": "qweer",
             "ignore": false
         }
     ],
