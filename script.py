@@ -20,6 +20,7 @@ import traceback
 import os
 import sys
 from pyvirtualdisplay import Display
+from webdriver_manager.chrome import ChromeDriverManager
 
 #display = Display(visible=0, size=(800, 600))
 #display.start()
@@ -36,8 +37,7 @@ options = webdriver.ChromeOptions()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
 options.add_argument("--headless")
-
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 def getPage(url):
     try:
