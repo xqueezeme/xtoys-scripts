@@ -21,6 +21,7 @@ import os
 import sys
 from pyvirtualdisplay import Display
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
 
 #display = Display(visible=0, size=(800, 600))
 #display.start()
