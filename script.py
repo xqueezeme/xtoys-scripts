@@ -38,7 +38,7 @@ options = webdriver.ChromeOptions()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
 options.add_argument("--headless")
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().arm64().install()), options=options)
 
 def getPage(url):
     try:
