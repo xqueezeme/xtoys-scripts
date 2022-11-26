@@ -255,7 +255,7 @@
             "url": "https://discuss.eroscripts.com/t/xxx/28534",
             "valid": false,
             "creator": "Mattman91c",
-            "ignore": false
+            "ignore": true
         },
         {
             "name": "LuxuryGirl - Rock Paper Scissors",
@@ -8319,8 +8319,8 @@
                 "hentai",
                 "cgi",
                 "titfuck",
-                "sfm",
-                "cumshots"
+                "cumshots",
+                "sfm"
             ],
             "created_at": "2021-12-26T19:12:44.019Z",
             "url": "https://discuss.eroscripts.com/t/xxx/45035",
@@ -18703,7 +18703,7 @@
             ],
             "created_at": "2022-01-16T08:02:41.453Z",
             "url": "https://discuss.eroscripts.com/t/xxx/47512",
-            "valid": true,
+            "valid": false,
             "creator": "spaceguy4820",
             "ignore": false
         },
@@ -35106,7 +35106,7 @@
             "url": "https://discuss.eroscripts.com/t/isekai-sluts-hmv-babatiks/67176",
             "valid": false,
             "creator": "sol_K",
-            "ignore": false
+            "ignore": true
         },
         {
             "name": "Rachel Starr PMV by Gemcutter",
@@ -42880,7 +42880,11 @@
                     "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/jerk-off-instruction-cum-for-me-violet-moreau-1.funscript"
                 }
             ],
-            "tags": [],
+            "tags": [
+                "handjob",
+                "joi",
+                "edge"
+            ],
             "created_at": "2022-11-24T21:16:55.183Z",
             "url": "https://discuss.eroscripts.com/t/jerk-off-instruction-cum-for-me-violet-moreau/84592",
             "valid": true,
@@ -42906,6 +42910,69 @@
             "url": "https://discuss.eroscripts.com/t/anal-vids-trailer-new-teen-hot-pearl-first-time-on-anal-action/84555",
             "valid": true,
             "creator": "Ducknorris",
+            "ignore": false
+        },
+        {
+            "name": "Natalie Mars PMV",
+            "site": "spankbang",
+            "id": "61oyv",
+            "scripts": [
+                {
+                    "name": "NATALIE MARS PMV.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/natalie-mars-pmv-1.funscript"
+                }
+            ],
+            "tags": [
+                "anal",
+                "audio-based",
+                "bdsm",
+                "trans"
+            ],
+            "created_at": "2022-11-26T01:07:25.905Z",
+            "url": "https://discuss.eroscripts.com/t/natalie-mars-pmv/84731",
+            "valid": true,
+            "creator": "EvelynEvil666",
+            "ignore": false
+        },
+        {
+            "name": "Edging Throbbing Cock For Eruption - Violet Moreau",
+            "site": "pornhub",
+            "id": "ph6372b546e2612",
+            "scripts": [
+                {
+                    "name": "Edging Throbbing Cock for Eruption_Violet Moreau_1080p.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/edging-throbbing-cock-for-eruption-violet-moreau-1.funscript"
+                }
+            ],
+            "tags": [
+                "handjob",
+                "edging"
+            ],
+            "created_at": "2022-11-26T00:19:33.478Z",
+            "url": "https://discuss.eroscripts.com/t/edging-throbbing-cock-for-eruption-violet-moreau/84718",
+            "valid": true,
+            "creator": "Hazman501",
+            "ignore": false
+        },
+        {
+            "name": "BigGulpGirls - Aria Banks - Adorable and Dirty",
+            "site": "spankbang",
+            "id": "4u0zw",
+            "scripts": [
+                {
+                    "name": "BigGulpGirls.20.12.27.Aria.Banks.XXX.720p.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/biggulpgirls-aria-banks-adorable-and-dirty-1.funscript"
+                }
+            ],
+            "tags": [
+                "blowjob",
+                "slow",
+                "deepthroat"
+            ],
+            "created_at": "2022-11-25T19:15:59.689Z",
+            "url": "https://discuss.eroscripts.com/t/biggulpgirls-aria-banks-adorable-and-dirty/84692",
+            "valid": true,
+            "creator": "kinetics",
             "ignore": false
         }
     ],
