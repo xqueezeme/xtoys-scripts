@@ -39628,7 +39628,7 @@
             ],
             "created_at": "2022-09-18T03:24:27.802Z",
             "url": "https://discuss.eroscripts.com/t/big-ass-on-a-leash-iwanthavana/76387",
-            "valid": true,
+            "valid": false,
             "creator": "Goodstuff",
             "ignore": false
         },
@@ -41387,7 +41387,7 @@
             ],
             "created_at": "2022-10-30T21:23:47.288Z",
             "url": "https://discuss.eroscripts.com/t/celine-centino-ride/81519",
-            "valid": true,
+            "valid": false,
             "creator": "Lolo007",
             "ignore": false
         },
@@ -43105,6 +43105,47 @@
             "url": "https://discuss.eroscripts.com/t/mistress-t-stop-and-go-gamme/84894",
             "valid": true,
             "creator": "Hazman501",
+            "ignore": false
+        },
+        {
+            "name": "Throat Training",
+            "site": "spankbang",
+            "id": "6l0hu",
+            "scripts": [
+                {
+                    "name": "train.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/throat-training-1.funscript"
+                }
+            ],
+            "tags": [
+                "compilation",
+                "bdsm"
+            ],
+            "created_at": "2022-11-28T12:27:32.783Z",
+            "url": "https://discuss.eroscripts.com/t/throat-training/85063",
+            "valid": true,
+            "creator": "Sith",
+            "ignore": false
+        },
+        {
+            "name": "Teacher of Magic - Beautiful School Teacher helps with studying after work",
+            "site": "pornhub",
+            "id": "ph57939d4a2dc44",
+            "scripts": [
+                {
+                    "name": "Teacher of Magic - Beautiful School Teacher helps with studying after work.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/teacher-of-magic-beautiful-school-teacher-helps-with-studying-after-work-1.funscript"
+                }
+            ],
+            "tags": [
+                "blowjob",
+                "pov",
+                "facial"
+            ],
+            "created_at": "2022-11-28T20:11:20.521Z",
+            "url": "https://discuss.eroscripts.com/t/teacher-of-magic-beautiful-school-teacher-helps-with-studying-after-work/85099",
+            "valid": true,
+            "creator": "Zadigius",
             "ignore": false
         }
     ],
