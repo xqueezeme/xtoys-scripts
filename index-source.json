@@ -28264,7 +28264,7 @@
             "url": "https://discuss.eroscripts.com/t/oh-my-god-bj-requested-script/51082",
             "valid": false,
             "creator": "oninja19192",
-            "ignore": false
+            "ignore": true
         },
         {
             "name": "\u5f39\u529b\u64473.0 [jav pmv]",
@@ -36540,8 +36540,8 @@
             ],
             "tags": [
                 "vaginal",
-                "solo-female",
                 "cumshots",
+                "solo-female",
                 "dildo",
                 "machine"
             ],
@@ -45774,6 +45774,27 @@
             "url": "https://discuss.eroscripts.com/t/lisa-ann-deep-anal-drilling/91822",
             "valid": true,
             "creator": "Poppington",
+            "ignore": false
+        },
+        {
+            "name": "LianaGood - The first video",
+            "site": "spankbang",
+            "id": "5t8gw",
+            "scripts": [
+                {
+                    "name": "LianaGood - The first video.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/lianagood-the-first-video-1.funscript"
+                }
+            ],
+            "tags": [
+                "handjob",
+                "edging",
+                "slow"
+            ],
+            "created_at": "2023-01-21T01:56:30.571Z",
+            "url": "https://discuss.eroscripts.com/t/lianagood-the-first-video/91945",
+            "valid": true,
+            "creator": "Jamned",
             "ignore": false
         }
     ],
