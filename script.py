@@ -625,7 +625,7 @@ f = open('topics.json')
 all = json.load(f)
 funscriptsFolder = 'funscripts'
 #videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
-print('Added ' + str(videosAdded) + ' videos.')
+#print('Added ' + str(videosAdded) + ' videos.')
 
 saveIndex(sourceIndexFile, indexFile)
 validateSelenium(sourceIndexFile)
