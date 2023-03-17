@@ -438,12 +438,14 @@ def upgradeScript(sourceIndexFile, modelVersion):
                desc="Upgrading script videos", 
                ascii=False, ncols=75):
         video = videos[idx]
+        video['ignore'] = False
         if(video.get('ignore', False) == False):
             scripts = []
             if(video.get('script', None) != None):
                 scripts.append({"name" : '', "location": video['script']})
                 video['scripts'] = scripts
                 video.pop('script', None)
+
         #if(video.get('pack', False) == False):
         newVideos.append(video)
     data['videos'] = newVideos
