@@ -531,6 +531,7 @@ def validateVideo(video):
             except: 
                 valid = False
                 print(url + ' is invalid')
+                drive.save_screenshot(video['id'] + ".png")
         except KeyboardInterrupt:
             sys.exit()
         except:
