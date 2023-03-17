@@ -520,7 +520,8 @@ def validateVideo(video):
     while tries < 3 and valid == None:
         try:
             driver.get(url)
-            driver.execute_script('videos = document.querySelectorAll("video"); for(video of videos) {video.pause()}')
+            driver.execute_script('videos = document.querySelectorAll("video"); for(video of videos) {video.pause()}; document.getElementById("age_check").hidden = true';)
+')
             try:
                 input = WebDriverWait(driver, 20).until(
                     EC.presence_of_element_located((By.XPATH, xpath))
