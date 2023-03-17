@@ -488,6 +488,7 @@ def saveIndex(sourceIndexFile, indexFileName):
                 newTags.append(video['name'])
                 tags[tag] = newTags
             newVideos.append(video)
+    print(f"Active videos: {len(newVideos)}")
     data['videos'] = newVideos
     data['tags'] = dict(sorted(tags.items(), key=operator.itemgetter(0)))
  
@@ -654,8 +655,8 @@ upgradeScript(sourceIndexFile, modelVersion)
 # print('Added ' + str(videosAdded) + ' videos.')
 
 saveIndex(sourceIndexFile, indexFile)
-validateSelenium(sourceIndexFile)
-saveIndex(sourceIndexFile, indexFile)
+# validateSelenium(sourceIndexFile)
+# saveIndex(sourceIndexFile, indexFile)
 
 # Close.
 driver.close()
