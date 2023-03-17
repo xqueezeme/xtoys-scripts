@@ -505,7 +505,7 @@ def validateSelenium(sourceIndexFile):
                desc="Validating existing videos", 
                ascii=False, ncols=75):
         video = videos[idx]
-        if(video.get('ignore', False) == False):
+        if(video.get('ignore', False) == False) and video['site'] == 'spankbang':
             validateVideo(video)
 
         data['videos'] = videos
@@ -552,7 +552,7 @@ def validateVideo(video):
                     driver.execute_script(
                         'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
 
-                    input = WebDriverWait(driver, 20).until(
+                    input = WebDriverWait(driver, 2).until(
                         EC.presence_of_element_located((By.XPATH, xpath))
                     )
                     valid = True
