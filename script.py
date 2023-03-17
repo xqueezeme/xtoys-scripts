@@ -552,6 +552,7 @@ def validateVideo(video):
             except: 
                 valid = False
                 print(url + ' is invalid')
+                traceback.print_exc()
         except KeyboardInterrupt:
             sys.exit()
         except:
