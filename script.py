@@ -520,9 +520,17 @@ def validateVideo(video):
     while tries < 3 and valid == None:
         try:
             driver.get(url)
-            driver.execute_script('videos = document.querySelectorAll("video"); for(video of videos) {video.pause()}; if(document.getElementById("age_check")) document.getElementById("age_check").hidden = true;')
+            driver.execute_script('videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
+            if site == 'spankbang':
+                try:
+                    input = WebDriverWait(driver, 5).until(
+                        EC.presence_of_element_located((By.XPATH, "#age_check_yes"))
+                    )
+                    input.click()
+                except:
+                    pass
             try:
-                input = WebDriverWait(driver, 20).until(
+                input = WebDriverWait(driver, 5).until(
                     EC.presence_of_element_located((By.XPATH, xpath))
                 )
                 valid = True
@@ -531,7 +539,7 @@ def validateVideo(video):
             except: 
                 valid = False
                 print(url + ' is invalid')
-                drive.save_screenshot(video['id'] + ".png")
+                driver.save_screenshot(video['id'] + ".png")
         except KeyboardInterrupt:
             sys.exit()
         except:
