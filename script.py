@@ -646,17 +646,17 @@ seleniumLogin()
 
 upgradeScript(sourceIndexFile, modelVersion)
 
-# pages = 20
-# readTopicList()
-# f = open('topics.json')
-# all = json.load(f)
-# funscriptsFolder = 'funscripts'
-# videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
-# print('Added ' + str(videosAdded) + ' videos.')
+pages = 20
+readTopicList()
+f = open('topics.json')
+all = json.load(f)
+funscriptsFolder = 'funscripts'
+videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
+print('Added ' + str(videosAdded) + ' videos.')
 
 saveIndex(sourceIndexFile, indexFile)
-# validateSelenium(sourceIndexFile)
-# saveIndex(sourceIndexFile, indexFile)
+validateSelenium(sourceIndexFile)
+saveIndex(sourceIndexFile, indexFile)
 
 # Close.
 driver.close()
