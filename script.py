@@ -526,11 +526,11 @@ def validateVideo(video):
                     EC.presence_of_element_located((By.XPATH, xpath))
                 )
                 valid = True
-                #print(url + ' is valid')
+                print(url + ' is valid')
 
             except: 
                 valid = False
-                #print(url + ' is invalid')
+                print(url + ' is invalid')
         except KeyboardInterrupt:
             sys.exit()
         except:
