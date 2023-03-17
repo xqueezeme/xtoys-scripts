@@ -501,6 +501,12 @@ def validateSelenium(sourceIndexFile):
         video = videos[idx]
         if(video.get('ignore', False) == False or True):
             validateVideo(video)
+
+        data['videos'] = videos
+        jsonStr = json.dumps(data, indent=4)
+        with open(sourceIndexFile, "w") as outfile:
+            outfile.write(jsonStr)
+
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
     with open(sourceIndexFile, "w") as outfile:
