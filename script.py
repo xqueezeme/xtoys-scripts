@@ -532,9 +532,11 @@ def validateVideo(video):
                 )
                 valid = True
                 #print(url + ' is valid')
-
+                print(f"{json.dumps(video)} is valid")
             except: 
                 valid = False
+                print(f"{json.dumps(video)} is invalid")
+
                 #print(url + ' is invalid')
         except KeyboardInterrupt:
             sys.exit()
@@ -626,12 +628,12 @@ seleniumLogin()
 upgradeScript(sourceIndexFile, modelVersion)
 
 pages = 20
-readTopicList()
-f = open('topics.json')
-all = json.load(f)
-funscriptsFolder = 'funscripts'
-videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
-print('Added ' + str(videosAdded) + ' videos.')
+#readTopicList()
+#f = open('topics.json')
+#all = json.load(f)
+#funscriptsFolder = 'funscripts'
+#videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
+#print('Added ' + str(videosAdded) + ' videos.')
 
 saveIndex(sourceIndexFile, indexFile)
 validateSelenium(sourceIndexFile)
