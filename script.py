@@ -498,13 +498,8 @@ def validateSelenium(sourceIndexFile):
                desc="Validating existing videos", 
                ascii=False, ncols=75):
         video = videos[idx]
-        if video.get('ignore', False) is False or True:
+        if(video.get('ignore', False) == False or True):
             validateVideo(video)
-        data['videos'] = videos
-        jsonStr = json.dumps(data, indent=4)
-        with open(sourceIndexFile, "w") as outfile:
-            outfile.write(jsonStr)
-
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
     with open(sourceIndexFile, "w") as outfile:
@@ -532,11 +527,9 @@ def validateVideo(video):
                 )
                 valid = True
                 #print(url + ' is valid')
-                print(f"{json.dumps(video)} is valid")
+
             except: 
                 valid = False
-                print(f"{json.dumps(video)} is invalid")
-
                 #print(url + ' is invalid')
         except KeyboardInterrupt:
             sys.exit()
@@ -545,8 +538,7 @@ def validateVideo(video):
             traceback.print_exc()
     if(valid != None):
         video['valid'] = valid
-
-        if(previousValid is False and valid == False):
+        if(previousValid == False and valid == False):
             video['ignore'] = True
 def looptopics(sourceIndexFile, topics, funscriptsFolder):
     ignoreUrls = []
@@ -628,12 +620,12 @@ seleniumLogin()
 upgradeScript(sourceIndexFile, modelVersion)
 
 pages = 20
-#readTopicList()
-#f = open('topics.json')
-#all = json.load(f)
-#funscriptsFolder = 'funscripts'
-#videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
-#print('Added ' + str(videosAdded) + ' videos.')
+readTopicList()
+f = open('topics.json')
+all = json.load(f)
+funscriptsFolder = 'funscripts'
+videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
+print('Added ' + str(videosAdded) + ' videos.')
 
 saveIndex(sourceIndexFile, indexFile)
 validateSelenium(sourceIndexFile)
