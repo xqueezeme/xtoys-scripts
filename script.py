@@ -28,7 +28,7 @@ xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschi
 xpath_invalid_pornhub = "//*[contains(text(), 'Fout Pagina Niet Gevonden')]"
 
 ua = UserAgent()
-userAgent = str(ua.chrome)
+userAgent = str(ua.random)
 session = requests.Session()
 f = open('./credentials.json')
 credentials = json.load(f)
