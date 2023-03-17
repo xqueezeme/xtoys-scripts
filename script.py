@@ -20,6 +20,7 @@ import traceback
 import os
 import sys
 from pyvirtualdisplay import Display
+import cloudscraper
 
 #display = Display(visible=0, size=(800, 600))
 #display.start()
@@ -508,8 +509,6 @@ def validateSelenium(sourceIndexFile):
 def validateVideo(video):
     site = video['site']
     url = getUrl(site, video['id'])
-    xpath = "//video"
-    driver.get('https://google.com')
     print(url)
     if (site == 'pornhub'):
         xpath = "//div[@id='player']//video"
@@ -519,27 +518,24 @@ def validateVideo(video):
     time.sleep(1)
     while tries < 3 and valid == None:
         try:
-            driver.get(url)
-            driver.execute_script('videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
-            if site == 'spankbang':
-                try:
-                    input = WebDriverWait(driver, 5).until(
-                        EC.presence_of_element_located((By.XPATH, "#age_check_yes"))
-                    )
-                    input.click()
-                except:
-                    pass
+
+
+
             try:
-                input = WebDriverWait(driver, 5).until(
-                    EC.presence_of_element_located((By.XPATH, xpath))
-                )
-                valid = True
-                print(url + ' is valid')
+                scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+                content = scraper.get(url).text
+                soup = Soup(content, "lxml")
+                dom = etree.HTML(str(soup))
+                videos = dom.xpath('//video')
+                if videos:
+                    valid = True
+                else:
+                    valid = False
+                print(url + f' is valid: {valid}')
 
             except: 
                 valid = False
                 print(url + ' is invalid')
-                driver.save_screenshot(video['id'] + ".png")
         except KeyboardInterrupt:
             sys.exit()
         except:
