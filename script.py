@@ -505,7 +505,7 @@ def validateSelenium(sourceIndexFile):
                desc="Validating existing videos", 
                ascii=False, ncols=75):
         video = videos[idx]
-        if(video.get('ignore', False) == False) and video['site'] == 'spankbang':
+        if video.get('ignore', False) is False:
             validateVideo(video)
 
         data['videos'] = videos
