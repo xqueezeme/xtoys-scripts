@@ -510,23 +510,23 @@ def validateVideo(video):
     site = video['site']
     url = getUrl(site, video['id'])
     print(url)
+
     if (site == 'pornhub'):
         xpath = "//div[@id='player']//video"
+    else:
+        xpath ="//video"
     tries = 0
     previousValid =  video.get('valid', True)
     valid = None
     time.sleep(1)
     while tries < 3 and valid == None:
         try:
-
-
-
             try:
                 scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
                 content = scraper.get(url).text
                 soup = Soup(content, "lxml")
                 dom = etree.HTML(str(soup))
-                videos = dom.xpath('//video')
+                videos = dom.xpath(xpath)
                 if videos:
                     valid = True
                 else:
@@ -625,12 +625,12 @@ seleniumLogin()
 upgradeScript(sourceIndexFile, modelVersion)
 
 pages = 20
-#readTopicList()
+readTopicList()
 f = open('topics.json')
 all = json.load(f)
 funscriptsFolder = 'funscripts'
-#videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
-#print('Added ' + str(videosAdded) + ' videos.')
+videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
+print('Added ' + str(videosAdded) + ' videos.')
 
 saveIndex(sourceIndexFile, indexFile)
 validateSelenium(sourceIndexFile)

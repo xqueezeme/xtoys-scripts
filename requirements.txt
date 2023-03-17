@@ -131,4 +131,4 @@ wsproto==1.2.0
 yarl==1.8.1
 yaspin==2.1.0
 zipp==3.10.0
-cloudscraper
+cloudscraper==1.2.69
