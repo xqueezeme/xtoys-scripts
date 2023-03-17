@@ -510,7 +510,7 @@ def validateVideo(video):
     url = getUrl(site, video['id'])
     xpath = "//video"
     driver.get('https://google.com')
-
+    print(url)
     if (site == 'pornhub'):
         xpath = "//div[@id='player']//video"
     tries = 0
