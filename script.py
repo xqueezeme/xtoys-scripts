@@ -1,4 +1,4 @@
-
+import datetime
 import operator
 from bs4 import BeautifulSoup as Soup
 
@@ -438,8 +438,9 @@ def upgradeScript(sourceIndexFile, modelVersion):
                desc="Upgrading script videos", 
                ascii=False, ncols=75):
         video = videos[idx]
-        video['ignore'] = False
-        video['valid'] = True
+        if datetime.datetime.today().day == 1:
+            video['ignore'] = False
+            video['valid'] = True
 
         if(video.get('ignore', False) == False):
             scripts = []
@@ -628,11 +629,6 @@ def savePage(page, url):
 
 def readTopicList():
     all = readInfiniscroll('latest', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false',pages)
-    #topTopics = readInfiniscroll('top', 'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/top.json?ascending=false&per_page=50&period=all',pages)
-
-    #for topic in topTopics:
-    #    all.append(topic)
-
     jsonStr = json.dumps(all, indent=4)
     with open('topics.json', "w") as outfile:
         outfile.write(jsonStr)
