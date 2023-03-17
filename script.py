@@ -439,6 +439,8 @@ def upgradeScript(sourceIndexFile, modelVersion):
                ascii=False, ncols=75):
         video = videos[idx]
         video['ignore'] = False
+        video['valid'] = True
+
         if(video.get('ignore', False) == False):
             scripts = []
             if(video.get('script', None) != None):
@@ -501,7 +503,7 @@ def validateSelenium(sourceIndexFile):
                desc="Validating existing videos", 
                ascii=False, ncols=75):
         video = videos[idx]
-        if(video.get('ignore', False) == False or True):
+        if(video.get('ignore', False) == False):
             validateVideo(video)
 
         data['videos'] = videos
@@ -652,7 +654,7 @@ upgradeScript(sourceIndexFile, modelVersion)
 # print('Added ' + str(videosAdded) + ' videos.')
 
 saveIndex(sourceIndexFile, indexFile)
-#validateSelenium(sourceIndexFile)
+validateSelenium(sourceIndexFile)
 saveIndex(sourceIndexFile, indexFile)
 
 # Close.
