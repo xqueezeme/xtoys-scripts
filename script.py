@@ -528,17 +528,27 @@ def validateVideo(video):
     while tries < 3 and valid == None:
         try:
             try:
-                scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
-                content = scraper.get(url).text
-                soup = Soup(content, "lxml")
-                dom = etree.HTML(str(soup))
-                videos = dom.xpath(xpath)
-                if videos:
-                    valid = True
+                if site == 'spankbang':
+                    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+                    content = scraper.get(url).text
+                    soup = Soup(content, "lxml")
+                    dom = etree.HTML(str(soup))
+                    videos = dom.xpath(xpath)
+                    if videos:
+                        valid = True
+                    else:
+                        valid = False
+                    print(url + f' is valid: {valid}')
                 else:
-                    valid = False
-                print(url + f' is valid: {valid}')
+                    driver.get(url)
+                    driver.execute_script(
+                        'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
 
+                    input = WebDriverWait(driver, 20).until(
+                        EC.presence_of_element_located((By.XPATH, xpath))
+                    )
+                    valid = True
+                    print(url + ' is valid')
             except: 
                 valid = False
                 print(url + ' is invalid')
