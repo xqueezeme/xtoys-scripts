@@ -539,12 +539,14 @@ def validateVideo(video):
                     content = scraper.get(url).text
                     soup = Soup(content, "lxml")
                     dom = etree.HTML(str(soup))
-                    videos = dom.xpath(xpath)
-                    if videos:
-                        valid = True
-                    else:
+                    if dom.xpath(xpath_invalid_spankbang):
                         valid = False
-                    print(url + f' is valid: {valid}')
+                    else:
+                        videos = dom.xpath(xpath)
+                        if videos:
+                            valid = True
+                        else:
+                            valid = False
                 else:
                     driver.get(url)
                     driver.execute_script(
@@ -554,10 +556,11 @@ def validateVideo(video):
                         EC.presence_of_element_located((By.XPATH, xpath))
                     )
                     valid = True
-                    print(url + ' is valid')
-            except: 
+                print(f"{url} is valid: {valid}")
+
+            except:
                 valid = False
-                print(url + ' is invalid')
+                print(f"{url} is valid: {valid}")
                 traceback.print_exc()
         except KeyboardInterrupt:
             sys.exit()
