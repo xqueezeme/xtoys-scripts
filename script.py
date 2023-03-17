@@ -620,11 +620,11 @@ seleniumLogin()
 upgradeScript(sourceIndexFile, modelVersion)
 
 pages = 20
-readTopicList()
+#readTopicList()
 f = open('topics.json')
 all = json.load(f)
 funscriptsFolder = 'funscripts'
-videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
+#videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
 print('Added ' + str(videosAdded) + ' videos.')
 
 saveIndex(sourceIndexFile, indexFile)
