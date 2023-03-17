@@ -498,7 +498,7 @@ def validateSelenium(sourceIndexFile):
                desc="Validating existing videos", 
                ascii=False, ncols=75):
         video = videos[idx]
-        if(video.get('ignore', False) is False):
+        if video.get('ignore', False) is False or True:
             validateVideo(video)
         data['videos'] = videos
         jsonStr = json.dumps(data, indent=4)
