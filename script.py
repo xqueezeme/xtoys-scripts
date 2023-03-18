@@ -557,6 +557,7 @@ def validateVideo(video):
                                 input = WebDriverWait(driver, 2).until(
                                     EC.presence_of_element_located((By.XPATH, invalid_xpath))
                                 )
+                                print(f"Found {invalid_xpath}")
                                 valid = False
                             except:
                                 valid = True
