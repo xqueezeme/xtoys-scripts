@@ -26,8 +26,8 @@ import cloudscraper
 #display.start()
 
 xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschikbaar.')]"
-xpath_invalid_pornhub = "//*[contains(text(), 'Fout Pagina Niet Gevonden')]"
 
+xpath_invalid_pornhubs = [ "//*[contains(text(), 'Fout Pagina Niet Gevonden')]", "//*[contains(text(), 'Gratis Premium Video')]"]
 ua = UserAgent()
 userAgent = str(ua.random)
 session = requests.Session()
@@ -551,11 +551,20 @@ def validateVideo(video):
                     driver.get(url)
                     driver.execute_script(
                         'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
-
-                    input = WebDriverWait(driver, 2).until(
-                        EC.presence_of_element_located((By.XPATH, xpath))
-                    )
-                    valid = True
+                    if site == 'pornhub':
+                        for invalid_xpath in xpath_invalid_pornhubs:
+                            try:
+                                input = WebDriverWait(driver, 2).until(
+                                    EC.presence_of_element_located((By.XPATH, invalid_xpath))
+                                )
+                                valid = False
+                            except:
+                                valid = True
+                    if valid is None:
+                        input = WebDriverWait(driver, 2).until(
+                            EC.presence_of_element_located((By.XPATH, xpath))
+                        )
+                        valid = True
                 print(f"{url} is valid: {valid}")
 
             except:
