@@ -148,7 +148,7 @@ def findPornhubIds(pornhubSel):
                     if(id):
                         links.append(id)
                 except:
-                    print('failed on ' + str(a))
+                    pass
     return list(map(lambda link: { 'id' : link, 'site': 'pornhub'}, set(links)))
 
 def findSpankbangIds(spankbangSel):
@@ -162,7 +162,7 @@ def findSpankbangIds(spankbangSel):
                         links.append(id)
 
                 except:
-                    print('failed on ' + str(a))
+                    pass
     return list(map(lambda link: { 'id' : link, 'site': 'spankbang'}, set(links)))
 def findXvideosIds(xvideosSel):
     links = []
@@ -173,10 +173,8 @@ def findXvideosIds(xvideosSel):
                     id = getXvideosId(str(a))
                     if(id):
                         links.append(id)
-                    else:
-                        print('Could not create id for ' + str(a))
                 except:
-                    print('failed on ' + str(a))
+                    pass
     return list(map(lambda link: { 'id' : link, 'site': 'xvideos'}, set(links)))
 def findXhamsterIds(xhamsterSel):
     links = [] 
@@ -187,7 +185,7 @@ def findXhamsterIds(xhamsterSel):
                 if(id):
                         links.append(id)
             except:
-                print('failed on ' + str(a))
+                pass
     return list(map(lambda link: { 'id' : link, 'site': 'xhamster'}, set(links)))
 def findEpornerIds(EpornerSel):
     links = [] 
@@ -198,7 +196,7 @@ def findEpornerIds(EpornerSel):
                 if(id):
                         links.append(id)
             except:
-                print('failed on ' + str(a))
+                pass
     return list(map(lambda link: { 'id' : link, 'site': 'eporner'}, set(links)))
 
 epornerAXPath = './/a[contains(@href,"Eporner.com")]/@href'
@@ -555,7 +553,6 @@ def validateVideo(video):
                             input = WebDriverWait(driver, 1).until(
                                 EC.presence_of_element_located((By.XPATH, invalid_xpath))
                             )
-                            print(f"Found {invalid_xpath}")
                             valid = False
                         except:
                             valid = True
