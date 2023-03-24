@@ -501,7 +501,8 @@ def validateSelenium(sourceIndexFile):
     f = open(sourceIndexFile)
     data = json.load(f)
     videos = data['videos']
-    for idx in tqdm (range(len(videos)), 
+    videos = data['videos']
+    for idx in tqdm (range(len(videos)),
                desc="Validating existing videos", 
                ascii=False, ncols=75):
         video = videos[idx]
@@ -596,11 +597,12 @@ def looptopics(sourceIndexFile, topics, funscriptsFolder):
     f = open(sourceIndexFile)
     data = json.load(f)
     videos = data['videos']
+    filtered_topics = list(filter(lambda t: t.get('url') not in ignoreUrls, topics))
     videosAdded = 0
-    for idx in tqdm (range (len(topics)), 
+    for idx in tqdm (range (len(filtered_topics)),
                desc="Getting videos from topics", 
                ascii=False, ncols=75):
-        topic = topics[idx]
+        topic = filtered_topics[idx]
         if not topic['url'] in ignoreUrls:
             matchingVideo = next(filter(lambda existing: existing['name'] == topic['title'], videos), None)
             if(matchingVideo):
@@ -627,15 +629,15 @@ def looptopics(sourceIndexFile, topics, funscriptsFolder):
                     ignoreUrls.append(topic['url'])
 
 
-        data['videos'] = videos
-        jsonStr = json.dumps(data, indent=4)
-        with open(sourceIndexFile, "w") as outfile:
-            outfile.write(jsonStr)
+    data['videos'] = videos
+    jsonStr = json.dumps(data, indent=4)
+    with open(sourceIndexFile, "w") as outfile:
+        outfile.write(jsonStr)
 
-        ignoreIndex['urls'] = ignoreUrls
-        jsonStr = json.dumps(ignoreIndex, indent=4)
-        with open('ignore-urls.json', "w") as outfile:
-            outfile.write(jsonStr)
+    ignoreIndex['urls'] = ignoreUrls
+    jsonStr = json.dumps(ignoreIndex, indent=4)
+    with open('ignore-urls.json', "w") as outfile:
+        outfile.write(jsonStr)
 
     return videosAdded
 def savePage(page, url):
