@@ -449,7 +449,6 @@ def upgradeScript(sourceIndexFile, modelVersion):
                 video['scripts'] = scripts
                 video.pop('script', None)
 
-        #if(video.get('pack', False) == False):
         newVideos.append(video)
     data['videos'] = newVideos
     jsonStr = json.dumps(data, indent=4)
