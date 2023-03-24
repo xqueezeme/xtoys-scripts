@@ -557,7 +557,7 @@ def validateVideo(video):
                     if site == 'pornhub':
                         invalid_xpath = " | ".join(xpath_invalid_pornhubs)
                         try:
-                            input = WebDriverWait(driver, 2).until(
+                            input = WebDriverWait(driver, 1).until(
                                 EC.presence_of_element_located((By.XPATH, invalid_xpath))
                             )
                             print(f"Found {invalid_xpath}")
