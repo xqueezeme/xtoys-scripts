@@ -264,8 +264,6 @@ def parsePost(post,topic,funscriptsFolder):
                 return video
             else:
                 return None
-        else:
-            print('Video is invalid ' + id['site'] + ' id: ' + id)
         return None
 
 def parsePack(post):
@@ -518,7 +516,6 @@ scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
 def validateVideo(video):
     site = video['site']
     url = getUrl(site, video['id'])
-    print(url)
 
     if (site == 'pornhub'):
         xpath = "//div[@id='player']//video"
