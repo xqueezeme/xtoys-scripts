@@ -565,7 +565,7 @@ def validateVideo(video):
                         except:
                             valid = True
                     if valid is None:
-                        input = WebDriverWait(driver, 2).until(
+                        input = WebDriverWait(driver, 1).until(
                             EC.presence_of_element_located((By.XPATH, xpath))
                         )
                         valid = True
