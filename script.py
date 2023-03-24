@@ -518,6 +518,10 @@ def validateSelenium(sourceIndexFile):
     with open(sourceIndexFile, "w") as outfile:
         outfile.write(jsonStr)
 
+
+scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+
+
 def validateVideo(video):
     site = video['site']
     url = getUrl(site, video['id'])
@@ -535,7 +539,6 @@ def validateVideo(video):
         try:
             try:
                 if site == 'spankbang':
-                    scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
                     content = scraper.get(url).text
                     soup = Soup(content, "lxml")
                     dom = etree.HTML(str(soup))
