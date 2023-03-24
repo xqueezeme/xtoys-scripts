@@ -555,15 +555,15 @@ def validateVideo(video):
                     driver.execute_script(
                         'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
                     if site == 'pornhub':
-                        for invalid_xpath in xpath_invalid_pornhubs:
-                            try:
-                                input = WebDriverWait(driver, 2).until(
-                                    EC.presence_of_element_located((By.XPATH, invalid_xpath))
-                                )
-                                print(f"Found {invalid_xpath}")
-                                valid = False
-                            except:
-                                valid = True
+                        invalid_xpath = " | ".join(xpath_invalid_pornhubs)
+                        try:
+                            input = WebDriverWait(driver, 2).until(
+                                EC.presence_of_element_located((By.XPATH, invalid_xpath))
+                            )
+                            print(f"Found {invalid_xpath}")
+                            valid = False
+                        except:
+                            valid = True
                     if valid is None:
                         input = WebDriverWait(driver, 2).until(
                             EC.presence_of_element_located((By.XPATH, xpath))
