@@ -442,9 +442,9 @@ def upgradeScript(sourceIndexFile, modelVersion):
             video['ignore'] = False
             video['valid'] = True
 
-        if(video.get('ignore', False) == False):
+        if(video.get('ignore', False) is False):
             scripts = []
-            if(video.get('script', None) != None):
+            if(video.get('script', None) is None):
                 scripts.append({"name" : '', "location": video['script']})
                 video['scripts'] = scripts
                 video.pop('script', None)
@@ -501,18 +501,13 @@ def validateSelenium(sourceIndexFile):
     f = open(sourceIndexFile)
     data = json.load(f)
     videos = data['videos']
-    videos = data['videos']
-    for idx in tqdm (range(len(videos)),
+    videos_to_validate = list(filter(lambda v: v.get('ignore', False) is False, videos))
+    for idx in tqdm (range(len(videos_to_validate)),
                desc="Validating existing videos", 
                ascii=False, ncols=75):
         video = videos[idx]
         if video.get('ignore', False) is False:
             validateVideo(video)
-
-        data['videos'] = videos
-        jsonStr = json.dumps(data, indent=4)
-        with open(sourceIndexFile, "w") as outfile:
-            outfile.write(jsonStr)
 
     data['videos'] = videos
     jsonStr = json.dumps(data, indent=4)
@@ -533,10 +528,10 @@ def validateVideo(video):
     else:
         xpath ="//video"
     tries = 0
-    previousValid =  video.get('valid', True)
+    previousValid = video.get('valid', True)
     valid = None
     time.sleep(1)
-    while tries < 3 and valid == None:
+    while tries < 3 and valid is None:
         try:
             try:
                 if site == 'spankbang':
@@ -570,20 +565,20 @@ def validateVideo(video):
                             EC.presence_of_element_located((By.XPATH, xpath))
                         )
                         valid = True
-                print(f"{url} is valid: {valid}")
+                #print(f"{url} is valid: {valid}")
 
             except:
                 valid = False
-                print(f"{url} is valid: {valid}")
+                #print(f"{url} is valid: {valid}")
                 traceback.print_exc()
         except KeyboardInterrupt:
             sys.exit()
         except:
             tries += 1
             traceback.print_exc()
-    if(valid != None):
+    if valid is not None:
         video['valid'] = valid
-        if(previousValid == False and valid == False):
+        if(previousValid is False and valid is False):
             video['ignore'] = True
 def looptopics(sourceIndexFile, topics, funscriptsFolder):
     ignoreUrls = []
