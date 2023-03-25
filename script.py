@@ -497,10 +497,7 @@ def validateSelenium(sourceIndexFile):
     data = json.load(f)
     videos = data['videos']
     videos_to_validate = list(filter(lambda v: v.get('ignore', False) is False, videos))
-    for idx in tqdm (range(len(videos_to_validate)),
-               desc="Validating existing videos", 
-               ascii=False, ncols=75):
-        video = videos[idx]
+    for video in videos_to_validate:
         if video.get('ignore', False) is False:
             validateVideo(video)
 
