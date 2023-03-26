@@ -566,6 +566,11 @@ def validateVideo(video):
         except:
             tries += 1
             traceback.print_exc()
+        finally:
+            for handle in driver.window_handles:
+                driver.switch_to.window(handle)
+                driver.close()
+
     if valid is not None:
         video['valid'] = valid
         if(previousValid is False and valid is False):
