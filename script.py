@@ -573,6 +573,7 @@ def validateVideo(video):
                     driver.close()
             except:
                 pass
+
     if valid is not None:
         video['valid'] = valid
         if not previousValid and not valid:
