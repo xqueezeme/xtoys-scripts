@@ -438,9 +438,9 @@ def upgradeScript(sourceIndexFile, modelVersion):
             video['ignore'] = False
             video['valid'] = True
 
-        if(video.get('ignore', False) is False):
+        if(not video.get('ignore', False)):
             scripts = []
-            if(video.get('script')):
+            if video.get('script'):
                 scripts.append({"name" : '', "location": video['script']})
                 video['scripts'] = scripts
                 video.pop('script', None)
@@ -575,7 +575,7 @@ def validateVideo(video):
                 pass
     if valid is not None:
         video['valid'] = valid
-        if(previousValid is False and valid is False):
+        if not previousValid and not valid:
             video['ignore'] = True
 def looptopics(sourceIndexFile, topics, funscriptsFolder):
     ignoreUrls = []
