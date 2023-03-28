@@ -435,7 +435,7 @@ def upgradeScript(sourceIndexFile, modelVersion):
                desc="Upgrading script videos", 
                ascii=False, ncols=75):
         video = videos[idx]
-        if datetime.datetime.today().day == 1:
+        if datetime.today().day == 1:
             video['ignore'] = False
             video['valid'] = True
 
