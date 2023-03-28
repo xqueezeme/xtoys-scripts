@@ -1,5 +1,5 @@
 import operator
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 from bs4 import BeautifulSoup as Soup
 
@@ -461,8 +461,8 @@ def createDisplayName(name):
 
 def saveIndex(sourceIndexFile, indexFileName):
     if os.path.exists(sourceIndexFile):
-        f = open(sourceIndexFile)
-        data = json.load(f)
+        with open(sourceIndexFile) as f:
+            data = json.load(f)
     else:
         data = {}
         data['author'] = 'xqueezeme'
@@ -497,14 +497,17 @@ def validateSelenium(sourceIndexFile):
     with open(sourceIndexFile) as f:
         data = json.load(f, cls=CustomDecoder)
         videos = data['videos']
-        videos_to_validate = list(filter(lambda v: not v.get('ignore', False), videos))
+        videos_to_validate = list(filter(lambda v:
+                                         not v.get('ignore', False) and
+                                         (v.get('last_checked') is None or v.get('last_checked') < datetime.utcnow() - timedelta(days=7))
+                                         , videos))
         for video in videos_to_validate:
             validateVideo(video)
 
-        data['videos'] = videos
-        jsonStr = json.dumps(data, indent=4, cls=CustomEncoder)
-        with open(sourceIndexFile, "w") as outfile:
-            outfile.write(jsonStr)
+            data['videos'] = videos
+            jsonStr = json.dumps(data, indent=4, cls=CustomEncoder)
+            with open(sourceIndexFile, "w") as outfile:
+                outfile.write(jsonStr)
 
 
 scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
