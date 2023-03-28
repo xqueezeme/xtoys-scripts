@@ -1,5 +1,6 @@
-import datetime
 import operator
+from datetime import datetime, date
+
 from bs4 import BeautifulSoup as Soup
 
 import re
@@ -493,18 +494,17 @@ def saveIndex(sourceIndexFile, indexFileName):
         outfile.write(jsonStr)
 
 def validateSelenium(sourceIndexFile):
-    f = open(sourceIndexFile)
-    data = json.load(f)
-    videos = data['videos']
-    videos_to_validate = list(filter(lambda v: v.get('ignore', False) is False, videos))
-    for video in videos_to_validate:
-        if video.get('ignore', False) is False:
+    with open(sourceIndexFile) as f:
+        data = json.load(f, cls=CustomDecoder)
+        videos = data['videos']
+        videos_to_validate = list(filter(lambda v: not v.get('ignore', False), videos))
+        for video in videos_to_validate:
             validateVideo(video)
 
-    data['videos'] = videos
-    jsonStr = json.dumps(data, indent=4)
-    with open(sourceIndexFile, "w") as outfile:
-        outfile.write(jsonStr)
+        data['videos'] = videos
+        jsonStr = json.dumps(data, indent=4, cls=CustomEncoder)
+        with open(sourceIndexFile, "w") as outfile:
+            outfile.write(jsonStr)
 
 
 scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
@@ -578,6 +578,26 @@ def validateVideo(video):
         video['valid'] = valid
         if not previousValid and not valid:
             video['ignore'] = True
+        video['last_checked'] = datetime.utcnow()
+class CustomEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (date, datetime)):
+            return obj.isoformat()
+
+
+class CustomDecoder(json.JSONDecoder):
+    def __init__(self, *args, **kwargs):
+        super().__init__(object_hook=self.try_datetime, *args, **kwargs)
+
+    @staticmethod
+    def try_datetime(d):
+        ret = {}
+        for key, value in d.items():
+            try:
+                ret[key] = datetime.fromisoformat(value)
+            except (ValueError, TypeError):
+                ret[key] = value
+        return ret
 def looptopics(sourceIndexFile, topics, funscriptsFolder):
     ignoreUrls = []
     if os.path.exists('ignore-urls.json'):
@@ -587,50 +607,50 @@ def looptopics(sourceIndexFile, topics, funscriptsFolder):
     else:
         ignoreIndex = {}
     
-    f = open(sourceIndexFile)
-    data = json.load(f)
-    videos = data['videos']
-    filtered_topics = list(filter(lambda t: t.get('url') not in ignoreUrls, topics))
-    videosAdded = 0
-    for idx in tqdm (range (len(filtered_topics)),
-               desc="Getting videos from topics", 
-               ascii=False, ncols=75):
-        topic = filtered_topics[idx]
-        if not topic['url'] in ignoreUrls:
-            matchingVideo = next(filter(lambda existing: existing['name'] == topic['title'], videos), None)
-            if(matchingVideo):
-                matchingVideo['tags'] = topic['tags']
-                matchingVideo['creator'] = topic['username']
-                matchingVideo['created_at'] = topic['created_at']
-            else:
-                newvideos = parsePage(formatHTML(getPage(topic['url'])), topic, funscriptsFolder)
-                if (newvideos and len(newvideos) > 0):
-                    for video in newvideos:
-                        if(video):
-                            existingVideo = next(filter(lambda existing: existing['id'] == video['id'] and existing['site'] == video['site'], videos), None)
-                            if(existingVideo == None):
-                                videos.append(video)
-                                videosAdded += 1
-                            else:
-                                existingVideo['tags'] = video['tags']
-                                existingVideo['creator'] = video['creator']
-                                existingVideo['created_at'] = video['created_at']
-
-                        else:
-                            ignoreUrls.append(topic['url'])
+    with open(sourceIndexFile) as f:
+        data = json.load(f, cls=CustomDecoder)
+        videos = data['videos']
+        filtered_topics = list(filter(lambda t: t.get('url') not in ignoreUrls, topics))
+        videosAdded = 0
+        for idx in tqdm (range (len(filtered_topics)),
+                   desc="Getting videos from topics",
+                   ascii=False, ncols=75):
+            topic = filtered_topics[idx]
+            if not topic['url'] in ignoreUrls:
+                matchingVideo = next(filter(lambda existing: existing['name'] == topic['title'], videos), None)
+                if(matchingVideo):
+                    matchingVideo['tags'] = topic['tags']
+                    matchingVideo['creator'] = topic['username']
+                    matchingVideo['created_at'] = topic['created_at']
                 else:
-                    ignoreUrls.append(topic['url'])
+                    newvideos = parsePage(formatHTML(getPage(topic['url'])), topic, funscriptsFolder)
+                    if (newvideos and len(newvideos) > 0):
+                        for video in newvideos:
+                            if(video):
+                                existingVideo = next(filter(lambda existing: existing['id'] == video['id'] and existing['site'] == video['site'], videos), None)
+                                if(existingVideo == None):
+                                    videos.append(video)
+                                    videosAdded += 1
+                                else:
+                                    existingVideo['tags'] = video['tags']
+                                    existingVideo['creator'] = video['creator']
+                                    existingVideo['created_at'] = video['created_at']
+
+                            else:
+                                ignoreUrls.append(topic['url'])
+                    else:
+                        ignoreUrls.append(topic['url'])
 
 
-    data['videos'] = videos
-    jsonStr = json.dumps(data, indent=4)
-    with open(sourceIndexFile, "w") as outfile:
-        outfile.write(jsonStr)
+        data['videos'] = videos
+        jsonStr = json.dumps(data, indent=4, cls=CustomEncoder)
+        with open(sourceIndexFile, "w") as outfile:
+            outfile.write(jsonStr)
 
-    ignoreIndex['urls'] = ignoreUrls
-    jsonStr = json.dumps(ignoreIndex, indent=4)
-    with open('ignore-urls.json', "w") as outfile:
-        outfile.write(jsonStr)
+        ignoreIndex['urls'] = ignoreUrls
+        jsonStr = json.dumps(ignoreIndex, indent=4)
+        with open('ignore-urls.json', "w") as outfile:
+            outfile.write(jsonStr)
 
     return videosAdded
 def savePage(page, url):
