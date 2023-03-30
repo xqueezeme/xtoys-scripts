@@ -27,7 +27,11 @@ import cloudscraper
 #display.start()
 
 xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschikbaar.')]"
-xpath_invalid_pornhubs = [ "//*[contains(text(), 'Fout Pagina Niet Gevonden')]", "//*[contains(text(), 'Gratis Premium Video')]","//*[contains(text(), 'Video werd verwijderd')]","//*[contains(text(), 'Deze video werd uitgeschakeld')]"]
+xpath_invalid_pornhubs = [ "//*[contains(text(), 'Fout Pagina Niet Gevonden')]",
+                           "//*[contains(text(), 'Gratis Premium Video')]",
+                           "//*[contains(text(), 'Video werd verwijderd')]",
+                           "//*[contains(text(), 'Deze video werd uitgeschakeld')]",
+                            "//*[contains(text(), 'Video is disabled')]"]
 ua = UserAgent()
 userAgent = str(ua.random)
 session = requests.Session()
