@@ -23,8 +23,8 @@ import sys
 from pyvirtualdisplay import Display
 import cloudscraper
 
-#display = Display(visible=0, size=(800, 600))
-#display.start()
+display = Display(visible=0, size=(800, 600))
+display.start()
 
 xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschikbaar.')]"
 xpath_invalid_pornhubs = [ "//*[contains(text(), 'Fout Pagina Niet Gevonden')]",
@@ -41,6 +41,7 @@ options = webdriver.ChromeOptions()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
 options.add_argument("--headless")
+
 driver = webdriver.Chrome(options=options)
 def getPage(url):
     try:
