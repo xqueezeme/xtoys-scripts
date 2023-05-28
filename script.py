@@ -498,8 +498,8 @@ def saveIndex(sourceIndexFile, indexFileName):
 
 def validateSelenium(sourceIndexFile):
     data = None
-    with open(sourceIndexFile) as f:
-        data = json.load(f, cls=CustomDecoder)
+    with open(sourceIndexFile) as file:
+        data = json.load(file, cls=CustomDecoder)
     if data:
         videos = data['videos']
         videos_to_validate = list(filter(lambda v:
