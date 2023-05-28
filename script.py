@@ -1,4 +1,5 @@
 import operator
+import random
 from datetime import datetime, date, timedelta
 
 from bs4 import BeautifulSoup as Soup
@@ -507,6 +508,7 @@ def validateSelenium(sourceIndexFile):
                                          not v.get('ignore', False) and
                                          (v.get('last_checked') is None or v.get('last_checked') < datetime.utcnow() - timedelta(days=31))
                                          , videos))
+        videos_to_validate = videos_to_validate[:100]
         for count, video in enumerate(videos_to_validate):
             print(f"Validating video {count} / {len(videos_to_validate)}")
 
