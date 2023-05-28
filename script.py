@@ -498,14 +498,18 @@ def saveIndex(sourceIndexFile, indexFileName):
         outfile.write(jsonStr)
 
 def validateSelenium(sourceIndexFile):
+    data = None
     with open(sourceIndexFile) as f:
         data = json.load(f, cls=CustomDecoder)
+    if data:
         videos = data['videos']
         videos_to_validate = list(filter(lambda v:
                                          not v.get('ignore', False) and
-                                         (v.get('last_checked') is None or v.get('last_checked') < datetime.utcnow() - timedelta(days=7))
+                                         (v.get('last_checked') is None or v.get('last_checked') < datetime.utcnow() - timedelta(days=31))
                                          , videos))
-        for video in videos_to_validate:
+        for count, video in enumerate(videos_to_validate):
+            print(f"Validating video {count} / {len(videos_to_validate)}")
+
             validateVideo(video)
 
             data['videos'] = videos
