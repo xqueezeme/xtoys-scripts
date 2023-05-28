@@ -477,10 +477,8 @@ def saveIndex(sourceIndexFile, indexFileName):
     videos = data['videos']
     newVideos = []
     tags = {}
-    for idx in tqdm (range(len(videos)), 
-               desc="Upgrading script videos", 
-               ascii=False, ncols=75):
-        video = videos[idx]
+    print("Upgrading script videos")
+    for idx, video in enumerate(videos):
         if(video.get('ignore', False) == False and video.get('valid', True)):
             video['displayName'] = createDisplayName(video.get('name'))
             for tag in video['tags']:
