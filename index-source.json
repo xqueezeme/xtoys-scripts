@@ -60406,7 +60406,7 @@
             "valid": true,
             "creator": "refreshed1992",
             "ignore": false,
-            "last_checked": "2023-08-15T01:31:09.997307"
+            "last_checked": "2023-08-22T01:31:41.809720"
         },
         {
             "name": "Something Special PMV by AverageJay",
@@ -60431,7 +60431,7 @@
             "valid": true,
             "creator": "EvelynEvil666",
             "ignore": false,
-            "last_checked": "2023-08-15T01:31:16.429294"
+            "last_checked": "2023-08-22T01:31:43.504179"
         },
         {
             "name": "VR PMV - JAV 06 - Close Encounters",
@@ -60452,8 +60452,8 @@
             "url": "https://discuss.eroscripts.com/t/vr-pmv-jav-06-close-encounters/117910",
             "valid": false,
             "creator": "teufelx3",
-            "ignore": false,
-            "last_checked": "2023-08-15T01:31:21.369090"
+            "ignore": true,
+            "last_checked": "2023-08-22T01:31:45.253513"
         },
         {
             "name": "Skylar Vox MMF Threesome",
@@ -60615,6 +60615,28 @@
             "creator": "qweer",
             "ignore": false,
             "last_checked": "2023-08-21T01:31:22.387250"
+        },
+        {
+            "name": "VR PMV - Fam Time",
+            "site": "spankbang",
+            "id": "4wn8n",
+            "scripts": [
+                {
+                    "name": "PMV - Fam Time.funscript",
+                    "location": "https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/funscripts/vr-pmv-fam-time-1.funscript"
+                }
+            ],
+            "tags": [
+                "vr",
+                "pmv",
+                "step-family"
+            ],
+            "created_at": "2023-08-21T22:05:00.028Z",
+            "url": "https://discuss.eroscripts.com/t/vr-pmv-fam-time/119050",
+            "valid": false,
+            "creator": "teufelx3",
+            "ignore": false,
+            "last_checked": "2023-08-22T01:30:55.926915"
         }
     ],
     "version": 1
