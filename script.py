@@ -48,6 +48,24 @@ options.add_argument("--headless")
 driver = webdriver.Chrome(options=options)
 image_folder = 'images'
 
+import unicodedata
+import re
+
+def slugify(value, allow_unicode=False):
+    """
+    Taken from https://github.com/django/django/blob/master/django/utils/text.py
+    Convert to ASCII if 'allow_unicode' is False. Convert spaces or repeated
+    dashes to single dashes. Remove characters that aren't alphanumerics,
+    underscores, or hyphens. Convert to lowercase. Also strip leading and
+    trailing whitespace, dashes, and underscores.
+    """
+    value = str(value)
+    if allow_unicode:
+        value = unicodedata.normalize('NFKC', value)
+    else:
+        value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+    value = re.sub(r'[^\w\s-]', '', value.lower())
+    return re.sub(r'[-\s]+', '-', value).strip('-_')
 
 def getPage(url):
     try:
@@ -589,7 +607,7 @@ def create_image_data_url(url):
 
 def update_img(video, image_link):
     if image_link:
-        filename = video['name'] + '.jpeg'
+        filename = slugify(video['name']) + '.jpeg'
         if not os.path.exists(image_folder + '/' + filename):
             data_url = create_image_data_url(image_link)
             print(f"Data url for {image_link}: {data_url}")
