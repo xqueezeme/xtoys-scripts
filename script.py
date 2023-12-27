@@ -403,7 +403,7 @@ def parsePage(text, topic, funscriptsFolder):
                     return None
         else:
             video = parsePost(post, topic, funscriptsFolder)
-            if (video):
+            if video:
                 videos.append(video)
     return videos
 
@@ -551,7 +551,7 @@ def validateSelenium(sourceIndexFile):
         videos_to_validate = list(filter(lambda v:
                                          not v.get('ignore', False) and
                                          (v.get('last_checked') is None or v.get(
-                                             'last_checked') < datetime.utcnow() - timedelta(days=7))
+                                             'last_checked') < datetime.utcnow() - timedelta(days=0))
                                          , videos))
         for count, video in enumerate(videos_to_validate):
             print(f"Validating video {count} / {len(videos_to_validate)}")
