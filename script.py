@@ -591,6 +591,7 @@ def update_img(video, image_link):
         print(f"Data url for {image_link}: {data_url}")
         if data_url:
             video['image-data'] = data_url
+            print(f"Updated video: {json.dumps(video, cls=CustomEncoder)}")
 
 
 def get_image(driver, site, video):
@@ -633,7 +634,7 @@ def get_image(driver, site, video):
             image_xpath = '//*[@class="play_cover"]/img[1]'
             img = driver.xpath(image_xpath)
             if img:
-                update_img(video, img.get("src"))
+                update_img(video, img[0].get("src"))
     except Exception:
         print(f"Error getting image for {video}")
         traceback.print_exc()
