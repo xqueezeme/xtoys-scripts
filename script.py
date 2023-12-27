@@ -510,7 +510,12 @@ def upgradeScript(sourceIndexFile, modelVersion):
                 scripts.append({"name": '', "location": video['script']})
                 video['scripts'] = scripts
                 video.pop('script', None)
-
+        if not video.get('thumbnail-data') and video.get('thumbnail', None):
+          thumbnail = video.get('thumbnail', None)
+          path = thumbnail.replace('https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/','')
+          with open(path) as f:
+            contents = f.read()
+            video['thumbnail-data'] = contents
         newVideos.append(video)
     data['videos'] = newVideos
     jsonStr = json.dumps(data, indent=4)
@@ -570,7 +575,7 @@ def validateSelenium(sourceIndexFile):
         videos_to_validate = list(filter(lambda v:
                                          not v.get('ignore', False) and
                                          (v.get('last_checked') is None or v.get(
-                                             'last_checked') < datetime.utcnow() - timedelta(days=7) or v.get('thumbnail') is None)
+                                             'last_checked') < datetime.utcnow() - timedelta(days=7))
                                          , videos))
         for count, video in enumerate(videos_to_validate):
             print(f"Validating video {count} / {len(videos_to_validate)}")
@@ -610,9 +615,10 @@ def update_img(video, image_link, filename):
       data_url = create_image_data_url(image_link)
       if data_url:
           video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
-          print(f"Updating thumbnail {filename}")
+          video['thumbnail-data'] = data_url
+          print(f"Updating thumbnail {video['name']}")
   
-          with open(image_folder + "/" + filename, "w") as outfile:
+            with open(image_folder + "/" + filename, "w") as outfile:
               outfile.write(data_url)
 
 def get_image(driver, site, video):
