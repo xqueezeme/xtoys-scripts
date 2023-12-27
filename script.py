@@ -46,6 +46,7 @@ options.add_argument('--disable-browser-side-navigation')
 options.add_argument("--headless")
 
 driver = webdriver.Chrome(options=options)
+image_folder = 'images'
 
 
 def getPage(url):
@@ -555,9 +556,10 @@ def validateSelenium(sourceIndexFile):
                                          , videos))
         for count, video in enumerate(videos_to_validate):
             print(f"Validating video {count} / {len(videos_to_validate)}")
+            if video.get('image-data'):
+                del video["image-data"]
 
             validateVideo(video)
-
             data['videos'] = videos
             jsonStr = json.dumps(data, indent=4, cls=CustomEncoder)
             with open(sourceIndexFile, "w") as outfile:
@@ -587,12 +589,14 @@ def create_image_data_url(url):
 
 def update_img(video, image_link):
     if image_link:
-        data_url = create_image_data_url(image_link)
-        print(f"Data url for {image_link}: {data_url}")
-        if data_url:
-            video['image-data'] = data_url
-            print(f"Updated video: {json.dumps(video, cls=CustomEncoder)}")
-
+        filename = video['slug'] + '.jpeg'
+        if not os.path.exists(image_folder + '/' + filename):
+            data_url = create_image_data_url(image_link)
+            print(f"Data url for {image_link}: {data_url}")
+            if data_url:
+                video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
+                with open(image_folder + "/" + filename, "w") as outfile:
+                    outfile.write(data_url)
 
 def get_image(driver, site, video):
     try:
