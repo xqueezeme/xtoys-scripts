@@ -627,7 +627,7 @@ def get_image(driver, site, video):
                 )
                 if img:
                     image_link = img.get_attribute("poster")
-                    update_img(video, image_link)
+                    update_img(video, image_link, filename)
                     return True
             elif site == "pornhub":
                 image_xpath = '//*[@id="player"]//img'
@@ -635,7 +635,7 @@ def get_image(driver, site, video):
                     EC.presence_of_element_located((By.XPATH, image_xpath))
                 )
                 if img:
-                    update_img(video, img.get_attribute("src"))
+                    update_img(video, img.get_attribute("src"), filename)
                     return True
 
             elif site == "xvideos":
@@ -644,7 +644,7 @@ def get_image(driver, site, video):
                     EC.presence_of_element_located((By.XPATH, image_xpath))
                 )
                 if img:
-                    update_img(video, img.get_attribute("src"))
+                    update_img(video, img.get_attribute("src"), filename)
                     return True
 
             elif site == "xhamster":
@@ -656,14 +656,14 @@ def get_image(driver, site, video):
                     style = div.get_attribute("style")
                     match = re.search(r"background-image: url\(&quot;(.*)&quot;\)", style)
                     if match:
-                        update_img(video, match.group(1))
+                        update_img(video, match.group(1), filename)
                         return True
 
             elif site == "spankbang":
                 image_xpath = '//*[@class="play_cover"]/img[1]'
                 img = driver.xpath(image_xpath)
                 if img:
-                    update_img(video, img[0].get("src"))
+                    update_img(video, img[0].get("src"), filename)
                     return True
 
         except Exception:
