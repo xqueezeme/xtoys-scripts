@@ -605,7 +605,7 @@ def create_image_data_url(url):
     return pillow_image_to_base64_string(img)
 
 
-def update_img(video, image_link, file_name):
+def update_img(video, image_link, filename):
     if image_link:
       data_url = create_image_data_url(image_link)
       if data_url:
