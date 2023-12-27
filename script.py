@@ -589,7 +589,7 @@ def create_image_data_url(url):
 
 def update_img(video, image_link):
     if image_link:
-        filename = video['slug'] + '.jpeg'
+        filename = video['name'] + '.jpeg'
         if not os.path.exists(image_folder + '/' + filename):
             data_url = create_image_data_url(image_link)
             print(f"Data url for {image_link}: {data_url}")
