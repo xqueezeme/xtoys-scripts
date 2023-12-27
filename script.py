@@ -537,6 +537,9 @@ def create_image_data_url(url):
 
     response = requests.get(url)
     img = Image.open(BytesIO(response.content))
+    size = 128, 128
+    img.thumbnail(size, Image.Resampling.LANCZOS)
+
     return pillow_image_to_base64_string(img)
 
 
@@ -600,6 +603,7 @@ def validateVideo(video):
                                         video['image-data'] = data_url
 
                         except Exception:
+                            print(f"Error converting {image_xpath} from {url}")
                             traceback.print_exc()
 
                 #print(f"{url} is valid: {valid}")
