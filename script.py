@@ -576,6 +576,7 @@ def pillow_image_to_base64_string(img):
 
 
 def create_image_data_url(url):
+    
     response = requests.get(url)
     img = Image.open(BytesIO(response.content))
     size = 128, 128
@@ -587,6 +588,7 @@ def create_image_data_url(url):
 def update_img(video, image_link):
     if image_link:
         data_url = create_image_data_url(image_link)
+        print(f"Data url for {image_link}: {data_url}")
         if data_url:
             video['image-data'] = data_url
 
@@ -631,7 +633,7 @@ def get_image(driver, site, video):
             image_xpath = '//*[@class="play_cover"]/img[1]'
             img = driver.xpath(image_xpath)
             if img:
-                update_img(video, img[0]["src"])
+                update_img(video, img["src"])
     except Exception:
         print(f"Error getting image for {video}")
         traceback.print_exc()
