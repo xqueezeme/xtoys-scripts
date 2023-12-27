@@ -537,6 +537,9 @@ def create_image_data_url(url):
 
     response = requests.get(url)
     img = Image.open(BytesIO(response.content))
+    size = 128, 128
+    img.thumbnail(size, Image.Resampling.LANCZOS)
+
     return pillow_image_to_base64_string(img)
 
 
