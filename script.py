@@ -549,10 +549,11 @@ def validateVideo(video):
 
     if (site == 'pornhub'):
         xpath = "//div[@id='player']//video"
-        image_xpath = '//*[@class="play_cover"]/img'
+        image_xpath = '//*[@id="player"]//img'
     else:
         xpath ="//video"
-        image_xpath = '//*[@id="player"]//img'
+        image_xpath = '//*[@class="play_cover"]/img'
+
     tries = 0
     previousValid = video.get('valid', True)
     valid = None
