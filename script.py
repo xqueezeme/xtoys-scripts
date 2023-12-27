@@ -563,16 +563,16 @@ def get_image(driver, site, video):
                 EC.presence_of_element_located((By.XPATH, image_xpath))
             )
             if img:
-                update_img(video, img["src"])
+                update_img(video, img.get_attribute("src"))
         elif site == "xvideos":
             image_xpath = '//*[@class="video-pic"]/img'
             img = WebDriverWait(driver, 1).until(
                 EC.presence_of_element_located((By.XPATH, image_xpath))
             )
             if img:
-                update_img(video, img["src"])
+                update_img(video, img.get_attribute("src"))
         elif site == "xhamster":
-            image_xpath = '//*[@class="xp-preload-image"]'
+            image_xpath = '//*[@class="xp-preload-image"][1]'
             div = WebDriverWait(driver, 1).until(
                 EC.presence_of_element_located((By.XPATH, image_xpath))
             )
@@ -583,7 +583,7 @@ def get_image(driver, site, video):
                     update_img(video, match.group(1))
 
         elif site == "spankbang":
-            image_xpath = '//*[@class="play_cover"]/img'
+            image_xpath = '//*[@class="play_cover"]/img[1]'
             img = driver.xpath(image_xpath)
             if img:
                 update_img(video, img["src"])
