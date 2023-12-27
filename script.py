@@ -605,62 +605,62 @@ def create_image_data_url(url):
     return pillow_image_to_base64_string(img)
 
 
-def update_img(video, image_link):
+def update_img(video, image_link, file_name):
     if image_link:
-        filename = slugify(video['name']) + '.jpeg'
-        if not os.path.exists(image_folder + '/' + filename):
-            data_url = create_image_data_url(image_link)
-            if data_url:
-                video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
-                print(f"Updating thumbnail {filename}")
-
-                with open(image_folder + "/" + filename, "w") as outfile:
-                    outfile.write(data_url)
+      data_url = create_image_data_url(image_link)
+      if data_url:
+          video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
+          print(f"Updating thumbnail {filename}")
+  
+          with open(image_folder + "/" + filename, "w") as outfile:
+              outfile.write(data_url)
 
 def get_image(driver, site, video):
-    try:
-        if site == "eporner":
-            image_xpath = "//*[@id=''moviexxx']/div[@poster]"
-
-            img = WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located((By.XPATH, image_xpath))
-            )
-            if img:
-                image_link = img.get_attribute("poster")
-                update_img(video, image_link)
-        elif site == "pornhub":
-            image_xpath = '//*[@id="player"]//img'
-            img = WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located((By.XPATH, image_xpath))
-            )
-            if img:
-                update_img(video, img.get_attribute("src"))
-        elif site == "xvideos":
-            image_xpath = '//*[@class="video-pic"]/img'
-            img = WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located((By.XPATH, image_xpath))
-            )
-            if img:
-                update_img(video, img.get_attribute("src"))
-        elif site == "xhamster":
-            image_xpath = '//*[@class="xp-preload-image"][1]'
-            div = WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located((By.XPATH, image_xpath))
-            )
-            if div:
-                style = div.get_attribute("style")
-                match = re.search(r"background-image: url\(\'(.*)\'\)", style)
-                if match:
-                    update_img(video, match.group(1))
-
-        elif site == "spankbang":
-            image_xpath = '//*[@class="play_cover"]/img[1]'
-            img = driver.xpath(image_xpath)
-            if img:
-                update_img(video, img[0].get("src"))
-    except Exception:
-        print(f"Error getting image for {video}")
-        traceback.print_exc()
+    filename = slugify(video['name']) + '.jpeg'
+    if not os.path.exists(image_folder + '/' + filename):
+        try:
+            if site == "eporner":
+                image_xpath = "//*[@id=''moviexxx']/div[@poster]"
+    
+                img = WebDriverWait(driver, 1).until(
+                    EC.presence_of_element_located((By.XPATH, image_xpath))
+                )
+                if img:
+                    image_link = img.get_attribute("poster")
+                    update_img(video, image_link)
+            elif site == "pornhub":
+                image_xpath = '//*[@id="player"]//img'
+                img = WebDriverWait(driver, 1).until(
+                    EC.presence_of_element_located((By.XPATH, image_xpath))
+                )
+                if img:
+                    update_img(video, img.get_attribute("src"))
+            elif site == "xvideos":
+                image_xpath = '//*[@class="video-pic"]/img'
+                img = WebDriverWait(driver, 1).until(
+                    EC.presence_of_element_located((By.XPATH, image_xpath))
+                )
+                if img:
+                    update_img(video, img.get_attribute("src"))
+            elif site == "xhamster":
+                image_xpath = '//*[@class="xp-preload-image"][1]'
+                div = WebDriverWait(driver, 1).until(
+                    EC.presence_of_element_located((By.XPATH, image_xpath))
+                )
+                if div:
+                    style = div.get_attribute("style")
+                    match = re.search(r"background-image: url\(\'(.*)\'\)", style)
+                    if match:
+                        update_img(video, match.group(1))
+    
+            elif site == "spankbang":
+                image_xpath = '//*[@class="play_cover"]/img[1]'
+                img = driver.xpath(image_xpath)
+                if img:
+                    update_img(video, img[0].get("src"))
+        except Exception:
+            print(f"Error getting image for {video}")
+            traceback.print_exc()
 
 
 def validateVideo(video):
