@@ -610,9 +610,10 @@ def update_img(video, image_link):
         filename = slugify(video['name']) + '.jpeg'
         if not os.path.exists(image_folder + '/' + filename):
             data_url = create_image_data_url(image_link)
-            print(f"Data url for {image_link}: {data_url}")
             if data_url:
                 video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
+                print(f"Updating thumbnail {filename}")
+
                 with open(image_folder + "/" + filename, "w") as outfile:
                     outfile.write(data_url)
 
