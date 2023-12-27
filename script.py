@@ -3,7 +3,6 @@ import operator
 import random
 from datetime import datetime, date, timedelta
 from io import BytesIO
-from typing import io
 
 from bs4 import BeautifulSoup as Soup
 
@@ -524,17 +523,12 @@ scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
 import requests
 from PIL import Image
 def pillow_image_to_base64_string(img):
-    buffered = io.BytesIO()
+    buffered = BytesIO()
     img.save(buffered, format="JPEG")
     return base64.b64encode(buffered.getvalue()).decode("utf-8")
 
 
 def create_image_data_url(url):
-    # python2.x, use this instead
-    # from StringIO import StringIO
-    # for python3.x,
-    from io import StringIO
-
     response = requests.get(url)
     img = Image.open(BytesIO(response.content))
     size = 128, 128
