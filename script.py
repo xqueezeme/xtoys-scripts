@@ -1,6 +1,9 @@
+import base64
 import operator
 import random
 from datetime import datetime, date, timedelta
+from io import BytesIO
+from typing import io
 
 from bs4 import BeautifulSoup as Soup
 
@@ -518,6 +521,23 @@ def validateSelenium(sourceIndexFile):
 
 
 scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
+import requests
+from PIL import Image
+def pillow_image_to_base64_string(img):
+    buffered = io.BytesIO()
+    img.save(buffered, format="JPEG")
+    return base64.b64encode(buffered.getvalue()).decode("utf-8")
+
+
+def create_image_data_url(url):
+    # python2.x, use this instead
+    # from StringIO import StringIO
+    # for python3.x,
+    from io import StringIO
+
+    response = requests.get(url)
+    img = Image.open(BytesIO(response.content))
+    return pillow_image_to_base64_string(img)
 
 
 def validateVideo(video):
@@ -526,8 +546,10 @@ def validateVideo(video):
 
     if (site == 'pornhub'):
         xpath = "//div[@id='player']//video"
+        image_xpath = '//*[@class="play_cover"]/img'
     else:
         xpath ="//video"
+        image_xpath = '//*[@id="player"]//img'
     tries = 0
     previousValid = video.get('valid', True)
     valid = None
@@ -565,6 +587,21 @@ def validateVideo(video):
                             EC.presence_of_element_located((By.XPATH, xpath))
                         )
                         valid = True
+                    if valid:
+                        try:
+                            img = WebDriverWait(driver, 1).until(
+                                EC.presence_of_element_located((By.XPATH, image_xpath))
+                            )
+                            if img:
+                                image_link = img.get_attribute("src")
+                                if image_link:
+                                    data_url = create_image_data_url(image_link)
+                                    if data_url:
+                                        video['image-data'] = data_url
+
+                        except Exception:
+                            traceback.print_exc()
+
                 #print(f"{url} is valid: {valid}")
 
             except:
