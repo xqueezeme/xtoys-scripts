@@ -649,7 +649,7 @@ def get_image(driver, site, video):
                 )
                 if div:
                     style = div.get_attribute("style")
-                    match = re.search(r"background-image: url\(\'(.*)\'\)", style)
+                    match = re.search(r"background-image: url\(&quot;(.*)&quot;\)", style)
                     if match:
                         update_img(video, match.group(1))
     
