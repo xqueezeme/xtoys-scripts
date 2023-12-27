@@ -633,7 +633,8 @@ def get_image(driver, site, video):
             image_xpath = '//*[@class="play_cover"]/img[1]'
             img = driver.xpath(image_xpath)
             if img:
-                update_img(video, img[0]["src"])
+                print(json.dumps(img))
+                update_img(video, img[0].get("src"))
     except Exception:
         print(f"Error getting image for {video}")
         traceback.print_exc()
