@@ -549,31 +549,39 @@ def update_img(video, image_link):
 def get_image(driver, site, video):
     try:
         if site == "eporner":
+            image_xpath = "//*[@id=''moviexxx']/div[@poster]"
+
             img = WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located((By.XPATH, "//*[@id=''moviexxx']/div[@poster]"))
+                EC.presence_of_element_located((By.XPATH, image_xpath))
             )
             if img:
                 image_link = img.get_attribute("poster")
                 update_img(video, image_link)
         elif site == "pornhub":
             image_xpath = '//*[@id="player"]//img'
-            img = driver.xpath(image_xpath)
+            img = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.XPATH, image_xpath))
+            )
             if img:
-                update_img(video, img["src"])        
+                update_img(video, img["src"])
         elif site == "xvideos":
             image_xpath = '//*[@class="video-pic"]/img'
-            img = driver.xpath(image_xpath)
+            img = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.XPATH, image_xpath))
+            )
             if img:
                 update_img(video, img["src"])
         elif site == "xhamster":
             image_xpath = '//*[@class="xp-preload-image"]'
-            div = driver.xpath(image_xpath)
+            div = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.XPATH, image_xpath))
+            )
             if div:
                 style = div.get_attribute("style")
                 match = re.search(r"background-image: url\(\'(.*)\'\)", style)
                 if match:
                     update_img(video, match.group(1))
-        
+
         elif site == "spankbang":
             image_xpath = '//*[@class="play_cover"]/img'
             img = driver.xpath(image_xpath)
