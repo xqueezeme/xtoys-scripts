@@ -628,6 +628,7 @@ def get_image(driver, site, video):
                 if img:
                     image_link = img.get_attribute("poster")
                     update_img(video, image_link)
+                    return True
             elif site == "pornhub":
                 image_xpath = '//*[@id="player"]//img'
                 img = WebDriverWait(driver, 1).until(
@@ -635,6 +636,8 @@ def get_image(driver, site, video):
                 )
                 if img:
                     update_img(video, img.get_attribute("src"))
+                    return True
+
             elif site == "xvideos":
                 image_xpath = '//*[@class="video-pic"]/img'
                 img = WebDriverWait(driver, 1).until(
@@ -642,6 +645,8 @@ def get_image(driver, site, video):
                 )
                 if img:
                     update_img(video, img.get_attribute("src"))
+                    return True
+
             elif site == "xhamster":
                 image_xpath = '//*[@class="xp-preload-image"][1]'
                 div = WebDriverWait(driver, 1).until(
@@ -652,15 +657,19 @@ def get_image(driver, site, video):
                     match = re.search(r"background-image: url\(&quot;(.*)&quot;\)", style)
                     if match:
                         update_img(video, match.group(1))
-    
+                        return True
+
             elif site == "spankbang":
                 image_xpath = '//*[@class="play_cover"]/img[1]'
                 img = driver.xpath(image_xpath)
                 if img:
                     update_img(video, img[0].get("src"))
+                    return True
+
         except Exception:
             print(f"Error getting image for {video}")
             traceback.print_exc()
+    return False
 
 
 def validateVideo(video):
@@ -686,32 +695,13 @@ def validateVideo(video):
                     if dom.xpath(xpath_invalid_spankbang):
                         valid = False
                     else:
-                        videos = dom.xpath(xpath)
-                        if videos:
-                            valid = True
-                            get_image(dom, site, video)
-                        else:
-                            valid = False
+                        valid = get_image(dom, site, video)
                 else:
                     driver.get(url)
                     driver.execute_script(
                         'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
-                    if site == 'pornhub':
-                        invalid_xpath = " | ".join(xpath_invalid_pornhubs)
-                        try:
-                            input = WebDriverWait(driver, 1).until(
-                                EC.presence_of_element_located((By.XPATH, invalid_xpath))
-                            )
-                            valid = False
-                        except:
-                            valid = True
-                    if valid is None:
-                        input = WebDriverWait(driver, 1).until(
-                            EC.presence_of_element_located((By.XPATH, xpath))
-                        )
-                        valid = True
-                    if valid:
-                        get_image(driver, site, video)
+                    valid = get_image(driver, site, video)
+
 
                 # print(f"{url} is valid: {valid}")
 
