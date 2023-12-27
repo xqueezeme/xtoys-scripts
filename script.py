@@ -603,6 +603,7 @@ def validateVideo(video):
                                         video['image-data'] = data_url
 
                         except Exception:
+                            print(f"Error converting {image_xpath} from {url}")
                             traceback.print_exc()
 
                 #print(f"{url} is valid: {valid}")
