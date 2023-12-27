@@ -541,6 +541,47 @@ def create_image_data_url(url):
     img.thumbnail(size, Image.Resampling.LANCZOS)
 
     return pillow_image_to_base64_string(img)
+def update_img(video, image_link):
+    if image_link:
+        data_url = create_image_data_url(image_link)
+        if data_url:
+            video['image-data'] = data_url
+def get_image(driver, site, video):
+    try:
+        if site == "eporner":
+            img = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.XPATH, "//*[@id=''moviexxx']/div[@poster]"))
+            )
+            if img:
+                image_link = img.get_attribute("poster")
+                update_img(video, image_link)
+        elif site == "pornhub":
+            image_xpath = '//*[@id="player"]//img'
+            img = driver.xpath(image_xpath)
+            if img:
+                update_img(video, img["src"])        
+        elif site == "xvideos":
+            image_xpath = '//*[@class="video-pic"]/img'
+            img = driver.xpath(image_xpath)
+            if img:
+                update_img(video, img["src"])
+        elif site == "xhamster":
+            image_xpath = '//*[@class="xp-preload-image"]'
+            div = driver.xpath(image_xpath)
+            if div:
+                style = div.get_attribute("style")
+                match = re.search(r"background-image: url\(\'(.*)\'\)", style)
+                if match:
+                    update_img(video, match.group(1))
+        
+        elif site == "spankbang":
+            image_xpath = '//*[@class="play_cover"]/img'
+            img = driver.xpath(image_xpath)
+            if img:
+                update_img(video, img["src"])
+    except Exception:
+        print(f"Error getting image for {video}")
+        traceback.print_exc()
 
 
 def validateVideo(video):
@@ -549,10 +590,8 @@ def validateVideo(video):
 
     if (site == 'pornhub'):
         xpath = "//div[@id='player']//video"
-        image_xpath = '//*[@id="player"]//img'
     else:
         xpath ="//video"
-        image_xpath = '//*[@class="play_cover"]/img'
 
     tries = 0
     previousValid = video.get('valid', True)
@@ -571,6 +610,7 @@ def validateVideo(video):
                         videos = dom.xpath(xpath)
                         if videos:
                             valid = True
+                            get_image(dom, site, video)
                         else:
                             valid = False
                 else:
@@ -592,20 +632,7 @@ def validateVideo(video):
                         )
                         valid = True
                     if valid:
-                        try:
-                            img = WebDriverWait(driver, 1).until(
-                                EC.presence_of_element_located((By.XPATH, image_xpath))
-                            )
-                            if img:
-                                image_link = img.get_attribute("src")
-                                if image_link:
-                                    data_url = create_image_data_url(image_link)
-                                    if data_url:
-                                        video['image-data'] = data_url
-
-                        except Exception:
-                            print(f"Error converting {image_xpath} from {url}")
-                            traceback.print_exc()
+                        get_image(driver, site, video)
 
                 #print(f"{url} is valid: {valid}")
 
