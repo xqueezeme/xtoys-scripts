@@ -510,12 +510,8 @@ def upgradeScript(sourceIndexFile, modelVersion):
                 scripts.append({"name": '', "location": video['script']})
                 video['scripts'] = scripts
                 video.pop('script', None)
-        if not video.get('thumbnail-data', None) and video.get('thumbnail', None):
-          thumbnail = video.get('thumbnail', None)
-          path = thumbnail.replace('https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/','')
-          with open(path) as f:
-            contents = f.read()
-            video['thumbnail-data'] = contents
+        if video.get('thumbnail-data', None):
+           del video['thumbnail-data']
         newVideos.append(video)
     data['videos'] = newVideos
     jsonStr = json.dumps(data, indent=4)
@@ -615,7 +611,6 @@ def update_img(video, image_link, filename):
       data_url = create_image_data_url(image_link)
       if data_url:
           video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
-          video['thumbnail-data'] = data_url
           print(f"Updating thumbnail {video['name']}")
   
           with open(image_folder + "/" + filename, "w") as outfile:
