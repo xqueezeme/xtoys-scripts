@@ -557,7 +557,7 @@ def saveIndex(sourceIndexFile, indexFileName):
     data['videos'] = newVideos
     data['tags'] = dict(sorted(tags.items(), key=operator.itemgetter(0)))
 
-    jsonStr = json.dumps(data, indent=4)
+    jsonStr = json.dumps(data)
     with open(indexFileName, "w") as outfile:
         outfile.write(jsonStr)
 
