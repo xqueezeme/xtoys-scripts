@@ -500,7 +500,7 @@ def upgradeScript(sourceIndexFile, modelVersion):
                     desc="Upgrading script videos",
                     ascii=False, ncols=75):
         video = videos[idx]
-        if datetime.today().day == 1:
+        if datetime.today().day == 1 or True:
             video['ignore'] = False
             video['valid'] = True
 
@@ -571,7 +571,7 @@ def validateSelenium(sourceIndexFile):
         videos_to_validate = list(filter(lambda v:
                                          not v.get('ignore', False) and
                                          (v.get('last_checked') is None or v.get(
-                                             'last_checked') < datetime.utcnow() - timedelta(days=1))
+                                             'last_checked') < datetime.utcnow() - timedelta(days=0))
                                          , videos))
         for count, video in enumerate(videos_to_validate):
             print(f"Validating video {count} / {len(videos_to_validate)}")
@@ -608,68 +608,68 @@ def create_image_data_url(url):
 
 def update_img(video, image_link, filename):
     if image_link:
-      data_url = create_image_data_url(image_link)
-      if data_url:
-          video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
-          print(f"Updating thumbnail {video['name']}")
-  
-          with open(image_folder + "/" + filename, "w") as outfile:
-            outfile.write(data_url)
+      if not os.path.exists(image_folder + '/' + filename):
+        data_url = create_image_data_url(image_link)
+        if data_url:
+            video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
+            print(f"Updating thumbnail {video['name']}")
+    
+            with open(image_folder + "/" + filename, "w") as outfile:
+              outfile.write(data_url)
 
 def get_image(driver, site, video):
     filename = slugify(video['name']) + '.jpeg'
-    if not os.path.exists(image_folder + '/' + filename):
-        try:
-            if site == "eporner":
-                image_xpath = "//*[@id=''moviexxx']/div[@poster]"
-    
-                img = WebDriverWait(driver, 1).until(
-                    EC.presence_of_element_located((By.XPATH, image_xpath))
-                )
-                if img:
-                    image_link = img.get_attribute("poster")
-                    update_img(video, image_link, filename)
-                    return True
-            elif site == "pornhub":
-                image_xpath = '//*[@id="player"]//img'
-                img = WebDriverWait(driver, 1).until(
-                    EC.presence_of_element_located((By.XPATH, image_xpath))
-                )
-                if img:
-                    update_img(video, img.get_attribute("src"), filename)
-                    return True
+    try:
+        if site == "eporner":
+            image_xpath = "//*[@id=''moviexxx']/div[@poster]"
 
-            elif site == "xvideos":
-                image_xpath = '//*[@class="video-pic"]/img'
-                img = WebDriverWait(driver, 1).until(
-                    EC.presence_of_element_located((By.XPATH, image_xpath))
-                )
-                if img:
-                    update_img(video, img.get_attribute("src"), filename)
-                    return True
+            img = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.XPATH, image_xpath))
+            )
+            if img:
+                image_link = img.get_attribute("poster")
+                update_img(video, image_link, filename)
+                return True
+        elif site == "pornhub":
+            image_xpath = '//*[@id="player"]//img'
+            img = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.XPATH, image_xpath))
+            )
+            if img:
+                update_img(video, img.get_attribute("src"), filename)
+                return True
 
-            elif site == "xhamster":
-                image_xpath = '//*[@class="xp-preload-image"][1]'
-                div = WebDriverWait(driver, 1).until(
-                    EC.presence_of_element_located((By.XPATH, image_xpath))
-                )
-                if div:
-                    style = div.get_attribute("style")
-                    match = re.search(r"background-image: url\(&quot;(.*)&quot;\)", style)
-                    if match:
-                        update_img(video, match.group(1), filename)
-                        return True
+        elif site == "xvideos":
+            image_xpath = '//*[@class="video-pic"]/img'
+            img = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.XPATH, image_xpath))
+            )
+            if img:
+                update_img(video, img.get_attribute("src"), filename)
+                return True
 
-            elif site == "spankbang":
-                image_xpath = '//*[@class="play_cover"]/img[1]'
-                img = driver.xpath(image_xpath)
-                if img:
-                    update_img(video, img[0].get("src"), filename)
+        elif site == "xhamster":
+            image_xpath = '//*[@class="xp-preload-image"][1]'
+            div = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.XPATH, image_xpath))
+            )
+            if div:
+                style = div.get_attribute("style")
+                match = re.search(r"background-image: url\(&quot;(.*)&quot;\)", style)
+                if match:
+                    update_img(video, match.group(1), filename)
                     return True
 
-        except Exception:
-            print(f"Error getting image for {video}")
-            traceback.print_exc()
+        elif site == "spankbang":
+            image_xpath = '//*[@class="play_cover"]/img[1]'
+            img = driver.xpath(image_xpath)
+            if img:
+                update_img(video, img[0].get("src"), filename)
+                return True
+
+    except Exception:
+        print(f"Error getting image for {video}")
+        traceback.print_exc()
     return False
 
 
