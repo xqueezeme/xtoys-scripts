@@ -771,7 +771,9 @@ def looptopics(sourceIndexFile, topics, funscriptsFolder):
                     matchingVideo['creator'] = topic['username']
                     matchingVideo['created_at'] = topic['created_at']
                 else:
-                    newvideos = parsePage(formatHTML(getPage(topic['url'])), topic, funscriptsFolder)
+                    var url = topic['url'])
+                    print(f"Parsing page for {url}")
+                    newvideos = parsePage(formatHTML(getPage(), topic, funscriptsFolder)
                     if (newvideos and len(newvideos) > 0):
                         for video in newvideos:
                             if (video):
