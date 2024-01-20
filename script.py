@@ -314,7 +314,7 @@ seleniumLogin()
 
 upgradeScript(sourceIndexFile, modelVersion)
 
-pages = 2000
+pages = 200
 readTopicList()
 f = open('topics.json')
 all = json.load(f)

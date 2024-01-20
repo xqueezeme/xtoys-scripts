@@ -127,6 +127,8 @@ def parsePost(post, topic, session, driver):
             else:
                 return None
         return None
+    else:
+        print("No videos or funscript found!")
 
 def parsePack(post):
     current = ''
