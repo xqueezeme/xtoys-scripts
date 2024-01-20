@@ -15,6 +15,8 @@ def parse_page_from_url(url, topic, session, driver):
     newvideos = parsePage(
         formatHTML(getPage(session, url)), topic, session, driver)
     return newvideos
+
+
 def getPage(session, url):
     try:
         response = session.get(url)
@@ -23,6 +25,7 @@ def getPage(session, url):
         print('Error trying to access ' + url + '\nTrying again in 10 sec')
         time.sleep(5)
         return getPage(url)
+
 
 def formatHTML(content):
     start = content.index('<body')
@@ -129,27 +132,31 @@ def parsePost(post, topic, session, driver):
     else:
         print("No videos or funscript found!")
 
+
 def parsePack(post):
     current = ''
     title = None
     link = None
     funscripts = None
     videos = []
+
     for el in post:
+        videoLinks = None
+
         text = ''.join(el.itertext()).strip().lower()
-        if (text):
-            if (current == 'title'):
+        if text:
+            if current == 'title':
                 title = text.split('\n')[0]
                 current = None
-            elif (current == 'link'):
+            elif current == 'link':
                 videoLinks = findVideoLinks(el)
                 current = None
 
-            elif (current == 'script'):
+            elif current == 'script':
                 regexpNS = 'http://exslt.org/regular-expressions'
                 funscripts = []
                 links = el.xpath(".//a[re:test(@href, '(\.funscript$)')]", namespaces={'re': regexpNS})
-                if (len(links) > 0):
+                if len(links) > 0:
                     for link in links:
                         if (link.get("href").startswith('http')):
                             funscripts.append({'location': link.get("href"), 'name': ''.join(link.itertext())})
@@ -157,10 +164,9 @@ def parsePack(post):
                             funscripts.append({'location': 'https://discuss.eroscripts.com' + link.get("href"),
                                                'name': ''.join(link.itertext())})
                     current = None
-                if (title and funscripts != None and len(funscripts) > 0 and videoLinks != None and len(
-                        videoLinks) == 1):
+                if title and funscripts and videoLinks and len(videoLinks) == 1:
                     video = videoLinks[0]
-                    if (title.lower() == 'length'):
+                    if title.lower() == 'length':
                         title = funscripts[0]['name'].replace('.funscript', '')
                     videos.append({'title': title, 'site': video['site'], 'id': video['id'], 'funscripts': funscripts})
                 title = None
@@ -169,14 +175,14 @@ def parsePack(post):
                 videoLinks = None
 
 
-            elif (text == 'details'):
+            elif text == 'details':
                 current = 'title'
-            elif (text == 'video link') or el.get('alt') == ':movie_camera:':
+            elif text == 'video link' or el.get('alt') == ':movie_camera:':
                 current = 'link'
-            elif (text == 'script'):
+            elif text == 'script':
                 current = 'script'
         if el.tag == 'hr':
-            if (title and funscripts != None and len(funscripts) > 0 and videoLinks != None and len(videoLinks) == 1):
+            if title and funscripts and videoLinks and len(videoLinks) == 1:
                 video = videoLinks[0]
                 if (title.lower() == 'length'):
                     title = funscripts[0]['name'].replace('.funscript', '')
@@ -186,6 +192,7 @@ def parsePack(post):
             funscripts = None
             videoLinks = None
     return videos
+
 
 epornerAXPath = './/a[contains(@href,"eporner.com")]/@href'
 spankbangAXPath = './/a[contains(@href,"spankbang.com")]/@href'
@@ -255,8 +262,10 @@ def getXhamsterId(url):
     split = group.split('-')
     return split[len(split) - 1]
 
-EPORNER_ID_REGEX1= re.compile(r'eporner\.com\/video\-([a-zA-Z0-9]+)\/?.*', re.IGNORECASE)
-EPORNER_ID_REGEX2= re.compile(r'eporner\.com\/.*\/([a-zA-Z0-9]+)\/.*', re.IGNORECASE)
+
+EPORNER_ID_REGEX1 = re.compile(r'eporner\.com\/video\-([a-zA-Z0-9]+)\/?.*', re.IGNORECASE)
+EPORNER_ID_REGEX2 = re.compile(r'eporner\.com\/.*\/([a-zA-Z0-9]+)\/.*', re.IGNORECASE)
+
 
 def getEpornerId(url):
     group = EPORNER_ID_REGEX1.search(url)
