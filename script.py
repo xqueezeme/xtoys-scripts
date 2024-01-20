@@ -300,13 +300,15 @@ pages = 50
 read_topic_list()
 f = open('topics.json')
 all = json.load(f)
-videosAdded = loop_topics(sourceIndexFile, all)
-print('Added ' + str(videosAdded) + ' videos.')
+try:
+    videosAdded = loop_topics(sourceIndexFile, all)
+    print('Added ' + str(videosAdded) + ' videos.')
 
-save_index(sourceIndexFile, indexFile)
-validation_service.validateSelenium(driver, sourceIndexFile)
-save_index(sourceIndexFile, indexFile)
+    save_index(sourceIndexFile, indexFile)
+    validation_service.validateSelenium(driver, sourceIndexFile)
+finally:
+    save_index(sourceIndexFile, indexFile)
+    # Close.
+    driver.close()
+    # display.stop()
 
-# Close.
-driver.close()
-# display.stop()
