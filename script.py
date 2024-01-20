@@ -241,9 +241,9 @@ def looptopics(sourceIndexFile, topics):
                     url = topic['url']
                     print(f"Parsing page for {url}")
                     newvideos = post_service.parse_page_from_url(url, topic, session, driver)
-                    if (newvideos and len(newvideos) > 0):
+                    if newvideos and len(newvideos) > 0:
                         for video in newvideos:
-                            if (video):
+                            if video:
                                 existingVideo = next(filter(
                                     lambda existing: existing['id'] == video['id'] and existing['site'] == video[
                                         'site'], videos), None)
@@ -260,15 +260,15 @@ def looptopics(sourceIndexFile, topics):
                     else:
                         ignoreUrls.append(topic['url'])
 
-        data['videos'] = videos
-        jsonStr = json.dumps(data, indent=4, cls=CustomEncoder)
-        with open(sourceIndexFile, "w") as outfile:
-            outfile.write(jsonStr)
+            data['videos'] = videos
+            jsonStr = json.dumps(data, indent=4, cls=CustomEncoder)
+            with open(sourceIndexFile, "w") as outfile:
+                outfile.write(jsonStr)
 
-        ignoreIndex['urls'] = ignoreUrls
-        jsonStr = json.dumps(ignoreIndex, indent=4)
-        with open('ignore-urls.json', "w") as outfile:
-            outfile.write(jsonStr)
+            ignoreIndex['urls'] = ignoreUrls
+            jsonStr = json.dumps(ignoreIndex, indent=4)
+            with open('ignore-urls.json', "w") as outfile:
+                outfile.write(jsonStr)
 
     return videosAdded
 
