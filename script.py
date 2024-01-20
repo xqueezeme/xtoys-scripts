@@ -384,11 +384,9 @@ def parsePack(post):
 def parsePage(text, topic, funscriptsFolder):
     soup = Soup(text, "lxml")
     dom = etree.HTML(str(soup))
-    posts = dom.xpath('//div[contains(@itemprop,"articleBody")]')
+    post = dom.xpath('//*[@id="post_1"]//div[@class="cooked"]')
     videos = []
-    if (len(posts) > 0):
-        post = posts[0]
-        postId = post.xpath('.//*')
+    if post:
         if (len(post.xpath('.//hr')) > 0 or len(post.xpath(".//h3[text() =' Details']")) > 1):
             packVideos = parsePack(posts)
             for video in packVideos:
