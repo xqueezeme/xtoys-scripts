@@ -38,9 +38,7 @@ options.add_argument("--headless")
 driver = webdriver.Chrome(options=options)
 scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
 
-import unicodedata
 import re
-
 
 def getPage(url):
     try:
@@ -81,19 +79,6 @@ def seleniumLogin():
     for cookie in selenium_cookies:
         cookies[cookie['name']] = cookie['value']
     session.cookies.update(cookies)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 titleEscapeWords = ['pack']
 
