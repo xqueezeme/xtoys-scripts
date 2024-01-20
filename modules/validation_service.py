@@ -38,11 +38,6 @@ def validateVideo(driver, video):
     site = video['site']
     url = sites_service.getUrl(site, video['id'])
 
-    if (site == 'pornhub'):
-        xpath = "//div[@id='player']//video"
-    else:
-        xpath = "//video"
-
     tries = 0
     previousValid = video.get('valid', True)
     valid = None
