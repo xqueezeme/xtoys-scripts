@@ -622,14 +622,14 @@ def get_image(driver, site, video):
     try:
         if site == "eporner":
             image_xpath = "//*[@id=''moviexxx']/div[@poster]"
-
-            img = WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located((By.XPATH, image_xpath))
-            )
-            if img:
-                image_link = img.get_attribute("poster")
-                update_img(video, image_link, filename)
-                return True
+            poster_div = driver.xpath(image_xpath)
+            print(poster_div)
+            if poster_div:
+              img = poster_div
+              if img:
+                  image_link = img.get_attribute("poster")
+                  update_img(video, image_link, filename)
+                  return True
         elif site == "pornhub":
             image_xpath = '//*[@id="player"]//img'
             img = WebDriverWait(driver, 1).until(
