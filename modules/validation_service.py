@@ -5,10 +5,8 @@ import traceback
 from datetime import datetime, timedelta
 
 import cloudscraper
-import lxml.etree as etree
-from bs4 import BeautifulSoup as Soup
-
 from modules import sites_service, image_service
+from modules.common import CustomDecoder, CustomEncoder
 
 scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
 xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschikbaar.')]"
