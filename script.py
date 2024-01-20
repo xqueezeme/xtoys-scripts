@@ -773,7 +773,7 @@ def looptopics(sourceIndexFile, topics, funscriptsFolder):
                 else:
                     url = topic['url']
                     print(f"Parsing page for {url}")
-                    newvideos = parsePage(formatHTML(getPage(), topic, funscriptsFolder)
+                    newvideos = parsePage(formatHTML(getPage(url), topic, funscriptsFolder)
                     if (newvideos and len(newvideos) > 0):
                         for video in newvideos:
                             if (video):
