@@ -2,6 +2,7 @@ import base64
 import os
 import re
 import traceback
+import unicodedata
 from io import BytesIO
 
 import cloudscraper

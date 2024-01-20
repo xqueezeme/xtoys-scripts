@@ -50,7 +50,7 @@ def parsePage(text, topic, session, driver):
                         if (file == None):
                             allscriptsfound = False
                     scripts.append({'name': funscript['name'],
-                                    'location': 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + funscriptsFolder + '/' + filename})
+                                    'location': 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + FUNSCRIPT_FOLDER + '/' + filename})
                     funscriptIndex += 1
                 if allscriptsfound:
                     video = {
@@ -80,7 +80,6 @@ def parsePage(text, topic, session, driver):
 
 
 def parsePost(post, topic, session, driver):
-    print(f"Parsing post {post}")
     newVideoLinks = findVideoLinks(post)
     funscripts = []
     regexpNS = 'http://exslt.org/regular-expressions'
