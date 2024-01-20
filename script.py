@@ -379,7 +379,7 @@ def parsePack(post):
             funscripts = None
             videoLinks = None
     return videos
-
+ 
 
 def parsePage(text, topic, funscriptsFolder):
     soup = Soup(text, "lxml")
@@ -424,6 +424,8 @@ def parsePage(text, topic, funscriptsFolder):
             video = parsePost(post, topic, funscriptsFolder)
             if video:
                 videos.append(video)
+    else: 
+        print("post no found")
     return videos
 
 
@@ -826,7 +828,7 @@ indexFile = 'index.json'
 modelVersion = 1
 
 seleniumLogin()
-# savePage("page.html", 'https://discuss.eroscripts.com/t/cock-hero-dreamscape-5-blissful-immersion/49864')
+savePage("page.html", 'https://discuss.eroscripts.com/t/lily-kawaii-pov-asian-blowjob/142542')
 
 upgradeScript(sourceIndexFile, modelVersion)
 
