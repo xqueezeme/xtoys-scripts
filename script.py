@@ -84,7 +84,7 @@ def seleniumLogin():
 titleEscapeWords = ['pack']
 
 
-def readInfiniscroll(by, url, pages):
+def read_infiniscroll(by, url, pages):
     newTopics = []
     for i in tqdm(range(pages),
                   desc="Reading " + by + " topics",
@@ -131,7 +131,7 @@ def readInfiniscroll(by, url, pages):
         else:
             break
 
-    return reversed(newTopics)
+    return list(reversed(newTopics))
 
 
 def upgradeScript(sourceIndexFile, modelVersion):
@@ -178,7 +178,7 @@ def createDisplayName(name):
     return name.strip()
 
 
-def saveIndex(sourceIndexFile, indexFileName):
+def save_index(sourceIndexFile, indexFileName):
     if os.path.exists(sourceIndexFile):
         with open(sourceIndexFile) as f:
             data = json.load(f)
@@ -212,9 +212,7 @@ def saveIndex(sourceIndexFile, indexFileName):
 
 
 
-
-
-def looptopics(sourceIndexFile, topics):
+def loop_topics(sourceIndexFile, topics):
     ignoreUrls = []
     if os.path.exists('ignore-urls.json'):
         f = open('ignore-urls.json')
@@ -280,10 +278,10 @@ def savePage(page, url):
         outfile.write(pageContent)
 
 
-def readTopicList():
-    all = readInfiniscroll('latest',
+def read_topic_list():
+    all = read_infiniscroll('latest',
                            'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false',
-                           pages)
+                            pages)
     jsonStr = json.dumps(all, indent=4)
     with open('topics.json', "w") as outfile:
         outfile.write(jsonStr)
@@ -299,15 +297,15 @@ seleniumLogin()
 upgradeScript(sourceIndexFile, modelVersion)
 
 pages = 50
-readTopicList()
+read_topic_list()
 f = open('topics.json')
 all = json.load(f)
-videosAdded = looptopics(sourceIndexFile, all)
+videosAdded = loop_topics(sourceIndexFile, all)
 print('Added ' + str(videosAdded) + ' videos.')
 
-saveIndex(sourceIndexFile, indexFile)
+save_index(sourceIndexFile, indexFile)
 validation_service.validateSelenium(driver, sourceIndexFile)
-saveIndex(sourceIndexFile, indexFile)
+save_index(sourceIndexFile, indexFile)
 
 # Close.
 driver.close()
