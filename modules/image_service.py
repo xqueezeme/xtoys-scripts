@@ -87,7 +87,9 @@ def get_image(driver, site, video):
 
         elif site == "spankbang":
             image_xpath = '//*[@class="play_cover"]/img[1]'
-            img = driver.xpath(image_xpath)
+            img = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.XPATH, image_xpath))
+            )
             if img:
                 update_img(video, img[0].get("src"), filename)
                 return True
