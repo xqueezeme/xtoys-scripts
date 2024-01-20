@@ -320,7 +320,7 @@ savePage("page.html", 'https://discuss.eroscripts.com/t/lily-kawaii-pov-asian-bl
 
 upgradeScript(sourceIndexFile, modelVersion)
 
-pages = 20
+pages = 2000
 readTopicList()
 f = open('topics.json')
 all = json.load(f)
