@@ -20,9 +20,6 @@ cryptography==36.0.1
 cssselect==1.2.0
 dateparser==1.1.1
 deprecation==2.1.0
-discord-py-interactions==4.1.0
-discord-py-slash-command==3.0.3
-discord.py==2.1.0
 distlib==0.3.5
 distro==1.5.0
 dnspython==2.0.0

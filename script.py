@@ -1,30 +1,20 @@
-import base64
+import json
 import operator
-import random
-from datetime import datetime, date, timedelta
-from io import BytesIO
+import os
+import time
+from datetime import datetime, date
 
-from bs4 import BeautifulSoup as Soup
-
-import re
+import cloudscraper
 import requests
 from fake_useragent import UserAgent
-import time
-import requests
+from pyvirtualdisplay import Display
 from selenium import webdriver
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException
-import time
-import lxml.etree as etree
-import json
+from selenium.webdriver.support.wait import WebDriverWait
 from tqdm import tqdm
-import traceback
-import os
-import sys
-from pyvirtualdisplay import Display
-import cloudscraper
+
+from modules import validation_service, post_service
 
 display = Display(visible=0, size=(800, 600))
 display.start()
@@ -46,7 +36,7 @@ options.add_argument('--disable-browser-side-navigation')
 options.add_argument("--headless")
 
 driver = webdriver.Chrome(options=options)
-image_folder = 'images'
+scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
 
 import unicodedata
 import re
@@ -108,331 +98,16 @@ def seleniumLogin():
     session.cookies.update(cookies)
 
 
-def download_file(filename, url, retries=0):
-    local_filename = url.split('/')[-1]
-    # NOTE the stream=True parameter below
-    retries += 1
-    try:
-        with session.get(url, stream=True) as r:
-            r.raise_for_status()
-            with open(filename, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=8192):
-                    # If you have chunk encoded response uncomment if
-                    # and set chunk_size parameter to None.
-                    # if chunk:
-                    f.write(chunk)
-        return local_filename
-    except:
-        if (retries < 5):
-            print('Error trying to download ' + url + '\nTrying again in 10 sec')
-            time.sleep(5)
-            return download_file(filename, url, retries=retries)
-        else:
-            return None
 
 
-def getSpankbangId(url):
-    regex = re.compile(r'spankbang.com\/([a-zA-Z0-9]+)\/video')
-    return regex.search(url)[1]
 
 
-def getPornhubId(url):
-    regex = re.compile(r'viewkey=([a-z0-9]+)')
-    return regex.search(url)[1]
 
 
-def getXvideosId(url):
-    regex = re.compile(r'\/video(\d+)\/')
-    return regex.search(url)[1]
 
 
-def getXhamsterId(url):
-    regex = re.compile(r'xhamster\.com\/videos\/(.*)\/?.*')
-    group = regex.search(url)[1]
-    split = group.split('-')
-    return split[len(split) - 1]
 
 
-def getEpornerId(url):
-    regex = re.compile(r'Eporner\.com\/video\-([a-zA-Z0-9]+)\/?.*')
-    group = regex.search(url)
-    if (group):
-        return group[1]
-    regex = re.compile(r'Eporner\.com\/.*\/([a-zA-Z0-9]+)\/.*')
-    return regex.search(url)[1]
-
-
-def getUrl(site, id):
-    if (site == 'pornhub'):
-        return 'https://nl.pornhub.com/view_video.php?viewkey=' + id
-    elif (site == 'spankbang'):
-        return 'https://nl.spankbang.com/' + id + '/video/test'
-    elif (site == 'xvideos'):
-        return 'https://www.xvideos.com/video' + id + '/xxx'
-    elif (site == 'xhamster'):
-        return 'https://nl.xhamster.com/videos/xxx-' + id
-    elif (site == 'eporner'):
-        return 'https://www.eporner.com/video-' + id + '/'
-
-    return None
-
-
-def findPornhubIds(pornhubSel):
-    links = []
-    if (len(pornhubSel) > 0):
-        for a in pornhubSel:
-            if (not str(a).__contains__('pornhub.com/pornstar/') and not str(a).__contains__(
-                    'pornhub.com/model/') and not str(a).__contains__('pornhub.com/users/') and not str(a).__contains__(
-                    'pornhub.com/playlist/') and not str(a).__contains__('pornhub.com/channels/')):
-                try:
-                    id = getPornhubId(str(a))
-                    if (id):
-                        links.append(id)
-                except:
-                    pass
-    return list(map(lambda link: {'id': link, 'site': 'pornhub'}, set(links)))
-
-
-def findSpankbangIds(spankbangSel):
-    links = []
-    if (len(spankbangSel) > 0):
-        for a in spankbangSel:
-            if (not str(a).__contains__('/playlist/') and not str(a).__contains__('/profile/')):
-                try:
-                    id = getSpankbangId(str(a))
-                    if (id):
-                        links.append(id)
-
-                except:
-                    pass
-    return list(map(lambda link: {'id': link, 'site': 'spankbang'}, set(links)))
-
-
-def findXvideosIds(xvideosSel):
-    links = []
-    if (len(xvideosSel) > 0):
-        for a in xvideosSel:
-            if (not str(a).__contains__('/profiles/')):
-                try:
-                    id = getXvideosId(str(a))
-                    if (id):
-                        links.append(id)
-                except:
-                    pass
-    return list(map(lambda link: {'id': link, 'site': 'xvideos'}, set(links)))
-
-
-def findXhamsterIds(xhamsterSel):
-    links = []
-    if (len(xhamsterSel) > 0):
-        for a in xhamsterSel:
-            try:
-                id = getXhamsterId(str(a))
-                if (id):
-                    links.append(id)
-            except:
-                pass
-    return list(map(lambda link: {'id': link, 'site': 'xhamster'}, set(links)))
-
-
-def findEpornerIds(EpornerSel):
-    links = []
-    if (len(EpornerSel) > 0):
-        for a in EpornerSel:
-            try:
-                id = getEpornerId(str(a))
-                if (id):
-                    links.append(id)
-            except:
-                pass
-    return list(map(lambda link: {'id': link, 'site': 'eporner'}, set(links)))
-
-
-epornerAXPath = './/a[contains(@href,"Eporner.com")]/@href'
-spankbangAXPath = './/a[contains(@href,"spankbang.com")]/@href'
-pornhubAXPath = './/a[contains(@href,"pornhub.com")]/@href'
-xvideosAXPath = './/a[contains(@href,"xvideos.com")]/@href'
-xhamsterAXPath = './/a[contains(@href,"xhamster.com")]/@href'
-
-
-def findVideoLinks(element):
-    newVideoLinks = []
-    spankbangSel = element.xpath(spankbangAXPath)
-    newVideoLinks = newVideoLinks + findSpankbangIds(spankbangSel)
-
-    pornhubSel = element.xpath(pornhubAXPath)
-    newVideoLinks = newVideoLinks + findPornhubIds(pornhubSel)
-
-    xvideosSel = element.xpath(xvideosAXPath)
-    newVideoLinks = newVideoLinks + findXvideosIds(xvideosSel)
-    xhamsterSel = element.xpath(xhamsterAXPath)
-    newVideoLinks = newVideoLinks + findXhamsterIds(xhamsterSel)
-    EpornerSel = element.xpath(epornerAXPath)
-    newVideoLinks = newVideoLinks + findEpornerIds(EpornerSel)
-    return newVideoLinks
-
-
-def parsePost(post, topic, funscriptsFolder):
-    print(f"Parsing post {post}")
-    newVideoLinks = findVideoLinks(post)
-    funscripts = []
-    regexpNS = 'http://exslt.org/regular-expressions'
-    links = post.xpath(".//*[not(blockquote)]//a[re:test(@href, '(\.funscript$)')]", namespaces={'re': regexpNS})
-
-    for link in links:
-        if (link.get("href").startswith('http')):
-            funscripts.append({'location': link.get("href"), 'name': ''.join(link.itertext())})
-        else:
-            funscripts.append(
-                {'location': 'https://discuss.eroscripts.com' + link.get("href"), 'name': ''.join(link.itertext())})
-
-    if (len(newVideoLinks) == 1 and len(funscripts) > 0 and len(funscripts) <= 3):
-        print("Found the correct amount of videos and funscripts")
-        id = newVideoLinks[0]
-        if (id):
-            funscriptIndex = 1
-            scripts = []
-            allscriptsfound = True
-            for funscript in funscripts:
-                filename = topic['slug'] + '-' + str(funscriptIndex) + '.funscript'
-                if (not os.path.exists(funscriptsFolder + '/' + filename)):
-                    file = download_file(funscriptsFolder + '/' + filename, funscript['location'])
-                    if (file == None):
-                        allscriptsfound = False
-                scripts.append({'name': funscript['name'],
-                                'location': 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + funscriptsFolder + '/' + filename})
-                funscriptIndex += 1
-            if (allscriptsfound):
-                video = {
-                    "name": topic['title'],
-                    "site": id['site'],
-                    "id": id['id'],
-                    "scripts": scripts,
-                    "tags": topic['tags'],
-                    "created_at": topic['created_at'],
-                    "url": topic['url'],
-                    "valid": True,
-                    "creator": topic['username'],
-                    "ignore": False
-                }
-                validateVideo(video)
-                return video
-            else:
-                return None
-        return None
-
-
-def parsePack(post):
-    current = ''
-    title = None
-    link = None
-    funscripts = None
-    videos = []
-    for el in post:
-        text = ''.join(el.itertext()).strip().lower()
-        if (text):
-            if (current == 'title'):
-                title = text.split('\n')[0]
-                current = None
-            elif (current == 'link'):
-                videoLinks = findVideoLinks(el)
-                current = None
-
-            elif (current == 'script'):
-                regexpNS = 'http://exslt.org/regular-expressions'
-                funscripts = []
-                links = el.xpath(".//a[re:test(@href, '(\.funscript$)')]", namespaces={'re': regexpNS})
-                if (len(links) > 0):
-                    for link in links:
-                        if (link.get("href").startswith('http')):
-                            funscripts.append({'location': link.get("href"), 'name': ''.join(link.itertext())})
-                        else:
-                            funscripts.append({'location': 'https://discuss.eroscripts.com' + link.get("href"),
-                                               'name': ''.join(link.itertext())})
-                    current = None
-                if (title and funscripts != None and len(funscripts) > 0 and videoLinks != None and len(
-                        videoLinks) == 1):
-                    video = videoLinks[0]
-                    if (title.lower() == 'length'):
-                        title = funscripts[0]['name'].replace('.funscript', '')
-                    videos.append({'title': title, 'site': video['site'], 'id': video['id'], 'funscripts': funscripts})
-                title = None
-                link = None
-                funscripts = None
-                videoLinks = None
-
-
-            elif (text == 'details'):
-                current = 'title'
-            elif (text == 'video link') or el.get('alt') == ':movie_camera:':
-                current = 'link'
-            elif (text == 'script'):
-                current = 'script'
-        if el.tag == 'hr':
-            if (title and funscripts != None and len(funscripts) > 0 and videoLinks != None and len(videoLinks) == 1):
-                video = videoLinks[0]
-                if (title.lower() == 'length'):
-                    title = funscripts[0]['name'].replace('.funscript', '')
-                videos.append({'title': title, 'site': video['site'], 'id': video['id'], 'funscripts': funscripts})
-            title = None
-            link = None
-            funscripts = None
-            videoLinks = None
-    return videos
- 
-
-def parsePage(text, topic, funscriptsFolder):
-    soup = Soup(text, "lxml")
-    dom = etree.HTML(str(soup))
-    post = dom.xpath('//*[@id="post_1"]//div[@class="cooked"]')
-    videos = []
-    if post:
-        if (len(post.xpath('.//hr')) > 0 or len(post.xpath(".//h3[text() =' Details']")) > 1):
-            packVideos = parsePack(posts)
-            for video in packVideos:
-                funscriptIndex = 1
-                scripts = []
-                allscriptsfound = True
-                for funscript in video['funscripts']:
-                    filename = topic['slug'] + '-' + video['id'] + '-' + str(funscriptIndex) + '.funscript'
-                    if (not os.path.exists(funscriptsFolder + '/' + filename)):
-                        file = download_file(funscriptsFolder + '/' + filename, funscript['location'])
-                        if (file == None):
-                            allscriptsfound = False
-                    scripts.append({'name': funscript['name'],
-                                    'location': 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + funscriptsFolder + '/' + filename})
-                    funscriptIndex += 1
-                if allscriptsfound:
-                    video = {
-                        "name": video['title'],
-                        "site": video['site'],
-                        "id": video['id'],
-                        "scripts": scripts,
-                        "tags": topic['tags'],
-                        "created_at": topic['created_at'],
-                        "url": topic['url'],
-                        "valid": True,
-                        "creator": topic['username'],
-                        "ignore": False,
-                        "pack": True
-                    }
-                    validateVideo(video)
-                    videos.append(video)
-                else:
-                    return None
-        else:
-            video = parsePost(post, topic, funscriptsFolder)
-            if video:
-                videos.append(video)
-    else: 
-        print("post no found")
-    return videos
-
-
-def formatHTML(content):
-    start = content.index('<body')
-    end = content.index('</body>')
-    return '<!DOCTYPE html><html lang="en">' + content[start: end - 1] + '</body></html'
 
 
 titleEscapeWords = ['pack']
@@ -523,7 +198,7 @@ def upgradeScript(sourceIndexFile, modelVersion):
 
 def createDisplayName(name):
     keywords = ['request filled', 'request fulfillment', 'completed request', 'script requested', 'script request',
-                'first script', 'pornhub', 'request'];
+                'first script', 'pornhub', 'request']
     for keyword in keywords:
         name = re.sub('[\(]\s*' + keyword + '\s*\[\)]\s*', '', name, flags=re.IGNORECASE)
         name = re.sub('[\[]\s*' + keyword + '\s*\]\s*', '', name, flags=re.IGNORECASE)
@@ -564,167 +239,10 @@ def saveIndex(sourceIndexFile, indexFileName):
         outfile.write(jsonStr)
 
 
-def validateSelenium(sourceIndexFile):
-    data = None
-    with open(sourceIndexFile) as file:
-        data = json.load(file, cls=CustomDecoder)
-    if data:
-        videos = data['videos']
-        videos_to_validate = list(filter(lambda v:
-                                         not v.get('ignore', False) and
-                                         (v.get('last_checked') is None or v.get(
-                                             'last_checked') < datetime.utcnow() - timedelta(days=7))
-                                         , videos))
-        for count, video in enumerate(videos_to_validate):
-            print(f"Validating video {count} / {len(videos_to_validate)}")
-            if video.get('image-data'):
-                del video["image-data"]
-
-            validateVideo(video)
-            data['videos'] = videos
-            jsonStr = json.dumps(data, indent=4, cls=CustomEncoder)
-            with open(sourceIndexFile, "w") as outfile:
-                outfile.write(jsonStr)
 
 
-scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
-import requests
-from PIL import Image
 
 
-def pillow_image_to_base64_string(img):
-    buffered = BytesIO()
-    img.save(buffered, format="JPEG")
-    return 'data:image/jpeg;base64,' + base64.b64encode(buffered.getvalue()).decode("utf-8")
-
-
-def create_image_data_url(url):
-
-    response = requests.get(url)
-    img = Image.open(BytesIO(response.content))
-    size = 256, 256
-    img.thumbnail(size, Image.Resampling.LANCZOS)
-
-    return pillow_image_to_base64_string(img)
-
-
-def update_img(video, image_link, filename):
-    if image_link:
-      if not os.path.exists(image_folder + '/' + filename):
-        data_url = create_image_data_url(image_link)
-        if data_url:
-            video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
-            print(f"Updating thumbnail {video['name']}")
-    
-            with open(image_folder + "/" + filename, "w") as outfile:
-              outfile.write(data_url)
-
-def get_image(driver, site, video):
-    filename = slugify(video['name']) + '.jpeg'
-    try:
-        if site == "eporner":
-            image_xpath = "//*[@id=''moviexxx']/div[@poster]"
-            poster_div = driver.xpath(image_xpath)
-            print(poster_div)
-            if poster_div:
-              img = poster_div
-              if img:
-                  image_link = img.get_attribute("poster")
-                  update_img(video, image_link, filename)
-                  return True
-        elif site == "pornhub":
-            image_xpath = '//*[@id="player"]//img'
-            img = WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located((By.XPATH, image_xpath))
-            )
-            if img:
-                update_img(video, img.get_attribute("src"), filename)
-                return True
-
-        elif site == "xvideos":
-            image_xpath = '//*[@class="video-pic"]/img'
-            img = WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located((By.XPATH, image_xpath))
-            )
-            if img:
-                update_img(video, img.get_attribute("src"), filename)
-                return True
-
-        elif site == "xhamster":
-            image_xpath = '//*[@class="xp-preload-image"][1]'
-            div = WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located((By.XPATH, image_xpath))
-            )
-            if div:
-                style = div.get_attribute("style")
-                match = re.search(r"background-image: url\(&quot;(.*)&quot;\)", style)
-                if match:
-                    update_img(video, match.group(1), filename)
-                    return True
-
-        elif site == "spankbang":
-            image_xpath = '//*[@class="play_cover"]/img[1]'
-            img = driver.xpath(image_xpath)
-            if img:
-                update_img(video, img[0].get("src"), filename)
-                return True
-
-    except Exception:
-        print(f"Error getting image for {video}")
-        traceback.print_exc()
-    return False
-
-
-def validateVideo(video):
-    site = video['site']
-    url = getUrl(site, video['id'])
-
-    if (site == 'pornhub'):
-        xpath = "//div[@id='player']//video"
-    else:
-        xpath = "//video"
-
-    tries = 0
-    previousValid = video.get('valid', True)
-    valid = None
-    time.sleep(1)
-    while tries < 3 and valid is None:
-        try:
-            try:
-                if site == 'spankbang':
-                    content = scraper.get(url).text
-                    soup = Soup(content, "lxml")
-                    dom = etree.HTML(str(soup))
-                    if dom.xpath(xpath_invalid_spankbang):
-                        valid = False
-                    else:
-                        valid = get_image(dom, site, video)
-                else:
-                    driver.get(url)
-                    driver.execute_script(
-                        'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
-                    valid = get_image(driver, site, video)
-
-
-                # print(f"{url} is valid: {valid}")
-
-            except:
-                valid = False
-                # print(f"{url} is valid: {valid}")
-                traceback.print_exc()
-        except KeyboardInterrupt:
-            sys.exit()
-        except:
-            tries += 1
-            traceback.print_exc()
-        finally:
-            pass
-
-    if valid is not None:
-        video['valid'] = valid
-        if not previousValid and not valid:
-            video['ignore'] = True
-        video['last_checked'] = datetime.utcnow()
 
 
 class CustomEncoder(json.JSONEncoder):
@@ -748,7 +266,7 @@ class CustomDecoder(json.JSONDecoder):
         return ret
 
 
-def looptopics(sourceIndexFile, topics, funscriptsFolder):
+def looptopics(sourceIndexFile, topics):
     ignoreUrls = []
     if os.path.exists('ignore-urls.json'):
         f = open('ignore-urls.json')
@@ -775,7 +293,7 @@ def looptopics(sourceIndexFile, topics, funscriptsFolder):
                 else:
                     url = topic['url']
                     print(f"Parsing page for {url}")
-                    newvideos = parsePage(formatHTML(getPage(url)), topic, funscriptsFolder)
+                    newvideos = post_service.parse_page_from_url(url, topic, session, driver)
                     if (newvideos and len(newvideos) > 0):
                         for video in newvideos:
                             if (video):
@@ -836,12 +354,11 @@ pages = 20
 readTopicList()
 f = open('topics.json')
 all = json.load(f)
-funscriptsFolder = 'funscripts'
-videosAdded = looptopics(sourceIndexFile, all, funscriptsFolder)
+videosAdded = looptopics(sourceIndexFile, all)
 print('Added ' + str(videosAdded) + ' videos.')
 
 saveIndex(sourceIndexFile, indexFile)
-validateSelenium(sourceIndexFile)
+validation_service.validateSelenium(driver, sourceIndexFile)
 saveIndex(sourceIndexFile, indexFile)
 
 # Close.
