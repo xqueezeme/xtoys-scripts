@@ -50,23 +50,10 @@ def validateVideo(driver, video):
     while tries < 3 and valid is None:
         try:
             try:
-                if site == 'spankbang':
-                    content = scraper.get(url).text
-                    soup = Soup(content, "lxml")
-                    dom = etree.HTML(str(soup))
-                    if dom.xpath(xpath_invalid_spankbang):
-                        valid = False
-                    else:
-                        valid = image_service.get_image(dom, site, video)
-                else:
-                    driver.get(url)
-                    driver.execute_script(
-                        'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
-                    valid = image_service.get_image(driver, site, video)
-
-
-                # print(f"{url} is valid: {valid}")
-
+                driver.get(url)
+                driver.execute_script(
+                    'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
+                valid = image_service.get_image(driver, site, video)
             except:
                 valid = False
                 # print(f"{url} is valid: {valid}")

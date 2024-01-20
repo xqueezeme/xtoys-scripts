@@ -47,15 +47,13 @@ def get_image(driver, site, video):
     filename = slugify(video['name']) + '.jpeg'
     try:
         if site == "eporner":
-            image_xpath = "//*[@id=''moviexxx']/div[@poster]"
-            poster_div = driver.xpath(image_xpath)
-            print(poster_div)
-            if poster_div:
-                img = poster_div
-                if img:
-                    image_link = img.get_attribute("poster")
-                    update_img(video, image_link, filename)
-                    return True
+            image_xpath = "//*[@id='moviexxx']/div[@poster]"
+            img = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.XPATH, image_xpath))
+            )
+            if img:
+                update_img(video, img.get_attribute("poster"), filename)
+
         elif site == "pornhub":
             image_xpath = '//*[@id="player"]//img'
             img = WebDriverWait(driver, 1).until(
@@ -97,3 +95,19 @@ def get_image(driver, site, video):
         print(f"Error getting image for {video}")
         traceback.print_exc()
     return False
+
+def slugify(value, allow_unicode=False):
+    """
+    Taken from https://github.com/django/django/blob/master/django/utils/text.py
+    Convert to ASCII if 'allow_unicode' is False. Convert spaces or repeated
+    dashes to single dashes. Remove characters that aren't alphanumerics,
+    underscores, or hyphens. Convert to lowercase. Also strip leading and
+    trailing whitespace, dashes, and underscores.
+    """
+    value = str(value)
+    if allow_unicode:
+        value = unicodedata.normalize('NFKC', value)
+    else:
+        value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+    value = re.sub(r'[^\w\s-]', '', value.lower())
+    return re.sub(r'[-\s]+', '-', value).strip('-_')
