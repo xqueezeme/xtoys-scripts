@@ -5,7 +5,7 @@ from modules import post_service
 
 class Test(TestCase):
     def test_parse_page(self):
-        topic = None
+        topic = {"slug":"test"}
         session = None
         text = None
         driver = None

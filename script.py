@@ -209,12 +209,6 @@ def saveIndex(sourceIndexFile, indexFileName):
         outfile.write(jsonStr)
 
 
-
-
-
-
-
-
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, (date, datetime)):
