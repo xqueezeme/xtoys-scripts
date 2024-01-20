@@ -273,6 +273,7 @@ def findVideoLinks(element):
 
 
 def parsePost(post, topic, funscriptsFolder):
+    print(f"Parsing post {post}")
     newVideoLinks = findVideoLinks(post)
     funscripts = []
     regexpNS = 'http://exslt.org/regular-expressions'
@@ -286,6 +287,7 @@ def parsePost(post, topic, funscriptsFolder):
                 {'location': 'https://discuss.eroscripts.com' + link.get("href"), 'name': ''.join(link.itertext())})
 
     if (len(newVideoLinks) == 1 and len(funscripts) > 0 and len(funscripts) <= 3):
+        print("Found the correct amount of videos and funscripts")
         id = newVideoLinks[0]
         if (id):
             funscriptIndex = 1
