@@ -130,7 +130,8 @@ def readInfiniscroll(by, url, pages):
                 break
         else:
             break
-    return newTopics
+
+    return reversed(newTopics)
 
 
 def upgradeScript(sourceIndexFile, modelVersion):
