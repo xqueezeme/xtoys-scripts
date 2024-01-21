@@ -31,23 +31,24 @@ def create_image_data_url(url):
     return pillow_image_to_base64_string(img)
 
 
-def update_img(video, image_link, filename):
-    if image_link:
+def update_img(video, data_url, filename):
+    if data_url:
         if not os.path.exists(image_folder + '/' + filename):
-            data_url = create_image_data_url(image_link)
-            if data_url:
-                video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
-                print(f"Updating thumbnail {video['name']}")
+            video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
+            print(f"Updating thumbnail {video['name']}")
 
-                with open(image_folder + "/" + filename, "w") as outfile:
-                    outfile.write(data_url)
+            with open(image_folder + "/" + filename, "w") as outfile:
+                outfile.write(data_url)
         else:
             video[
                 'thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
+def create_image(image_link):
+    if image_link:
+        data_url = create_image_data_url(image_link)
+        return data_url
 
 
 def get_image(driver, site, video):
-    filename = slugify(video['name']) + '.jpeg'
     try:
         if site == "eporner":
             image_xpath = "//*[@id='moviexxx']/div[@poster]"
@@ -55,7 +56,9 @@ def get_image(driver, site, video):
                 EC.presence_of_element_located((By.XPATH, image_xpath))
             )
             if img:
-                update_img(video, img.get_attribute("poster"), filename)
+
+                image = create_image(img.get_attribute("poster"))
+                return image
 
         elif site == "pornhub":
             image_xpath = '//*[@id="player"]//img'
@@ -63,8 +66,9 @@ def get_image(driver, site, video):
                 EC.presence_of_element_located((By.XPATH, image_xpath))
             )
             if img:
-                update_img(video, img.get_attribute("src"), filename)
-                return True
+                image = create_image(img.get_attribute("src"))
+
+                return image
 
         elif site == "xvideos":
             image_xpath = '//*[@class="video-pic"]/img'
@@ -72,8 +76,8 @@ def get_image(driver, site, video):
                 EC.presence_of_element_located((By.XPATH, image_xpath))
             )
             if img:
-                update_img(video, img.get_attribute("src"), filename)
-                return True
+                image = create_image(img.get_attribute("src"))
+                return image
 
         elif site == "xhamster":
             image_xpath = '//*[@class="xp-preload-image"][1]'
@@ -84,8 +88,8 @@ def get_image(driver, site, video):
                 style = div.get_attribute("style")
                 match = re.search(r"background-image: url\(&quot;(.*)&quot;\)", style)
                 if match:
-                    update_img(video, match.group(1), filename)
-                    return True
+                    image = create_image(match.group(1))
+                    return image
 
         elif site == "spankbang":
             image_xpath = '//*[@class="play_cover"]/img[1]'
@@ -93,13 +97,14 @@ def get_image(driver, site, video):
                 EC.presence_of_element_located((By.XPATH, image_xpath))
             )
             if img:
-                update_img(video, img[0].get("src"), filename)
-                return True
+                image = create_image(img[0].get("src"))
+
+                return image
 
     except Exception:
         print(f"Error getting image for {video}")
         traceback.print_exc()
-    return False
+    return None
 
 def slugify(value, allow_unicode=False):
     """

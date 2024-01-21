@@ -3,3 +3,5 @@ credentials.json
 geckodriver.log
 topics.json
 *.log
+tests/chromedriver
+chromedriver

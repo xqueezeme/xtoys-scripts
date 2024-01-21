@@ -4,6 +4,7 @@ import os
 import time
 from datetime import datetime, date
 
+import chromedriver_binary_sync
 import cloudscraper
 import requests
 from fake_useragent import UserAgent
@@ -17,6 +18,8 @@ from tqdm import tqdm
 from modules import validation_service, post_service, image_service
 from modules.common import CustomDecoder, CustomEncoder
 from modules.image_service import image_folder
+
+chromedriver_binary_sync.download()
 
 display = Display(visible=0, size=(800, 600))
 display.start()
@@ -300,6 +303,8 @@ seleniumLogin()
 #savePage("page.html", 'https://discuss.eroscripts.com/t/lily-kawaii-pov-asian-blowjob/142542')
 
 upgradeScript(sourceIndexFile, modelVersion)
+validation_service.validate_selenium(driver, sourceIndexFile, "eporner")
+save_index(sourceIndexFile, indexFile)
 
 pages = 20
 read_topic_list()
@@ -310,7 +315,7 @@ try:
     print('Added ' + str(videosAdded) + ' videos.')
 
     save_index(sourceIndexFile, indexFile)
-    validation_service.validateSelenium(driver, sourceIndexFile)
+    validation_service.validate_selenium(driver, sourceIndexFile)
 finally:
     save_index(sourceIndexFile, indexFile)
     # Close.

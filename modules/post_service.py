@@ -24,7 +24,7 @@ def getPage(session, url):
     except:
         print('Error trying to access ' + url + '\nTrying again in 10 sec')
         time.sleep(5)
-        return getPage(url)
+        return getPage(session, url)
 
 
 def formatHTML(content):
@@ -69,7 +69,7 @@ def parsePage(text, topic, session, driver):
                         "ignore": False,
                         "pack": True
                     }
-                    validation_service.validateVideo(driver, video)
+                    validation_service.validateVideo(driver, video, append_image=True)
                     videos.append(video)
                 else:
                     return None
