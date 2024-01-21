@@ -38,7 +38,7 @@ def validate_selenium(driver, sourceIndexFile, all=False, site=None, update_sour
             if video.get('image-data'):
                 del video["image-data"]
 
-            validateVideo(driver, video)
+            validateVideo(driver, video, append_image=True)
             if update_source:
                 data['videos'] = videos
 
@@ -79,7 +79,7 @@ def validateVideo(driver, video, append_image=False):
             # print(f"{url} is valid: {valid}")
             traceback.print_exc()
     valid = image is not None
-    if append_image and image:
+    if append_image and image and not video.get('thumbnail'):
         filename = image_service.slugify(video['name']) + '.jpeg'
         image_service.update_img(video, image, filename)
     print(f"{url} is {'in' if not valid else ''}valid")
