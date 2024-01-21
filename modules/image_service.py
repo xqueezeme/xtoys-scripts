@@ -48,7 +48,7 @@ def create_image(image_link):
         return data_url
 
 
-def get_image(driver, site, video):
+def get_image(driver, site, video, dom=None):
     try:
         if site == "eporner":
             image_xpath = "//*[@id='moviexxx']/div[@poster]"
@@ -92,14 +92,15 @@ def get_image(driver, site, video):
                     return image
 
         elif site == "spankbang":
-            image_xpath = '//*[@class="play_cover"]/img[1]'
-            img = WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located((By.XPATH, image_xpath))
-            )
-            if img:
-                image = create_image(img[0].get("src"))
+            if dom:
 
-                return image
+                image_xpath = '//*[@class="play_cover"]/img[1]'
+                img = dom.xpath(image_xpath)
+                if img:
+                    image = create_image(img[0].get("src"))
+                    return image
+            else:
+                return None
 
     except Exception:
         print(f"Error getting image for {video}")

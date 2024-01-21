@@ -3,8 +3,11 @@ import sys
 import time
 import traceback
 from datetime import datetime, timedelta
+from bs4 import BeautifulSoup as Soup
 
 import cloudscraper
+from lxml import etree
+
 from modules import sites_service, image_service
 from modules.common import CustomDecoder, CustomEncoder
 
@@ -50,12 +53,18 @@ def validateVideo(driver, video, append_image=False):
     time.sleep(1)
     while tries < 1 and image is None:
         try:
-            driver.get(url)
-            driver.execute_script(
-                'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
-            image = image_service.get_image(driver, site, video)
-            if not image:
-                tries += 1
+            if site == 'spankbang':
+                content = scraper.get(url).text
+                soup = Soup(content, "lxml")
+                dom = etree.HTML(str(soup))
+                image = image_service.get_image(dom, site, video, dom=dom)
+            else:
+                driver.get(url)
+                driver.execute_script(
+                    'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
+                image = image_service.get_image(driver, site, video)
+                if not image:
+                    tries += 1
         except KeyboardInterrupt:
             sys.exit()
 
@@ -69,7 +78,7 @@ def validateVideo(driver, video, append_image=False):
     if append_image and image:
         filename = image_service.slugify(video['name']) + '.jpeg'
         image_service.update_img(video, image, filename)
-
+    print(f"{url} is {'in' if not valid else ''}valid")
     video['valid'] = valid
     if not previousValid and not valid:
         video['ignore'] = True
