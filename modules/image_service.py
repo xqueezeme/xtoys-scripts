@@ -36,12 +36,14 @@ def update_img(video, image_link, filename):
         if not os.path.exists(image_folder + '/' + filename):
             data_url = create_image_data_url(image_link)
             if data_url:
-                video[
-                    'thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
+                video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
                 print(f"Updating thumbnail {video['name']}")
 
                 with open(image_folder + "/" + filename, "w") as outfile:
                     outfile.write(data_url)
+        else:
+            video[
+                'thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
 
 
 def get_image(driver, site, video):

@@ -14,8 +14,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from tqdm import tqdm
 
-from modules import validation_service, post_service
+from modules import validation_service, post_service, image_service
 from modules.common import CustomDecoder, CustomEncoder
+from modules.image_service import image_folder
 
 display = Display(visible=0, size=(800, 600))
 display.start()
@@ -161,6 +162,10 @@ def upgradeScript(sourceIndexFile, modelVersion):
                 video.pop('script', None)
         if video.get('thumbnail-data', None):
            del video['thumbnail-data']
+        filename = image_service.slugify(video['name']) + '.jpeg'
+        if not video.get('thumbnail') and os.path.exists(image_folder + '/' + filename):
+            video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
+
         newVideos.append(video)
     data['videos'] = newVideos
     jsonStr = json.dumps(data, indent=4)
