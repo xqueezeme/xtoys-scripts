@@ -46,9 +46,15 @@ class Test(TestCase):
         self.assertTrue(video.get('valid'))
         sourceIndexFile = 'index-source.json'
         validation_service.validate_selenium(driver, sourceIndexFile, "eporner")
-    def test_validate_videos(self):
+    def test_validate_videos_eporner(self):
         chromedriver_binary_sync.download()
 
         driver = webdriver.Chrome()
         sourceIndexFile = '../index-source.json'
         validation_service.validate_selenium(driver, sourceIndexFile, "eporner")
+    def test_validate_videos_spankbang(self):
+        chromedriver_binary_sync.download()
+
+        driver = webdriver.Chrome()
+        sourceIndexFile = '../index-source.json'
+        validation_service.validate_selenium(driver, sourceIndexFile, "spankbang")
