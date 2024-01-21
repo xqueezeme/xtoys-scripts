@@ -305,7 +305,7 @@ seleniumLogin()
 upgradeScript(sourceIndexFile, modelVersion)
 save_index(sourceIndexFile, indexFile)
 
-pages = 200
+pages = 400
 read_topic_list()
 f = open('topics.json')
 all = json.load(f)
