@@ -80,16 +80,17 @@ def get_image(driver, site, video, dom=None):
                 return image
 
         elif site == "xhamster":
-            image_xpath = '//*[@class="xp-preload-image"][1]'
+            image_xpath = '//*[contains(@class,"xplayer-fallback-image")][1]'
             div = WebDriverWait(driver, 1).until(
                 EC.presence_of_element_located((By.XPATH, image_xpath))
             )
             if div:
                 style = div.get_attribute("style")
-                match = re.search(r"background-image: url\(&quot;(.*)&quot;\)", style)
-                if match:
-                    image = create_image(match.group(1))
-                    return image
+                if style:
+                    match = re.search(r"background-image: url\(\"(.*)\"\)", style)
+                    if match:
+                        image = create_image(match.group(1))
+                        return image
 
         elif site == "spankbang":
             image_xpath = '//*[@class="play_cover"]/img[1]'
