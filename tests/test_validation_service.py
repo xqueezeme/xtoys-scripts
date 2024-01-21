@@ -34,7 +34,7 @@ class Test(TestCase):
             ],
             "created_at": "2024-01-20T05:54:59.378Z",
             "url": "https://discuss.eroscripts.com/t/lily-kawaii-pov-asian-blowjob/142542",
-            "valid": True,
+            "valid": False,
             "creator": "TheFunscripter",
             "ignore": False,
             "last_checked": "2024-01-20T22:55:02.964229",
@@ -44,3 +44,11 @@ class Test(TestCase):
                                          video
                                          )
         self.assertTrue(video.get('valid'))
+        sourceIndexFile = 'index-source.json'
+        validation_service.validate_selenium(driver, sourceIndexFile, "eporner")
+    def test_validate_videos(self):
+        chromedriver_binary_sync.download()
+
+        driver = webdriver.Chrome()
+        sourceIndexFile = '../index-source.json'
+        validation_service.validate_selenium(driver, sourceIndexFile, "eporner")

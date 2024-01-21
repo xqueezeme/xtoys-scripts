@@ -48,24 +48,23 @@ def validateVideo(driver, video, append_image=False):
     previousValid = video.get('valid', True)
     image = None
     time.sleep(1)
-    while tries < 3 and image is None:
+    while tries < 1 and image is None:
         try:
-            try:
-                driver.get(url)
-                driver.execute_script(
-                    'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
-                image = image_service.get_image(driver, site, video)
-            except:
-                image = None
-                # print(f"{url} is valid: {valid}")
-                traceback.print_exc()
+            driver.get(url)
+            driver.execute_script(
+                'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
+            image = image_service.get_image(driver, site, video)
+            if not image:
+                tries += 1
         except KeyboardInterrupt:
             sys.exit()
+
         except:
+            image = None
             tries += 1
+
+            # print(f"{url} is valid: {valid}")
             traceback.print_exc()
-        finally:
-            pass
     valid = image is not None
     if append_image and image:
         filename = image_service.slugify(video['name']) + '.jpeg'
