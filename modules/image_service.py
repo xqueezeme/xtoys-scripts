@@ -92,15 +92,11 @@ def get_image(driver, site, video, dom=None):
                     return image
 
         elif site == "spankbang":
-            if dom:
-
-                image_xpath = '//*[@class="play_cover"]/img[1]'
-                img = dom.xpath(image_xpath)
-                if img:
-                    image = create_image(img[0].get("src"))
-                    return image
-            else:
-                return None
+            image_xpath = '//*[@class="play_cover"]/img[1]'
+            img = dom.xpath(image_xpath)
+            if img:
+                image = create_image(img[0].get("src"))
+                return image
 
     except Exception:
         print(f"Error getting image for {video}")
