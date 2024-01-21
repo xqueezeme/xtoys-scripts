@@ -303,10 +303,9 @@ seleniumLogin()
 #savePage("page.html", 'https://discuss.eroscripts.com/t/lily-kawaii-pov-asian-blowjob/142542')
 
 upgradeScript(sourceIndexFile, modelVersion)
-validation_service.validate_selenium(driver, sourceIndexFile, "eporner")
 save_index(sourceIndexFile, indexFile)
 
-pages = 20
+pages = 200
 read_topic_list()
 f = open('topics.json')
 all = json.load(f)
@@ -315,7 +314,7 @@ try:
     print('Added ' + str(videosAdded) + ' videos.')
 
     save_index(sourceIndexFile, indexFile)
-    validation_service.validate_selenium(driver, sourceIndexFile)
+    validation_service.validate_selenium(driver, sourceIndexFile, all=True)
 finally:
     save_index(sourceIndexFile, indexFile)
     # Close.

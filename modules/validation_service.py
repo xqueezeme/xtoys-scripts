@@ -15,13 +15,15 @@ scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
 xpath_invalid_spankbang = "//*[contains(text(),'deze video is niet langer beschikbaar.')]"
 
 
-def validate_selenium(driver, sourceIndexFile, site=None):
+def validate_selenium(driver, sourceIndexFile, all=False, site=None, update_source=True):
     data = None
     with open(sourceIndexFile) as file:
         data = json.load(file, cls=CustomDecoder)
     if data:
         videos = data['videos']
-        if site:
+        if all:
+            videos_to_validate = list(videos)
+        elif site:
             videos_to_validate = list(filter(lambda v:
                                              v.get('site') == site
                                              , videos))
@@ -37,10 +39,12 @@ def validate_selenium(driver, sourceIndexFile, site=None):
                 del video["image-data"]
 
             validateVideo(driver, video)
-            data['videos'] = videos
-            jsonStr = json.dumps(data, indent=4, cls=CustomEncoder)
-            with open(sourceIndexFile, "w") as outfile:
-                outfile.write(jsonStr)
+            if update_source:
+                data['videos'] = videos
+
+                jsonStr = json.dumps(data, indent=4, cls=CustomEncoder)
+                with open(sourceIndexFile, "w") as outfile:
+                    outfile.write(jsonStr)
 
 
 def validateVideo(driver, video, append_image=False):
