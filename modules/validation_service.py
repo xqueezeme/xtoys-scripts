@@ -56,6 +56,8 @@ def validateVideo(driver, video, append_image=False):
     image = None
     time.sleep(1)
     while tries < 1 and image is None:
+        tries += 1
+
         try:
             if site == 'spankbang':
                 content = scraper.get(url).text
@@ -67,15 +69,11 @@ def validateVideo(driver, video, append_image=False):
                 driver.execute_script(
                     'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
                 image = image_service.get_image(driver, site, video)
-            if not image:
-                tries += 1
         except KeyboardInterrupt:
             sys.exit()
 
         except:
             image = None
-            tries += 1
-
             # print(f"{url} is valid: {valid}")
             traceback.print_exc()
     valid = image is not None
