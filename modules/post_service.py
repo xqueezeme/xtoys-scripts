@@ -236,7 +236,7 @@ def download_file(session, filename, url, retries=0):
         if (retries < 5):
             print('Error trying to download ' + url + '\nTrying again in 10 sec')
             time.sleep(5)
-            return download_file(filename, url, retries=retries)
+            return download_file(session, filename, url, retries=retries)
         else:
             return None
 
