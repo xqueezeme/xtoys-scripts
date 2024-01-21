@@ -67,8 +67,8 @@ def validateVideo(driver, video, append_image=False):
                 driver.execute_script(
                     'videos = document.querySelectorAll("video"); for(video of videos) {video.pause()};')
                 image = image_service.get_image(driver, site, video)
-                if not image:
-                    tries += 1
+            if not image:
+                tries += 1
         except KeyboardInterrupt:
             sys.exit()
 
