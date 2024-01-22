@@ -15,6 +15,7 @@ def createDisplayName(name):
         name = re.sub('\s*' + keyword + '\s*[\:]?[\-]?\s*', '', name, flags=re.IGNORECASE)
     return name.strip()
 
+EXCLUDED_SITES = [ "eporner"]
 def save_index(sourceIndexFile, indexFileName):
     if os.path.exists(sourceIndexFile):
         with open(sourceIndexFile) as f:
@@ -30,7 +31,7 @@ def save_index(sourceIndexFile, indexFileName):
     tags = {}
     print("Upgrading script videos")
     for idx, video in enumerate(videos):
-        if (video.get('ignore', False) == False and video.get('valid', True)):
+        if (video.get('ignore', False) == False and video.get('valid', True) and video.get('site') not in EXCLUDED_SITES):
             video['displayName'] = createDisplayName(video.get('name'))
             for tag in video['tags']:
                 newTags = tags.get(tag)
