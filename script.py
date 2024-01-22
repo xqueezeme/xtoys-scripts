@@ -305,7 +305,7 @@ seleniumLogin()
 upgradeScript(sourceIndexFile, modelVersion)
 save_index(sourceIndexFile, indexFile)
 
-pages = 400
+pages = 20
 read_topic_list()
 f = open('topics.json')
 all = json.load(f)
@@ -314,7 +314,7 @@ try:
     print('Added ' + str(videosAdded) + ' videos.')
 
     save_index(sourceIndexFile, indexFile)
-    validation_service.validate_selenium(driver, sourceIndexFile, all=True)
+    validation_service.validate_selenium(driver, sourceIndexFile)
 finally:
     save_index(sourceIndexFile, indexFile)
     # Close.
