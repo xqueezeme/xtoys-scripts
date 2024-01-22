@@ -124,7 +124,7 @@ def parsePost(post, topic, session, driver):
                     "creator": topic['username'],
                     "ignore": False
                 }
-                validation_service.validateVideo(driver, video)
+                validation_service.validateVideo(driver, video, append_image=True)
                 return video
             else:
                 return None

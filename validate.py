@@ -286,15 +286,6 @@ def savePage(page, url):
         outfile.write(pageContent)
 
 
-def read_topic_list():
-    all = read_infiniscroll('latest',
-                           'https://discuss.eroscripts.com/c/scripts/free-scripts/14/l/latest.json?ascending=false',
-                            pages)
-    jsonStr = json.dumps(all, indent=4)
-    with open('topics.json', "w") as outfile:
-        outfile.write(jsonStr)
-
-
 sourceIndexFile = 'index-source.json'
 indexFile = 'index.json'
 modelVersion = 1

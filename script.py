@@ -1,5 +1,4 @@
 import json
-import operator
 import os
 import time
 from datetime import datetime, date
@@ -15,8 +14,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from tqdm import tqdm
 
-from modules import validation_service, post_service, image_service
-from modules.common import CustomDecoder, CustomEncoder
+from modules import validation_service, post_service, image_service, common
+from modules.common import CustomDecoder, CustomEncoder, modelVersion
 from modules.image_service import image_folder
 
 chromedriver_binary_sync.download()
@@ -176,47 +175,7 @@ def upgradeScript(sourceIndexFile, modelVersion):
         outfile.write(jsonStr)
 
 
-def createDisplayName(name):
-    keywords = ['request filled', 'request fulfillment', 'completed request', 'script requested', 'script request',
-                'first script', 'pornhub', 'request']
-    for keyword in keywords:
-        name = re.sub('[\(]\s*' + keyword + '\s*\[\)]\s*', '', name, flags=re.IGNORECASE)
-        name = re.sub('[\[]\s*' + keyword + '\s*\]\s*', '', name, flags=re.IGNORECASE)
-        name = re.sub('\s*' + keyword + '\s*[\:]?[\-]?\s*', '', name, flags=re.IGNORECASE)
-    return name.strip()
 
-
-def save_index(sourceIndexFile, indexFileName):
-    if os.path.exists(sourceIndexFile):
-        with open(sourceIndexFile) as f:
-            data = json.load(f)
-    else:
-        data = {}
-        data['author'] = 'xqueezeme'
-        data['videos'] = []
-        data['tags'] = []
-    data['version'] = modelVersion
-    videos = data['videos']
-    newVideos = []
-    tags = {}
-    print("Upgrading script videos")
-    for idx, video in enumerate(videos):
-        if (video.get('ignore', False) == False and video.get('valid', True)):
-            video['displayName'] = createDisplayName(video.get('name'))
-            for tag in video['tags']:
-                newTags = tags.get(tag)
-                if (newTags == None):
-                    newTags = []
-                newTags.append(video['name'])
-                tags[tag] = newTags
-            newVideos.append(video)
-    print(f"Active videos: {len(newVideos)}")
-    data['videos'] = newVideos
-    data['tags'] = dict(sorted(tags.items(), key=operator.itemgetter(0)))
-
-    jsonStr = json.dumps(data)
-    with open(indexFileName, "w") as outfile:
-        outfile.write(jsonStr)
 
 
 
@@ -297,13 +256,12 @@ def read_topic_list():
 
 sourceIndexFile = 'index-source.json'
 indexFile = 'index.json'
-modelVersion = 1
 
 seleniumLogin()
 #savePage("page.html", 'https://discuss.eroscripts.com/t/lily-kawaii-pov-asian-blowjob/142542')
 
 upgradeScript(sourceIndexFile, modelVersion)
-save_index(sourceIndexFile, indexFile)
+common.save_index(sourceIndexFile, indexFile)
 
 pages = 20
 read_topic_list()
@@ -313,10 +271,10 @@ try:
     videosAdded = loop_topics(sourceIndexFile, all)
     print('Added ' + str(videosAdded) + ' videos.')
 
-    save_index(sourceIndexFile, indexFile)
+    common.save_index(sourceIndexFile, indexFile)
     validation_service.validate_selenium(driver, sourceIndexFile)
 finally:
-    save_index(sourceIndexFile, indexFile)
+    common.save_index(sourceIndexFile, indexFile)
     # Close.
     driver.close()
     # display.stop()
