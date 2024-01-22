@@ -1,10 +1,14 @@
+import hashlib
 import json
 import os
 import re
 from datetime import date, datetime
 import operator
 
+from modules.constants import INDEX_HASH_FILE
+
 modelVersion = 1
+
 
 def createDisplayName(name):
     keywords = ['request filled', 'request fulfillment', 'completed request', 'script requested', 'script request',
@@ -15,7 +19,10 @@ def createDisplayName(name):
         name = re.sub('\s*' + keyword + '\s*[\:]?[\-]?\s*', '', name, flags=re.IGNORECASE)
     return name.strip()
 
-EXCLUDED_SITES = [ "eporner"]
+
+EXCLUDED_SITES = ["eporner"]
+
+
 def save_index(sourceIndexFile, indexFileName):
     if os.path.exists(sourceIndexFile):
         with open(sourceIndexFile) as f:
@@ -31,7 +38,8 @@ def save_index(sourceIndexFile, indexFileName):
     tags = {}
     print("Upgrading script videos")
     for idx, video in enumerate(videos):
-        if (video.get('ignore', False) == False and video.get('valid', True) and video.get('site') not in EXCLUDED_SITES):
+        if (video.get('ignore', False) == False and video.get('valid', True) and video.get(
+                'site') not in EXCLUDED_SITES):
             video['displayName'] = createDisplayName(video.get('name'))
             for tag in video['tags']:
                 newTags = tags.get(tag)
@@ -45,8 +53,20 @@ def save_index(sourceIndexFile, indexFileName):
     data['tags'] = dict(sorted(tags.items(), key=operator.itemgetter(0)))
 
     jsonStr = json.dumps(data)
+    hashed_json = hash(jsonStr)
+    data['hash'] = hashed_json
+    jsonStr = json.dumps(data)
+
     with open(indexFileName, "w") as outfile:
         outfile.write(jsonStr)
+    with open(INDEX_HASH_FILE, "w") as outfile:
+        outfile.write(hashed_json)
+
+
+def hash(text):
+    h = hashlib.new('sha256')  # sha256 can be replaced with diffrent algorithms
+    h.update(text.encode())  # give a encoded string. Makes the String to the Hash
+    return h.hexdigest()  # Prints the Hash
 
 
 class CustomEncoder(json.JSONEncoder):
