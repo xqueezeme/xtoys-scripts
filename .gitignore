@@ -5,3 +5,4 @@ topics.json
 *.log
 tests/chromedriver
 chromedriver
+/.idea/

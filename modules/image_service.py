@@ -40,8 +40,7 @@ def update_img(video, data_url, filename):
             with open(image_folder + "/" + filename, "w") as outfile:
                 outfile.write(data_url)
         else:
-            video[
-                'thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
+            video['thumbnail'] = 'https://raw.githubusercontent.com/xqueezeme/xtoys-scripts/main/' + image_folder + '/' + filename
 def create_image(image_link):
     if image_link:
         data_url = create_image_data_url(image_link)
@@ -93,11 +92,12 @@ def get_image(driver, site, video, dom=None):
                         return image
 
         elif site == "spankbang":
-            image_xpath = '//*[@class="play_cover"]/img[1]'
-            img = dom.xpath(image_xpath)
-            if img:
-                image = create_image(img[0].get("src"))
-                return image
+            if dom is not None:
+                image_xpath = '//*[@class="play_cover"]/img[1]'
+                img = dom.xpath(image_xpath)
+                if img:
+                    image = create_image(img[0].get("src"))
+                    return image
 
     except Exception:
         print(f"Error getting image for {video}")

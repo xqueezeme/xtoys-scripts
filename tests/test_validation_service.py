@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from selenium import webdriver
 
-from modules import validation_service
+from modules import validation_service, common
 import chromedriver_binary_sync
 
 
@@ -98,7 +98,7 @@ class Test(TestCase):
         chromedriver_binary_sync.download()
 
         driver = webdriver.Chrome()
-        sourceIndexFile = '../index-source.json'
-        #validation_service.validate_selenium(driver, sourceIndexFile, "spankbang")
-
+        sourceIndexFile = 'index-source.json'
+        #validation_service.validate_selenium(driver, sourceIndexFile, update_source=True)
+        common.save_index(sourceIndexFile, "index.json")
 
