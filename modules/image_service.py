@@ -98,6 +98,12 @@ def get_image(driver, site, video, dom=None):
                 if img:
                     image = create_image(img[0].get("src"))
                     return image
+                image_xpath_vr = '//*[@id="vr_player"]//*[boolean(@poster)]'
+                img = dom.xpath(image_xpath_vr)
+                if img:
+                    image = create_image(img[0].get("poster"))
+                    return image
+
 
     except Exception:
         print(f"Error getting image for {video}")
