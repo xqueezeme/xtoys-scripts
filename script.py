@@ -3,19 +3,16 @@ import os
 import time
 from datetime import datetime, date
 
-import chromedriver_binary_sync
 import cloudscraper
 import requests
 from fake_useragent import UserAgent
 from pyvirtualdisplay import Display
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from tqdm import tqdm
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromiumService
 
 
 from modules import validation_service, post_service, image_service, common
@@ -37,7 +34,7 @@ userAgent = str(ua.random)
 session = requests.Session()
 f = open('./credentials.json')
 credentials = json.load(f)
-options = webdriver.ChromeOptions()
+options = Options()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
 options.add_argument("--headless")
