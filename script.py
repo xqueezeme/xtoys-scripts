@@ -16,8 +16,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 from tqdm import tqdm
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromiumService
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.os_manager import ChromeType
 
 
 from modules import validation_service, post_service, image_service, common
@@ -43,7 +41,7 @@ options = webdriver.ChromeOptions()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
 options.add_argument("--headless")
-driver = webdriver.Chrome(options=options, service=ChromiumService(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()))
+driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=options)
 
 scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
 
