@@ -8,6 +8,7 @@ import requests
 from fake_useragent import UserAgent
 from pyvirtualdisplay import Display
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -38,7 +39,9 @@ options = Options()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
 options.add_argument("--headless")
-driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=options)
+service = Service(executable_path=r'/usr/lib/chromium-browser/chromedriver')
+
+driver = webdriver.Chrome(options=options, service=service)
 
 scraper = cloudscraper.create_scraper()  # returns a CloudScraper instance
 
