@@ -39,7 +39,7 @@ options = Options()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
 options.add_argument("--headless")
-service = Service(executable_path=r'/usr/lib/chromedriver')
+service = Service(executable_path=r'/usr/bin/chromedriver')
 
 driver = webdriver.Chrome(options=options, service=service)
 
