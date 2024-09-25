@@ -8,8 +8,11 @@ options = {
         "gonewildstories": { 'tags': ['straight'] },
         "nsfwstories": { 'tags': ['straight'] },
         "eroticliterature": { 'tags': ['straight'] },
+        "gonewholesomestories": { 'tags': ['straight'] },
         "gaystoriesgonewild": { 'tags': ['gay']},
         "gaysexconfessions": { 'tags': ['gay']},
+        "gaystories": { 'tags': ['gay']},
+        "gayconfessions": { 'tags': ['gay']},
         "tsgonewildstories": { 'tags': ['trans']},
         "cdstoriesgonewild": { 'tags':['cd']},
         "crossdressingstories": { 'tags':['cd']},
@@ -19,7 +22,11 @@ options = {
         "naughtynarratives":{ 'tags':['straight','slut']},
         "stupidslutsclub":{ 'tags':['straight','slut']},
         "cheating_stories":{ 'tags':['straight','slut']},
-        "chastitystories": { 'tags': ["chastity","sissy"]}
+        "chastitystories": { 'tags': ["chastity","sissy"]},
+        "sexstories": { 'tags': ["straight"]},
+        "bdsmerotica": { 'tags': ["femdom"]},
+        "cuckoldstories2": { 'tags': ["straight"]},
+        "breedingstories": { 'tags': ["straight"]}
 }
 def is_valid_subreddit(subreddit: str):
     response = requests.get(f"https://www.reddit.com/r/{subreddit}/hot.json?limit=50")
@@ -58,6 +65,6 @@ for valid_subreddit in valid_subreddits:
 
 print("options = " + json.dumps(list(subreddit_with_images.keys()), indent=4))
 
-print("var imageReddits = " + json.dumps(subreddit_with_images, indent=4))
+print("var imageReddits = " + json.dumps(subreddit_with_images, indent=4)  + ";")
 
-print("var defaultImageReddit = " + json.dumps(new_image_reddits['straight'], indent=4))
+print("var defaultImageReddit = " + json.dumps(new_image_reddits['straight'], indent=4)+ ";")
