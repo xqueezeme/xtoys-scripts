@@ -14,7 +14,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from tqdm import tqdm
 from selenium import webdriver
-
+from webdriver_manager.chrome import ChromeDriverManager
 
 from modules import validation_service, post_service, image_service, common
 from modules.common import CustomDecoder, CustomEncoder, modelVersion
@@ -39,7 +39,7 @@ options = Options()
 options.add_argument("--mute-audio")
 options.add_argument('--disable-browser-side-navigation')
 options.add_argument("--headless")
-service = Service(executable_path=r'/usr/lib/chromium-browser/chromedriver')
+service = Service(ChromeDriverManager().install())
 
 driver = webdriver.Chrome(options=options, service=service)
 
