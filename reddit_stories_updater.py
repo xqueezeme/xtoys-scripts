@@ -21,12 +21,12 @@ options = {
         "femdomstories": { 'tags':['femdom']},
         "naughtynarratives":{ 'tags':['straight','slut']},
         "stupidslutsclub":{ 'tags':['straight','slut']},
-        "cheating_stories":{ 'tags':['straight','slut']},
         "chastitystories": { 'tags': ["chastity","sissy"]},
         "sexstories": { 'tags': ["straight"]},
         "bdsmerotica": { 'tags': ["femdom"]},
         "cuckoldstories2": { 'tags': ["straight"]},
-        "breedingstories": { 'tags': ["straight"]}
+        "breedingstories": { 'tags': ["straight"]},
+        "sissy_stories": { 'tags': [ "sissy"]}
 }
 def is_valid_subreddit(subreddit: str):
     response = requests.get(f"https://www.reddit.com/r/{subreddit}/hot.json?limit=50")
