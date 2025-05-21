@@ -42,10 +42,15 @@ def validate_selenium(driver, sourceIndexFile, all=False, site=None, update_sour
             validateVideo(driver, video, append_image=True)
             if update_source:
                 data['videos'] = videos
+            if count % 10 == 0:
+                save_data(data, sourceIndexFile)
+        save_data(data, sourceIndexFile)
 
-                jsonStr = json.dumps(data, indent=4, cls=CustomEncoder)
-                with open(sourceIndexFile, "w") as outfile:
-                    outfile.write(jsonStr)
+
+def save_data(data, sourceIndexFile:str):
+    jsonStr = json.dumps(data, indent=4, cls=CustomEncoder)
+    with open(sourceIndexFile, "w") as outfile:
+        outfile.write(jsonStr)
 
 
 def validateVideo(driver, video, append_image=False):
